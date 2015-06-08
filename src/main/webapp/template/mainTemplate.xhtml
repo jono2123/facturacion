@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title></title>
+        <h:outputStylesheet library="css" name="estilo.css"/>
+        <h:outputStylesheet library="css" name="themes/jodasoft.min.css"/>
+        <h:outputStylesheet library="css" name="jquery.mmenu.css"/>
+        <h:outputStylesheet library="css" name="jquery.mmenu.dragopen.css"/>
+        <h:outputStylesheet library="css" name="demo.css"/>
+
+
+        <style type="text/css">
+            .header,
+            .footer
+            {
+                box-sizing: border-box;
+                width: 100%;
+                position: fixed;
+            }
+            .header
+            {
+                top: 0;
+            }
+            .footer
+            {
+                bottom: 0;
+            }
+        </style>
+
+        <script type="text/javascript" src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+        <h:outputScript library="js" name="common.js" />
+        <h:outputScript library="js" name="menu/jquery.mmenu.min.js"/>
+        <h:outputScript library="js" name="menu/addons/jquery.mmenu.dragopen.min.js"/>
+        <h:outputScript library="js" name="menu/addons/jquery.mmenu.fixedelements.min.js"/>
+        <script type="text/javascript">
+            $(function () {
+                var $menu = $('nav#menu'),
+                        $html = $('html, body');
+
+                $menu.mmenu({
+                    dragOpen: true
+                });
+
+                var $anchor = false;
+                $menu.find('li > a').on(
+                        'click',
+                        function (e)
+                        {
+                            $anchor = $(this);
+                        }
+                );
+
+                var api = $menu.data('mmenu');
+                api.bind('closed',
+                        function ()
+                        {
+                            if ($anchor)
+                            {
+                                var href = $anchor.attr('href');
+                                $anchor = false;
+
+                                //	if the clicked link is linked to an anchor, scroll the page to that anchor 
+                                if (href.slice(0, 1) == '#')
+                                {
+                                    $html.animate({
+                                        scrollTop: $(href).offset().top
+                                    });
+                                }
+                            }
+                        }
+                );
+            });
+        </script>
+
+    </h:head>
+
+    <h:body>
+        <div id="mainContainer" >
+            <nav id="menu">
+                <h:form>
+                    <p:panelMenu style="width:100%;">
+                        <p:submenu label="Facturación">
+                            <p:menuitem value="Clientes"/>
+                        </p:submenu>
+                        <p:submenu label="Inventario" >
+                            <p:menuitem value="Items"/>
+                            <p:menuitem value="Unidades de Medida"/>
+                        </p:submenu>
+                    </p:panelMenu>
+
+
+                </h:form>
+            </nav>
+            <div id="header" class="header Fixed">
+                <a href="#menu"></a>
+                Demo
+            </div>
+
+
+            <div id="content">
+                <h:form>
+
+                </h:form>
+                <div id="right">
+                    <ui:insert name="content">Content</ui:insert>
+                </div>
+
+
+            </div>
+
+            <div id="fotter" >
+                <p:outputPanel style="width: 100%; height: 80px;">
+                    <h:outputText value="Pie de pagina"/>
+                </p:outputPanel>
+            </div>
+
+        </div>
+    </h:body>
+
+</html>

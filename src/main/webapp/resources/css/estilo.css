@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+#mainContainer{
+    width: 90%;
+    margin: 0px auto;
+    font-size: 0.8em;
+    height: auto;
+}
+
+#header{
+    width: 100%;
+    border: 1px solid black;
+}
+#content{
+    margin-top: 43px;
+    width: 100%;
+    border: none;
+    height: auto !important;
+    min-height: 500px;
+}
+#fotter{
+    width: 100%;
+    border: 1px solid black;
+}
+
+#left{
+    width: 25%;
+    float: left;
+    border: 1px solid black;
+
+}
+#right{
+    width: 100%;
+    float: left;
+    border: 1px solid black;
+
+}
+
+.botonesMantenimientos{
+    width: 90px;
+    margin-bottom: 5px; 
+    background-color: #d9534f;
+    color: #fff;
+    height: 37px;
+    border-color: #d43f3a;
+    border-radius: 4px !important;
+    font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 1.428571429;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#nav{
+    height:25px;
+    border-bottom:1px solid #ddd;
+    position:fixed;
+    top:100px;
+    //left:0px;
+    right:2.5%;
+    background:#fff url(../images/nav.png) repeat-x center left;
+    z-index:999999;
+    width: 60px;
+}
+
+#contentLeft{
+    width: 60%;
+    padding-left: 5%;
+    float: left;
+}
+#contentRight{
+    width: 25%;
+    float:left;
+    padding-left: 5%;
+}
+
+@media screen and (max-width: 700px) {
+
+    #contentLeft{
+        width: 98%;
+        padding-left: 2%;
+        float: left;
+    }
+    #contentRight{
+        width: 0%;
+        float:left;
+        display: none;
+    }
+}

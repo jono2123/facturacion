@@ -1,0 +1,149 @@
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"  
+      xmlns:pm="http://primefaces.org/mobile"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">  
+    <ui:define name="content">
+        <b:panel look="primary" title="Mantenimiento de Items" style="vertical-align: central;" >
+             <h:form>
+                <p:growl id="messages" showDetail="false"/>
+                <b:container style="width: 100%;">
+                    <b:row>
+                        <b:column>
+                            <div id="contentLeft">
+                                <b:container id="pnlDatos" style="width: 100%">
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Cédula/Ruc: "/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText  id="txtCedula" value="#{clienteController.cedula}"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton  ajax="true" value="Nuevo" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.saveCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Nombres:"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText id="txtNombres" value="#{clienteController.nombres}"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.updateCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
+                                                <p:confirm header="Modificar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton> 
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Apellidos:"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText value="#{clienteController.apellidos}" id="txtApellidos"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.deleteCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
+                                                <p:confirm header="Eliminar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton> 
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Dirección:"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText  value="#{clienteController.direccion}" id="txtDireccion"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true"  value="Limpiar" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos" action="#{clienteController.vaciaTextos()}">
+                                                <p:resetInput target="pnlDatos" />
+                                            </p:commandButton>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Teléfono:"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText  value="#{clienteController.telefono}" id="txtTelefono"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="E-Mail"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText  value="#{clienteController.mail}" id="txtEmail"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Fecha de Nacimiento"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:datepicker  id="txtFecha" mode="popup-icon" value="#{clienteController.fechaNacimiento}" changeYear="true" changeMonth="true" />
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                    </b:row>
+                                </b:container>
+
+                            </div>
+
+                            <div id="contentRight">
+                                <p:graphicImage value="../../resources/images/cliente.png" width="100%"/>
+                            </div>
+                        </b:column>
+                    </b:row>
+                    <b:row style="margin-top: 20px;">
+                        <b:column>
+                            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{clienteController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.clientePK}" selection="#{clienteController.cliente}" widgetVar="tablaClientes" filteredValue="#{clienteController.clientesFiltrados}">
+                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{clienteController.onRowSelect}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="Listado"/>
+                                </f:facet>
+                                <p:column  filterBy="#{cliente.clientePK.clieCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.clientePK.clieCedula}">
+                                    <h:outputText value="#{cliente.clientePK.clieCedula}"  />
+                                </p:column>
+                                <p:column headerText="Nombres" filterBy="#{cliente.clieNombres}" priority="1" style="width: 15%" sortBy="#{cliente.clieNombres}">
+                                    <h:outputText value="#{cliente.clieNombres}"/>
+                                </p:column>
+                                <p:column headerText="Apellidos" filterBy="#{cliente.clieApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.clieApellidos}">
+                                    <h:outputText value="#{cliente.clieApellidos}"/>
+                                </p:column>
+                                <p:column headerText="Dirección" priority="2" style="width: 18%">
+                                    <h:outputText value="#{cliente.clieDireccion}"/>
+                                </p:column>
+                                <p:column headerText="Teléfono" priority="2" style="width: 9%">
+                                    <h:outputText value="#{cliente.clieTelefono}"/>
+                                </p:column>
+                                <p:column headerText="e-Mail" priority="3" style="width: 18%">
+                                    <h:outputText value="#{cliente.clieMail}"/>
+                                </p:column>
+                                <p:column headerText="f. Nacimiento" priority="3" style="width: 10%">
+                                    <h:outputText value="#{clienteController.formateaFecha(cliente.clieFechaNacimiento)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </b:column>
+                    </b:row>
+                </b:container>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </b:panel>
+    </ui:define>
+</ui:composition>
+
