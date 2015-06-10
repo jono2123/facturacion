@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "UnidadDeMedida.findAll", query = "SELECT u FROM UnidadDeMedida u"),
     @NamedQuery(name = "UnidadDeMedida.findByUmedId", query = "SELECT u FROM UnidadDeMedida u WHERE u.umedId = :umedId"),
     @NamedQuery(name = "UnidadDeMedida.findByAlmaId", query = "SELECT u FROM UnidadDeMedida u WHERE u.almaId = :almaId"),
+    @NamedQuery(name = "UnidadDeMedida.findByAlmaIdAndUmedEstado", query = "SELECT u FROM UnidadDeMedida u WHERE u.almaId = :almaId and u.umedEstado = :estado"),
     @NamedQuery(name = "UnidadDeMedida.findByUmedNombre", query = "SELECT u FROM UnidadDeMedida u WHERE u.umedNombre = :umedNombre")})
 public class UnidadDeMedida implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -45,6 +46,8 @@ public class UnidadDeMedida implements Serializable {
     @Size(max = 20)
     @Column(name = "umed_nombre", length = 20)
     private String umedNombre;
+    @Column(name = "umed_estado")
+    private boolean umedEstado;
     @OneToMany(mappedBy = "umedId")
     private List<Articulo> articuloList;
 
@@ -77,6 +80,14 @@ public class UnidadDeMedida implements Serializable {
 
     public void setUmedNombre(String umedNombre) {
         this.umedNombre = umedNombre;
+    }
+
+    public boolean getUmedEstado() {
+        return umedEstado;
+    }
+
+    public void setUmedEstado(boolean umedEstado) {
+        this.umedEstado = umedEstado;
     }
 
     @XmlTransient

@@ -106,7 +106,7 @@ public class ClienteController extends AbstractMB implements Serializable{
             cliente.setClieMail(mail);
             cliente.setClieFechaNacimiento(fechaNacimiento);
             cliente.setClieEstado(true);
-            clienteFacade.edit(cliente);
+            clienteFacade.update(cliente);
             closeDialog();
             displayInfoMessageToUser("Cliente Modificado Correctamente");
             reiniciaCliente();
@@ -120,7 +120,7 @@ public class ClienteController extends AbstractMB implements Serializable{
     public void deleteCliente(){
         try {
             cliente.setClieEstado(false);
-            clienteFacade.edit(cliente);
+            clienteFacade.delete(cliente);
             closeDialog();
             displayInfoMessageToUser("Cliente Eliminado Correctamente");
             clientes.remove(cliente);

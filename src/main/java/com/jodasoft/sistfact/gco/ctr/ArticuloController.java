@@ -5,9 +5,17 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.Almacen;
+import com.jodasoft.sistfact.gco.mdl.Articulo;
+import com.jodasoft.sistfact.gco.mdl.UnidadDeMedida;
+import com.jodasoft.sistfact.gco.util.exp.ArticuloValidadorException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -27,22 +35,118 @@ public class ArticuloController extends AbstractMB {
     private boolean iva;
     private int umedida_id;
     private String infoAdicional;
-    
+    private List<UnidadDeMedida> unidades;
+    private Articulo articulo;
+
+    private List<Articulo> articulos;
+    private List<Articulo> articulosFiltrados;
+
     /////////////////////ejb del facade
     @EJB
-    private com.jodasoft.sistfact.gco.dao.ArticuloFacade clienteFacade;
-    
+    private com.jodasoft.sistfact.gco.dao.ArticuloFacade articuloFacade;
+
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.UnidadDeMedidaFacade unidadDeMedidaFacade;
+
     public ArticuloController() {
     }
-    
-    ////////////////////////// Gets y Sets //////////////////////////////////////////
 
+    //////////////////////funciones//////////////////////////////////////////////////
+    private void reiniciaArticulo() {
+        articulo = new Articulo();
+    }
+
+    public void vaciarTextos() {
+        setCodigo("");
+        setDescripcion("");
+        setPrecioCompra(0);
+        setPrecioVenta(0);
+        setUmedida_id(1);
+        setIva(false);
+        setInfoAdicional("");
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        setCodigo(articulo.getArtiCodigo());
+        setDescripcion(articulo.getArtiDescripcion());
+        setPrecioCompra(articulo.getArtiPrecioCompra());
+        setPrecioVenta(articulo.getArtiPrecioVenta());
+        setUmedida_id(articulo.getUmedId().getUmedId());
+        setIva(articulo.getArtiIva());
+        setInfoAdicional(articulo.getArtiInfoAdicional());
+    }
+
+    public void saveArticulo() {
+        try {
+            articulo = new Articulo();
+            Almacen almacen = new Almacen();
+            almacen.setAlmaId(1);
+            articulo.setAlmaId(almacen);
+            articulo.setArtEstado(true);
+            articulo.setArtiCodigo(codigo);
+            articulo.setArtiDescripcion(descripcion);
+            articulo.setArtiInfoAdicional(infoAdicional);
+            articulo.setArtiIva(iva);
+            articulo.setArtiPrecioCompra(precioCompra);
+            articulo.setArtiPrecioVenta(precioVenta);
+            UnidadDeMedida umed = new UnidadDeMedida();
+            umed.setUmedId(umedida_id);
+            articulo.setUmedId(umed);
+            articuloFacade.save(articulo);
+            closeDialog();
+            displayInfoMessageToUser("Artículo Guardado Correctamente");
+            articulos.add(articulo);
+            reiniciaArticulo();
+            vaciarTextos();
+        } catch (ArticuloValidadorException ex) {
+            keepDialogOpen();
+            displayErrorMessageToUser(ex.getMessage());
+        } catch (javax.ejb.EJBException ex) {
+            keepDialogOpen();
+            if(ex.getCausedByException().getCause().getLocalizedMessage().contains("llave duplicada viola restricción de unicidad"))
+            displayErrorMessageToUser("Ya existe un artículo con ese código");
+        }
+
+    }
+
+    public void updateArticulo() {
+        try {
+            articulo.setArtEstado(true);
+            articulo.setArtiCodigo(codigo);
+            articulo.setArtiDescripcion(descripcion);
+            articulo.setArtiInfoAdicional(infoAdicional);
+            articulo.setArtiIva(iva);
+            articulo.setArtiPrecioCompra(precioCompra);
+            articulo.setArtiPrecioVenta(precioVenta);
+            UnidadDeMedida umed = new UnidadDeMedida();
+            umed.setUmedId(umedida_id);
+            articulo.setUmedId(umed);
+            articuloFacade.update(articulo);
+            closeDialog();
+            displayInfoMessageToUser("Artículo Modificado Correctamente");
+            reiniciaArticulo();
+            vaciarTextos();
+        } catch (ArticuloValidadorException ex) {
+            keepDialogOpen();
+            displayErrorMessageToUser(ex.getMessage());
+        }
+    }
+
+    public void deleteArticulo() {
+        articuloFacade.delete(articulo);
+        articulos.remove(articulo);
+        vaciarTextos();
+        closeDialog();
+        displayInfoMessageToUser("Artículo Eliminado Correctamente");
+    }
+
+    ////////////////////////// Gets y Sets //////////////////////////////////////////
     public String getCodigo() {
         return codigo;
     }
 
     public void setCodigo(String codigo) {
-        this.codigo = codigo;
+        this.codigo = codigo.toUpperCase();
     }
 
     public String getDescripcion() {
@@ -50,7 +154,7 @@ public class ArticuloController extends AbstractMB {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+        this.descripcion = descripcion.toUpperCase();
     }
 
     public double getPrecioCompra() {
@@ -69,7 +173,7 @@ public class ArticuloController extends AbstractMB {
         this.precioVenta = precioVenta;
     }
 
-    public boolean isIva() {
+    public boolean getIva() {
         return iva;
     }
 
@@ -90,10 +194,53 @@ public class ArticuloController extends AbstractMB {
     }
 
     public void setInfoAdicional(String infoAdicional) {
-        this.infoAdicional = infoAdicional;
+        this.infoAdicional = infoAdicional.toUpperCase();
     }
-    
-    
-    
-    
+
+    public List<UnidadDeMedida> getUnidades() {
+        if (unidades == null) {
+            unidades = unidadDeMedidaFacade.listar(1);
+        }
+        return unidades;
+    }
+
+    public void setUnidades(List<UnidadDeMedida> unidades) {
+        this.unidades = unidades;
+    }
+
+    public List<Articulo> getArticulos() {
+        if (articulos == null) {
+            Almacen almacen = getAlmacen();
+            articulos = articuloFacade.listar(almacen, true);
+        }
+        return articulos;
+    }
+
+    public void setArticulos(List<Articulo> articulos) {
+        this.articulos = articulos;
+    }
+
+    public List<Articulo> getArticulosFiltrados() {
+        return articulosFiltrados;
+    }
+
+    public void setArticulosFiltrados(List<Articulo> articulosFiltrados) {
+        this.articulosFiltrados = articulosFiltrados;
+    }
+
+    public Articulo getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(Articulo articulo) {
+        this.articulo = articulo;
+    }
+
+    private Almacen getAlmacen() {
+        Almacen almacen = new Almacen();
+        almacen.setAlmaId(1);
+        return almacen;
+
+    }
+
 }

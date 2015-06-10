@@ -1,13 +1,13 @@
-<html xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"  
-      xmlns:pm="http://primefaces.org/mobile"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:b="http://bootsfaces.net/ui">  
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
     <ui:define name="content">
-        <b:panel look="primary" title="Mantenimiento de Items" style="vertical-align: central;" >
-             <h:form>
+        <b:panel look="primary" title="Mantenimiento de Ítems" style="vertical-align: central;" >
+            <h:form>
                 <p:growl id="messages" showDetail="false"/>
                 <b:container style="width: 100%;">
                     <b:row>
@@ -16,60 +16,60 @@
                                 <b:container id="pnlDatos" style="width: 100%">
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Cédula/Ruc: "/>
+                                            <h:outputText value="Código"/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText  id="txtCedula" value="#{clienteController.cedula}"/>
+                                            <b:inputText  id="txtCodigo" value="#{articuloController.codigo}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.saveCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos"/>
+                                            <p:commandButton  ajax="true" value="Nuevo" action="#{articuloController.saveArticulo()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblArticulos @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Nombres:"/>
+                                            <h:outputText value="Descripción: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText id="txtNombres" value="#{clienteController.nombres}"/>
+                                            <b:inputText id="txtDescripcion" value="#{articuloController.descripcion}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.updateCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
-                                                <p:confirm header="Modificar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            <p:commandButton ajax="true" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.updateArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
+                                                <p:confirm header="Modificar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Apellidos:"/>
+                                            <h:outputText value="Precio Compra: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText value="#{clienteController.apellidos}" id="txtApellidos"/>
+                                            <b:inputText value="#{articuloController.precioCompra}" id="txtPrecioCompra"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.deleteCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
-                                                <p:confirm header="Eliminar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            <p:commandButton ajax="true" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.deleteArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
+                                                <p:confirm header="Eliminar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Dirección:"/>
+                                            <h:outputText value="Precio Venta"/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText  value="#{clienteController.direccion}" id="txtDireccion"/>
+                                            <b:inputText  value="#{articuloController.precioVenta}" id="txtPrecioVenta"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true"  value="Limpiar" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos" action="#{clienteController.vaciaTextos()}">
+                                            <p:commandButton ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Teléfono:"/>
+                                            <h:outputText value="Tiene Iva: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText  value="#{clienteController.telefono}" id="txtTelefono"/>
+                                            <p:inputSwitch value="#{articuloController.iva}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
                                             <h:outputText value=""/>
@@ -77,10 +77,12 @@
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="E-Mail"/>
+                                            <h:outputText value="Unidad de Medida: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText  value="#{clienteController.mail}" id="txtEmail"/>
+                                            <b:selectOneMenu value="#{articuloController.umedida_id}"  >
+                                                <f:selectItems value="#{articuloController.unidades}" var="c" itemValue="#{c.umedId}" itemLabel="#{c.umedNombre}"/>
+                                            </b:selectOneMenu>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
                                             <h:outputText value=""/>
@@ -88,10 +90,10 @@
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Fecha de Nacimiento"/>
+                                            <h:outputText value="Información Adicional:"/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:datepicker  id="txtFecha" mode="popup-icon" value="#{clienteController.fechaNacimiento}" changeYear="true" changeMonth="true" />
+                                            <b:inputText value="#{articuloController.infoAdicional}" id="txtInfoAdicional"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
                                             <h:outputText value=""/>
@@ -102,37 +104,37 @@
                             </div>
 
                             <div id="contentRight">
-                                <p:graphicImage value="../../resources/images/cliente.png" width="100%"/>
+                                <p:graphicImage value="../../resources/images/products.png" width="100%"/>
                             </div>
                         </b:column>
                     </b:row>
                     <b:row style="margin-top: 20px;">
                         <b:column>
-                            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{clienteController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.clientePK}" selection="#{clienteController.cliente}" widgetVar="tablaClientes" filteredValue="#{clienteController.clientesFiltrados}">
-                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{clienteController.onRowSelect}"/>
+                            <p:dataTable styleClass="" style="width: 100%" var="articulo" value="#{articuloController.articulos}" id="tblArticulos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{articuloController.articulo}" widgetVar="tablaArticulos" filteredValue="#{articuloController.articulosFiltrados}">
+                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{articuloController.onRowSelect}"/>
                                 <f:facet name="header">
                                     <h:outputText value="Listado"/>
                                 </f:facet>
-                                <p:column  filterBy="#{cliente.clientePK.clieCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.clientePK.clieCedula}">
-                                    <h:outputText value="#{cliente.clientePK.clieCedula}"  />
+                                <p:column  filterBy="#{articulo.artiCodigo}" filterMatchMode="contains" headerText="Código" priority="1" style="width: 10%" sortBy="#{articulo.artiCodigo}">
+                                    <h:outputText value="#{articulo.artiCodigo}"  />
                                 </p:column>
-                                <p:column headerText="Nombres" filterBy="#{cliente.clieNombres}" priority="1" style="width: 15%" sortBy="#{cliente.clieNombres}">
-                                    <h:outputText value="#{cliente.clieNombres}"/>
+                                <p:column headerText="Descripción" filterBy="#{articulo.artiDescripcion}" filterMatchMode="contains" priority="1" style="width: 35%" sortBy="#{articulo.artiDescripcion}">
+                                    <h:outputText value="#{articulo.artiDescripcion}"/>
                                 </p:column>
-                                <p:column headerText="Apellidos" filterBy="#{cliente.clieApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.clieApellidos}">
-                                    <h:outputText value="#{cliente.clieApellidos}"/>
+                                <p:column headerText="P.Compra"  priority="2" style="width: 8%">
+                                    <h:outputText value="#{articulo.artiPrecioCompra}"/>
                                 </p:column>
-                                <p:column headerText="Dirección" priority="2" style="width: 18%">
-                                    <h:outputText value="#{cliente.clieDireccion}"/>
+                                <p:column headerText="P.Venta" priority="1" style="width: 8%">
+                                    <h:outputText value="#{articulo.artiPrecioVenta}"/>
                                 </p:column>
-                                <p:column headerText="Teléfono" priority="2" style="width: 9%">
-                                    <h:outputText value="#{cliente.clieTelefono}"/>
+                                <p:column headerText="Tiene Iva" priority="2" style="width: 5%">
+                                    <h:outputText value="#{articulo.artiIva?'SI':'NO'}"/>
                                 </p:column>
-                                <p:column headerText="e-Mail" priority="3" style="width: 18%">
-                                    <h:outputText value="#{cliente.clieMail}"/>
+                                <p:column headerText="Unidad de Medida" priority="3" style="width: 10%">
+                                    <h:outputText value="#{articulo.umedId.umedNombre}"/>
                                 </p:column>
-                                <p:column headerText="f. Nacimiento" priority="3" style="width: 10%">
-                                    <h:outputText value="#{clienteController.formateaFecha(cliente.clieFechaNacimiento)}"/>
+                                <p:column headerText="Inf. Adicional" priority="3" style="width: 24%">
+                                    <h:outputText value="#{articulo.artiInfoAdicional}"/>
                                 </p:column>
                             </p:dataTable>
                         </b:column>

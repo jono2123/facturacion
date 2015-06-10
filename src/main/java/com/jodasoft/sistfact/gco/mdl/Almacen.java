@@ -6,9 +6,7 @@
 package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,11 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,7 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Almacen.findByAlmaNombre", query = "SELECT a FROM Almacen a WHERE a.almaNombre = :almaNombre"),
     @NamedQuery(name = "Almacen.findByAlmaDireccion", query = "SELECT a FROM Almacen a WHERE a.almaDireccion = :almaDireccion"),
     @NamedQuery(name = "Almacen.findByAlmaRuc", query = "SELECT a FROM Almacen a WHERE a.almaRuc = :almaRuc"),
-    @NamedQuery(name = "Almacen.findByAlmaTelefono", query = "SELECT a FROM Almacen a WHERE a.almaTelefono = :almaTelefono")})
+    @NamedQuery(name = "Almacen.findByAlmaTelefono", query = "SELECT a FROM Almacen a WHERE a.almaTelefono = :almaTelefono"),
+    @NamedQuery(name = "Almacen.findByAlmaEstado", query = "SELECT a FROM Almacen a WHERE a.almaEstado = :almaEstado")})
 public class Almacen implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,12 +52,8 @@ public class Almacen implements Serializable {
     @Size(max = 15)
     @Column(name = "alma_telefono", length = 15)
     private String almaTelefono;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "almacen")
-    private List<Cliente> clienteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "almacen")
-    private List<Usuario> usuarioList;
-    @OneToMany(mappedBy = "almaId")
-    private List<Articulo> articuloList;
+    @Column(name = "alma_estado")
+    private Integer almaEstado;
 
     public Almacen() {
     }
@@ -109,31 +102,12 @@ public class Almacen implements Serializable {
         this.almaTelefono = almaTelefono;
     }
 
-    @XmlTransient
-    public List<Cliente> getClienteList() {
-        return clienteList;
+    public Integer getAlmaEstado() {
+        return almaEstado;
     }
 
-    public void setClienteList(List<Cliente> clienteList) {
-        this.clienteList = clienteList;
-    }
-
-    @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
-    }
-
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
-    }
-
-    @XmlTransient
-    public List<Articulo> getArticuloList() {
-        return articuloList;
-    }
-
-    public void setArticuloList(List<Articulo> articuloList) {
-        this.articuloList = articuloList;
+    public void setAlmaEstado(Integer almaEstado) {
+        this.almaEstado = almaEstado;
     }
 
     @Override

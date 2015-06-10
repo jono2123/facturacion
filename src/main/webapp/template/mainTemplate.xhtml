@@ -83,46 +83,57 @@
     </h:head>
 
     <h:body>
-        <div id="mainContainer" >
-            <nav id="menu">
-                <h:form>
-                    <p:panelMenu style="width:100%;">
-                        <p:submenu label="Facturación">
-                            <p:menuitem value="Clientes"/>
-                        </p:submenu>
-                        <p:submenu label="Inventario" >
-                            <p:menuitem value="Items"/>
-                            <p:menuitem value="Unidades de Medida"/>
-                        </p:submenu>
-                    </p:panelMenu>
+        <p:outputPanel rendered="#{!templateController.logueado}">
+            <script type="text/javascript">
+                
+
+                window.location = "/sistFact/faces/public/login.xhtml";
+
+            </script>
+        </p:outputPanel>
+        <p:outputPanel rendered="#{templateController.logueado}">       
+            <div id="mainContainer" >
+                <nav id="menu">
+                    <h:form>
+
+                        <p:panelMenu style="width:100%;">
+                            <p:submenu label="Facturación">
+                                <p:menuitem value="Clientes"/>
+                            </p:submenu>
+                            <p:submenu label="Inventario" >
+                                <p:menuitem value="Items"/>
+                                <p:menuitem value="Unidades de Medida"/>
+                            </p:submenu>
+                        </p:panelMenu>
 
 
-                </h:form>
-            </nav>
-            <div id="header" class="header Fixed">
-                <a href="#menu"></a>
-                Demo
-            </div>
-
-
-            <div id="content">
-                <h:form>
-
-                </h:form>
-                <div id="right">
-                    <ui:insert name="content">Content</ui:insert>
+                    </h:form>
+                </nav>
+                <div id="header" class="header Fixed">
+                    <a href="#menu"></a>
+                    <h:outputText value="#{templateController.usuario.almacen.almaNombre}"/>
                 </div>
 
 
-            </div>
+                <div id="content">
+                    <h:form>
 
-            <div id="fotter" >
-                <p:outputPanel style="width: 100%; height: 80px;">
-                    <h:outputText value="Pie de pagina"/>
-                </p:outputPanel>
-            </div>
+                    </h:form>
+                    <div id="right">
+                        <ui:insert name="content">Content</ui:insert>
+                    </div>
 
-        </div>
+
+                </div>
+
+                <div id="fotter" >
+                    <p:outputPanel style="width: 100%; height: 80px;">
+                        <h:outputText value="Pie de pagina"/>
+                    </p:outputPanel>
+                </div>
+
+            </div>
+        </p:outputPanel>
     </h:body>
 
 </html>

@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findByAlmaId", query = "SELECT u FROM Usuario u WHERE u.usuarioPK.almaId = :almaId"),
     @NamedQuery(name = "Usuario.findByUsuaId", query = "SELECT u FROM Usuario u WHERE u.usuarioPK.usuaId = :usuaId"),
     @NamedQuery(name = "Usuario.findByUsuaNombre", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre"),
+    @NamedQuery(name = "Usuario.findByUsuaNombreAndUsuaClaveAndEstado", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre and u.usuaClave = :usuaClave and u.usuaEstado = :usuaEstado"),
     @NamedQuery(name = "Usuario.findByUsuaClave", query = "SELECT u FROM Usuario u WHERE u.usuaClave = :usuaClave"),
     @NamedQuery(name = "Usuario.findByUsuaRol", query = "SELECT u FROM Usuario u WHERE u.usuaRol = :usuaRol"),
     @NamedQuery(name = "Usuario.findByUsuaEstado", query = "SELECT u FROM Usuario u WHERE u.usuaEstado = :usuaEstado")})
@@ -46,7 +47,7 @@ public class Usuario implements Serializable {
     private Integer usuaRol;
     @Column(name = "usua_estado")
     private Boolean usuaEstado;
-    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false, insertable = false, updatable = true)
     @ManyToOne(optional = false)
     private Almacen almacen;
 

@@ -54,15 +54,28 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
              ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getClieTelefono());
              Validacion.validadarCed_RUC(cliente.getClientePK().getClieCedula());
              create(cliente);
-             /*try {
-                 clienteDAO.commitAndCloseTransaction();
-             } catch (IdDuplicadoException ex) {
-                 throw new ClienteValidadorException("Ya existe un cliente con esta cédula");
-             }*/
          } catch (AtributoInvalidoException ex) {
              throw new ClienteValidadorException(ex.getMessage());
          } catch (CedulaInvalidaException ex) {
              throw new ClienteValidadorException(ex.getMessage());
          }
+    }
+    
+    public void update(Cliente cliente) throws ClienteValidadorException{
+        try {
+             ValidarAtributoUtil.validarStringNuloVacio("Nombres", cliente.getClieNombres());
+             ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getClieApellidos());
+             ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getClieDireccion());
+             ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getClieTelefono());
+             edit(cliente);
+         } catch (AtributoInvalidoException ex) {
+             throw new ClienteValidadorException(ex.getMessage());
+         }
+    }
+    
+    public void delete(Cliente cliente) throws ClienteValidadorException
+    {
+        cliente.setClieEstado(false);
+        edit(cliente);
     }
 }

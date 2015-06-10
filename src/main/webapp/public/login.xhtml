@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title>Acceder al sistema</title>
+        <h:outputStylesheet library="css" name="estilo.css"/>
+        <h:outputStylesheet library="css" name="themes/jodasoft.min.css"/>
+    </h:head>
+    <h:body>
+        <p:growl id="messages"/>
+        <h:form id="loginForm">
+            <b:panel title="Iniciar Sesión" look="primary" style="width: 40%; min-width: 300px; margin: 0px auto">
+                <b:container id="pnlDatos">
+                    <b:row>
+                        <b:column span="2">
+                            <h:outputText value="Nombre de Usuario:"/>
+                        </b:column>
+                        <b:column span="3">
+                            <b:inputText value="#{loginController.nomUsuario}" id="txtUsuario"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="2">
+                            <h:outputText value="Contraseña"/>
+                        </b:column>
+                        <b:column span="3">
+                            <b:inputSecret value="#{loginController.pass}" id="txtPassword"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="2">
+                            <h:outputText value=""/>
+                        </b:column>
+                        <b:column span="3">
+                            <p:commandButton value="Acceder" action="#{loginController.login()}" class="botonesMantenimientos btn-danger btn" update="messages"/>
+                        </b:column>
+
+                    </b:row>
+                </b:container>
+            </b:panel> 
+        </h:form>
+    </h:body>
+</html>
+
