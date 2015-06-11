@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
     @NamedQuery(name = "Cliente.findByAlmaId", query = "SELECT c FROM Cliente c WHERE c.clientePK.almaId = :almaId"),
     @NamedQuery(name = "Cliente.findByClieEstado", query = "SELECT c FROM Cliente c WHERE c.clieEstado = :clieEstado"),
+    @NamedQuery(name = "Cliente.findByClieCedulaAndClieAlmacenAndEstado", query = "SELECT c FROM Cliente c WHERE c.clientePK.clieCedula = :clieCedula and c.clientePK.almaId = :almaId and c.clieEstado = :clieEstado"),
     @NamedQuery(name = "Cliente.findByAlmaIdAndClieEstado", query = "SELECT c FROM Cliente c WHERE c.clientePK.almaId = :almaId and c.clieEstado = :clieEstado")})
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;

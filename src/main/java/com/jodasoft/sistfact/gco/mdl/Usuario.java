@@ -6,14 +6,18 @@
 package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -22,21 +26,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author javila
  */
 @Entity
-@Table(catalog = "dbfacturacion", schema = "public")
+@Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"usua_nombre"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByAlmaId", query = "SELECT u FROM Usuario u WHERE u.usuarioPK.almaId = :almaId"),
-    @NamedQuery(name = "Usuario.findByUsuaId", query = "SELECT u FROM Usuario u WHERE u.usuarioPK.usuaId = :usuaId"),
+    @NamedQuery(name = "Usuario.findByUsuaId", query = "SELECT u FROM Usuario u WHERE u.usuaId = :usuaId"),
     @NamedQuery(name = "Usuario.findByUsuaNombre", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre"),
-    @NamedQuery(name = "Usuario.findByUsuaNombreAndUsuaClaveAndEstado", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre and u.usuaClave = :usuaClave and u.usuaEstado = :usuaEstado"),
     @NamedQuery(name = "Usuario.findByUsuaClave", query = "SELECT u FROM Usuario u WHERE u.usuaClave = :usuaClave"),
     @NamedQuery(name = "Usuario.findByUsuaRol", query = "SELECT u FROM Usuario u WHERE u.usuaRol = :usuaRol"),
+    @NamedQuery(name = "Usuario.findByUsuaNombreAndUsuaClaveAndEstado", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre and u.usuaClave = :usuaClave and u.usuaEstado = :usuaEstado"),
     @NamedQuery(name = "Usuario.findByUsuaEstado", query = "SELECT u FROM Usuario u WHERE u.usuaEstado = :usuaEstado")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected UsuarioPK usuarioPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "usua_id", nullable = false)
+    private Integer usuaId;
     @Size(max = 30)
     @Column(name = "usua_nombre", length = 30)
     private String usuaNombre;
@@ -47,27 +54,23 @@ public class Usuario implements Serializable {
     private Integer usuaRol;
     @Column(name = "usua_estado")
     private Boolean usuaEstado;
-    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false, insertable = false, updatable = true)
+    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false, updatable = true)
     @ManyToOne(optional = false)
-    private Almacen almacen;
+    private Almacen almaId;
 
     public Usuario() {
     }
 
-    public Usuario(UsuarioPK usuarioPK) {
-        this.usuarioPK = usuarioPK;
+    public Usuario(Integer usuaId) {
+        this.usuaId = usuaId;
     }
 
-    public Usuario(int almaId, int usuaId) {
-        this.usuarioPK = new UsuarioPK(almaId, usuaId);
+    public Integer getUsuaId() {
+        return usuaId;
     }
 
-    public UsuarioPK getUsuarioPK() {
-        return usuarioPK;
-    }
-
-    public void setUsuarioPK(UsuarioPK usuarioPK) {
-        this.usuarioPK = usuarioPK;
+    public void setUsuaId(Integer usuaId) {
+        this.usuaId = usuaId;
     }
 
     public String getUsuaNombre() {
@@ -102,18 +105,18 @@ public class Usuario implements Serializable {
         this.usuaEstado = usuaEstado;
     }
 
-    public Almacen getAlmacen() {
-        return almacen;
+    public Almacen getAlmaId() {
+        return almaId;
     }
 
-    public void setAlmacen(Almacen almacen) {
-        this.almacen = almacen;
+    public void setAlmaId(Almacen almaId) {
+        this.almaId = almaId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (usuarioPK != null ? usuarioPK.hashCode() : 0);
+        hash += (usuaId != null ? usuaId.hashCode() : 0);
         return hash;
     }
 
@@ -124,7 +127,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.usuarioPK == null && other.usuarioPK != null) || (this.usuarioPK != null && !this.usuarioPK.equals(other.usuarioPK))) {
+        if ((this.usuaId == null && other.usuaId != null) || (this.usuaId != null && !this.usuaId.equals(other.usuaId))) {
             return false;
         }
         return true;
@@ -132,7 +135,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.jodasoft.sistfact.gco.mdl.Usuario[ usuarioPK=" + usuarioPK + " ]";
+        return "com.jodasoft.sistfact.gco.mdl.Usuario[ usuaId=" + usuaId + " ]";
     }
     
 }
