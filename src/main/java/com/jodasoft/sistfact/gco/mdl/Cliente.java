@@ -7,19 +7,26 @@ package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,18 +34,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"clie_cedula", "alma_id"}),
     @UniqueConstraint(columnNames = {"alma_id", "clie_codigo"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
-    @NamedQuery(name = "Cliente.findByAlmaId", query = "SELECT c FROM Cliente c WHERE c.clientePK.almaId = :almaId"),
+    @NamedQuery(name = "Cliente.findByAlmaId", query = "SELECT c FROM Cliente c WHERE c.almaId = :almaId"),
     @NamedQuery(name = "Cliente.findByClieEstado", query = "SELECT c FROM Cliente c WHERE c.clieEstado = :clieEstado"),
-    @NamedQuery(name = "Cliente.findByClieCedulaAndClieAlmacenAndEstado", query = "SELECT c FROM Cliente c WHERE c.clientePK.clieCedula = :clieCedula and c.clientePK.almaId = :almaId and c.clieEstado = :clieEstado"),
-    @NamedQuery(name = "Cliente.findByAlmaIdAndClieEstado", query = "SELECT c FROM Cliente c WHERE c.clientePK.almaId = :almaId and c.clieEstado = :clieEstado")})
+    @NamedQuery(name = "Cliente.findByClieCedulaAndClieAlmacenAndEstado", query = "SELECT c FROM Cliente c WHERE c.clieCedula = :clieCedula and c.almaId = :almaId and c.clieEstado = :clieEstado"),
+    @NamedQuery(name = "Cliente.findByAlmaIdAndClieEstado", query = "SELECT c FROM Cliente c WHERE c.almaId = :almaId and c.clieEstado = :clieEstado")})
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ClientePK clientePK;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 13)
+    @Column(name = "clie_cedula", nullable = false, length = 13)
+    private String clieCedula;
     @Size(max = 50)
     @Column(name = "clie_nombres", length = 50)
     private String clieNombres;
@@ -62,27 +73,34 @@ public class Cliente implements Serializable {
     @Size(max = 15)
     @Column(name = "clie_codigo", length = 15)
     private String clieCodigo;
-    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false, insertable = false, updatable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "clie_id", nullable = false)
+    private Integer clieId;
+    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false)
     @ManyToOne(optional = false)
-    private Almacen almacen;
+    private Almacen almaId;
+   
 
     public Cliente() {
     }
 
-    public Cliente(ClientePK clientePK) {
-        this.clientePK = clientePK;
+    public Cliente(Integer clieId) {
+        this.clieId = clieId;
     }
 
-    public Cliente(int almaId, String clieCedula) {
-        this.clientePK = new ClientePK(almaId, clieCedula);
+    public Cliente(Integer clieId, String clieCedula) {
+        this.clieId = clieId;
+        this.clieCedula = clieCedula;
     }
 
-    public ClientePK getClientePK() {
-        return clientePK;
+    public String getClieCedula() {
+        return clieCedula;
     }
 
-    public void setClientePK(ClientePK clientePK) {
-        this.clientePK = clientePK;
+    public void setClieCedula(String clieCedula) {
+        this.clieCedula = clieCedula;
     }
 
     public String getClieNombres() {
@@ -149,18 +167,28 @@ public class Cliente implements Serializable {
         this.clieCodigo = clieCodigo;
     }
 
-    public Almacen getAlmacen() {
-        return almacen;
+    public Integer getClieId() {
+        return clieId;
     }
 
-    public void setAlmacen(Almacen almacen) {
-        this.almacen = almacen;
+    public void setClieId(Integer clieId) {
+        this.clieId = clieId;
     }
+
+    public Almacen getAlmaId() {
+        return almaId;
+    }
+
+    public void setAlmaId(Almacen almaId) {
+        this.almaId = almaId;
+    }
+
+   
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (clientePK != null ? clientePK.hashCode() : 0);
+        hash += (clieId != null ? clieId.hashCode() : 0);
         return hash;
     }
 
@@ -171,7 +199,7 @@ public class Cliente implements Serializable {
             return false;
         }
         Cliente other = (Cliente) object;
-        if ((this.clientePK == null && other.clientePK != null) || (this.clientePK != null && !this.clientePK.equals(other.clientePK))) {
+        if ((this.clieId == null && other.clieId != null) || (this.clieId != null && !this.clieId.equals(other.clieId))) {
             return false;
         }
         return true;
@@ -179,7 +207,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.jodasoft.sistfact.gco.mdl.Cliente[ clientePK=" + clientePK + " ]";
+        return "com.jodasoft.sistfact.gco.mdl.Cliente[ clieId=" + clieId + " ]";
     }
     
 }

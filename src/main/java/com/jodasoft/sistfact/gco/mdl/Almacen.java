@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author javila
  */
 @Entity
-@Cacheable(false)
 @Table(catalog = "dbfacturacion", schema = "public")
+@Cacheable(false)
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Almacen.findAll", query = "SELECT a FROM Almacen a"),
@@ -60,8 +60,7 @@ public class Almacen implements Serializable {
     private String almaTelefono;
     @Column(name = "alma_estado")
     private Integer almaEstado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "almaId")
-    private List<Usuario> usuarioList;
+   
 
     public Almacen() {
     }
@@ -118,14 +117,9 @@ public class Almacen implements Serializable {
         this.almaEstado = almaEstado;
     }
 
-    @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
-    }
+    
 
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
-    }
+    
 
     @Override
     public int hashCode() {

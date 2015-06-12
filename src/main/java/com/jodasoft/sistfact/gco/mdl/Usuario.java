@@ -6,6 +6,7 @@
 package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,10 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"alma_id", "usua_id"}),
     @UniqueConstraint(columnNames = {"usua_nombre"})})
 @XmlRootElement
 @NamedQueries({
@@ -54,7 +58,8 @@ public class Usuario implements Serializable {
     private Integer usuaRol;
     @Column(name = "usua_estado")
     private Boolean usuaEstado;
-    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false, updatable = true)
+   
+    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false)
     @ManyToOne(optional = false)
     private Almacen almaId;
 
@@ -104,6 +109,8 @@ public class Usuario implements Serializable {
     public void setUsuaEstado(Boolean usuaEstado) {
         this.usuaEstado = usuaEstado;
     }
+
+   
 
     public Almacen getAlmaId() {
         return almaId;

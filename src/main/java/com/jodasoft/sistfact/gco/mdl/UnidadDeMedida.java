@@ -32,8 +32,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "UnidadDeMedida.findAll", query = "SELECT u FROM UnidadDeMedida u"),
     @NamedQuery(name = "UnidadDeMedida.findByUmedId", query = "SELECT u FROM UnidadDeMedida u WHERE u.umedId = :umedId"),
     @NamedQuery(name = "UnidadDeMedida.findByAlmaId", query = "SELECT u FROM UnidadDeMedida u WHERE u.almaId = :almaId"),
+    @NamedQuery(name = "UnidadDeMedida.findByUmedNombre", query = "SELECT u FROM UnidadDeMedida u WHERE u.umedNombre = :umedNombre"),
     @NamedQuery(name = "UnidadDeMedida.findByAlmaIdAndUmedEstado", query = "SELECT u FROM UnidadDeMedida u WHERE u.almaId = :almaId and u.umedEstado = :estado"),
-    @NamedQuery(name = "UnidadDeMedida.findByUmedNombre", query = "SELECT u FROM UnidadDeMedida u WHERE u.umedNombre = :umedNombre")})
+    @NamedQuery(name = "UnidadDeMedida.findByUmedEstado", query = "SELECT u FROM UnidadDeMedida u WHERE u.umedEstado = :umedEstado")})
 public class UnidadDeMedida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,9 +48,8 @@ public class UnidadDeMedida implements Serializable {
     @Column(name = "umed_nombre", length = 20)
     private String umedNombre;
     @Column(name = "umed_estado")
-    private boolean umedEstado;
-    @OneToMany(mappedBy = "umedId")
-    private List<Articulo> articuloList;
+    private Boolean umedEstado;
+   
 
     public UnidadDeMedida() {
     }
@@ -82,22 +82,15 @@ public class UnidadDeMedida implements Serializable {
         this.umedNombre = umedNombre;
     }
 
-    public boolean getUmedEstado() {
+    public Boolean getUmedEstado() {
         return umedEstado;
     }
 
-    public void setUmedEstado(boolean umedEstado) {
+    public void setUmedEstado(Boolean umedEstado) {
         this.umedEstado = umedEstado;
     }
 
-    @XmlTransient
-    public List<Articulo> getArticuloList() {
-        return articuloList;
-    }
 
-    public void setArticuloList(List<Articulo> articuloList) {
-        this.articuloList = articuloList;
-    }
 
     @Override
     public int hashCode() {
