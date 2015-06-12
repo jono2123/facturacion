@@ -98,11 +98,11 @@
 
                         <p:panelMenu style="width:100%;">
                             <p:submenu label="Facturación">
-                                <p:menuitem value="Clientes"/>
+                                <p:menuitem outcome="/private/facturacion/clienteUI.xhtml" value="Clientes" title="Módulo para el mantenimiento de clientes"/>
                             </p:submenu>
-                            <p:submenu label="Inventario" >
-                                <p:menuitem value="Items"/>
-                                <p:menuitem value="Unidades de Medida"/>
+                            <p:submenu label="Inventario">
+                                <p:menuitem value="Items" outcome="/private/inventario/itemUI.xhtml"/>
+                                <p:menuitem value="Unidades de Medida" outcome="/private/inventario/unidadDeMedidaUI.xhtml"/>
                             </p:submenu>
                         </p:panelMenu>
 
@@ -111,7 +111,7 @@
                 </nav>
                 <div id="header" class="header Fixed">
                     <a href="#menu"></a>
-                    <h:outputText value="#{templateController.usuario.almacen.almaNombre}"/>
+                    <h:outputText value="#{templateController.usuario.almaId.almaNombre}"/>
                 </div>
 
 

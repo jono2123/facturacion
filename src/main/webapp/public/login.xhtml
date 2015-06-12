@@ -15,20 +15,20 @@
         <p:growl id="messages"/>
         <h:form id="loginForm">
             <b:panel title="Iniciar Sesión" look="primary" style="width: 40%; min-width: 300px; margin: 0px auto">
-                <b:container id="pnlDatos">
-                    <b:row>
-                        <b:column span="2">
-                            <h:outputText value="Nombre de Usuario:"/>
+                <b:container id="pnlDatos" style="width: 100%">
+                    <b:row>                                                      
+                        <b:column col-md="3" col-xs="12">
+                            <h:outputText value="Usuario:"/>
                         </b:column>
-                        <b:column span="3">
+                        <b:column col-md="9" col-xs="12">
                             <b:inputText value="#{loginController.nomUsuario}" id="txtUsuario"/>
                         </b:column>
                     </b:row>
                     <b:row>
-                        <b:column span="2">
-                            <h:outputText value="Contraseña"/>
+                        <b:column col-md="3" col-xs="12">
+                            <h:outputText value="Contraseña:"/>
                         </b:column>
-                        <b:column span="3">
+                        <b:column col-md="9" col-xs="12">
                             <b:inputSecret value="#{loginController.pass}" id="txtPassword"/>
                         </b:column>
                     </b:row>

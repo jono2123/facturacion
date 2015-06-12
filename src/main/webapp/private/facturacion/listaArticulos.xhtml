@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="../../template/mainTemplate.xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <p:dataTable styleClass="" style="width: 100%" var="articulo" value="#{listaArticulosController.articulos}" id="tblArticulos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{listaArticulosController.articulo}" widgetVar="tablaArticulos" filteredValue="#{listaArticulosController.articulosFiltrados}">               
+                <f:facet name="header">
+                    <h:outputText value="Listado"/>
+                </f:facet>
+                <p:column  filterBy="#{articulo.artiCodigo}" filterMatchMode="contains" headerText="Código" priority="1" style="width: 10%" sortBy="#{articulo.artiCodigo}">
+                    <h:outputText value="#{articulo.artiCodigo}"  />
+                </p:column>
+                <p:column headerText="Descripción" filterBy="#{articulo.artiDescripcion}" filterMatchMode="contains" priority="1" style="width: 35%" sortBy="#{articulo.artiDescripcion}">
+                    <h:outputText value="#{articulo.artiDescripcion}"/>
+                </p:column>     
+                <p:column headerText="P.Venta" priority="1" style="width: 8%">
+                    <h:outputText value="#{articulo.artiPrecioVenta}"/>
+                </p:column>
+                <p:column headerText="Tiene Iva" priority="2" style="width: 5%">
+                    <h:outputText value="#{articulo.artiIva?'SI':'NO'}"/>
+                </p:column>
+            </p:dataTable>           
+        </ui:composition> 
+    </h:body>
+</html>
+
+

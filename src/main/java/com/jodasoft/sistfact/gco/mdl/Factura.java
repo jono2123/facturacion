@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -46,12 +48,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Factura.findByFactSubtotalConIva", query = "SELECT f FROM Factura f WHERE f.factSubtotalConIva = :factSubtotalConIva"),
     @NamedQuery(name = "Factura.findByFactIva", query = "SELECT f FROM Factura f WHERE f.factIva = :factIva"),
     @NamedQuery(name = "Factura.findByFactDescuento", query = "SELECT f FROM Factura f WHERE f.factDescuento = :factDescuento"),
-    @NamedQuery(name = "Factura.findByFactTotal", query = "SELECT f FROM Factura f WHERE f.factTotal = :factTotal")})
+    @NamedQuery(name = "Factura.findByFactTotal", query = "SELECT f FROM Factura f WHERE f.factTotal = :factTotal"),
+    @NamedQuery(name = "Factura.findByFactFecha", query = "SELECT f FROM Factura f WHERE f.factFecha = :factFecha")})
 public class Factura implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "fact_id", nullable = false)
     private Integer factId;
     @Column(name = "fact_numero")
@@ -76,7 +79,7 @@ public class Factura implements Serializable {
     private Double factDescuento;
     @Column(name = "fact_total", precision = 17, scale = 17)
     private Double factTotal;
-     @Column(name = "fact_fecha")
+    @Column(name = "fact_fecha")
     @Temporal(TemporalType.DATE)
     private Date factFecha;
     @JoinColumn(name = "alma_id", referencedColumnName = "alma_id")

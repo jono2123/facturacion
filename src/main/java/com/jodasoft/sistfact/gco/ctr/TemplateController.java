@@ -47,5 +47,4 @@ public class TemplateController implements Serializable {
     public boolean getLogueado(){
         return LoginController.getInstance().estaLogueado();
     }
-    
 }

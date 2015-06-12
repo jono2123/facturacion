@@ -52,7 +52,7 @@ public class UnidadDeMedidaController extends AbstractMB {
     public void saveUmed() {
         reiniciaUmed();
         unidad.setUmedNombre(nombre);
-        unidad.setAlmaId(1);
+        unidad.setAlmaId(LoginController.getInstance().getUsuario().getAlmaId().getAlmaId());
         unidad.setUmedEstado(true);
         try {
             umedFacade.save(unidad);
@@ -103,7 +103,7 @@ public class UnidadDeMedidaController extends AbstractMB {
 
     public List<UnidadDeMedida> getUnidades() {
         if (unidades == null) {
-            unidades = umedFacade.listar(1);
+            unidades = umedFacade.listar(LoginController.getInstance().getUsuario().getAlmaId().getAlmaId());
         }
         return unidades;
     }

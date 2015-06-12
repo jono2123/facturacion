@@ -45,9 +45,9 @@ public class LoginController extends AbstractMB implements Serializable {
         usuario=null;
         usuario = usuarioFacade.findByUserAndPass(nomUsuario, pass);
         if(usuario!=null){
-            if (usuario.getAlmacen().getAlmaEstado()==0){
+            if (usuario.getAlmaId().getAlmaEstado()==0){
                 return "/private/principal.xhtml?faces-redirect=true";
-            }else if(usuario.getAlmacen().getAlmaEstado()==1){
+            }else if(usuario.getAlmaId().getAlmaEstado()==1){
                 displayErrorMessageToUser("El Usuario ingresado tiene restringido el ingreso\nComuníquese con el administrador para más información");
             }else {
                 displayErrorMessageToUser("Nombre de Usuario o Contraseña incorrectos");

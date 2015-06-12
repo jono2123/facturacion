@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="../../template/mainTemplate.xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{listaClientesController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.clieId}" selection="#{listaClientesController.cliente}" widgetVar="tablaClientes" filteredValue="#{listaClientesController.clientesFiltrados}">
+                <f:facet name="header">
+                    <h:outputText value="Listado"/>
+                </f:facet>
+                <p:column  filterBy="#{cliente.clieCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.clieCedula}">
+                    <h:outputText value="#{cliente.clieCedula}"  />
+                </p:column>
+                <p:column headerText="Nombres" filterBy="#{cliente.clieNombres}" priority="1" style="width: 15%" sortBy="#{cliente.clieNombres}">
+                    <h:outputText value="#{cliente.clieNombres}"/>
+                </p:column>
+                <p:column headerText="Apellidos" filterBy="#{cliente.clieApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.clieApellidos}">
+                    <h:outputText value="#{cliente.clieApellidos}"/>
+                </p:column>
+                <p:column headerText="Dirección" priority="2" style="width: 18%">
+                    <h:outputText value="#{cliente.clieDireccion}"/>
+                </p:column>
+                <p:column headerText="e-Mail" priority="3" style="width: 18%">
+                    <h:outputText value="#{cliente.clieMail}"/>
+                </p:column>
+            </p:dataTable>
+           
+        </ui:composition> 
+    </h:body>
+</html>
+

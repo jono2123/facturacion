@@ -11,6 +11,7 @@ package com.jodasoft.sistfact.gco.ctr;
  */
 
 import com.jodasoft.sistfact.gco.ctr.util.JSFMessageUtil;
+import java.text.DecimalFormat;
 import org.primefaces.context.RequestContext;
 
 
@@ -42,4 +43,17 @@ public class AbstractMB {
  protected RequestContext getRequestContext(){
   return RequestContext.getCurrentInstance();
  }
+ 
+ private DecimalFormat df2 = new DecimalFormat("#,###,###,##0.00");
+  public double redondear(double num)
+  {
+    num *= 100.0D;
+    num = Math.round(num);
+    int numr = (int)num;
+    return numr / 100.0D;
+  }
+  
+   public String Formato(double num) {
+        return df2.format(num);
+   }
 }

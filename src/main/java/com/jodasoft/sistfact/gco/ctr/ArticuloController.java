@@ -79,8 +79,8 @@ public class ArticuloController extends AbstractMB {
     public void saveArticulo() {
         try {
             articulo = new Articulo();
-            Almacen almacen = new Almacen();
-            almacen.setAlmaId(1);
+            Almacen almacen = LoginController.getInstance().getUsuario().getAlmaId();
+           
             articulo.setAlmaId(almacen);
             articulo.setArtEstado(true);
             articulo.setArtiCodigo(codigo);
@@ -199,7 +199,7 @@ public class ArticuloController extends AbstractMB {
 
     public List<UnidadDeMedida> getUnidades() {
         if (unidades == null) {
-            unidades = unidadDeMedidaFacade.listar(1);
+            unidades = unidadDeMedidaFacade.listar(LoginController.getInstance().getUsuario().getAlmaId().getAlmaId());
         }
         return unidades;
     }
@@ -237,9 +237,7 @@ public class ArticuloController extends AbstractMB {
     }
 
     private Almacen getAlmacen() {
-        Almacen almacen = new Almacen();
-        almacen.setAlmaId(1);
-        return almacen;
+        return LoginController.getInstance().getUsuario().getAlmaId();
 
     }
 

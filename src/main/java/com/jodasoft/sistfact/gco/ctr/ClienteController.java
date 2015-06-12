@@ -7,7 +7,6 @@ package com.jodasoft.sistfact.gco.ctr;
 
 import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Cliente;
-import com.jodasoft.sistfact.gco.mdl.ClientePK;
 import com.jodasoft.sistfact.gco.util.exp.ClienteValidadorException;
 
 import java.io.Serializable;
@@ -31,7 +30,6 @@ public class ClienteController extends AbstractMB implements Serializable{
      */
     @EJB
     private com.jodasoft.sistfact.gco.dao.ClienteFacade clienteFacade;
-    
     private String cedula;
     private String nombres;
     private String apellidos;
@@ -50,7 +48,6 @@ public class ClienteController extends AbstractMB implements Serializable{
     //funciones///////////////////////////
     private void reiniciaCliente(){
         cliente = new Cliente();
-        cliente.setClientePK(new ClientePK());
     }
      public void vaciaTextos()
     {
@@ -64,14 +61,17 @@ public class ClienteController extends AbstractMB implements Serializable{
     }
     
    public String formateaFecha(Date fecha){
-       return fecha.toLocaleString().substring(0, fecha.toLocaleString().indexOf(" "));
+       if(fecha!=null)
+        return fecha.toLocaleString().substring(0, fecha.toLocaleString().indexOf(" "));
+       else
+           return "";
    }
     
     public void saveCliente() {
         try {
             reiniciaCliente();
-            cliente.getClientePK().setAlmaId(1);
-            cliente.getClientePK().setClieCedula(cedula);
+            Almacen almacen = LoginController.getInstance().getUsuario().getAlmaId();
+     
             cliente.setClieNombres(nombres);
             cliente.setClieApellidos(apellidos);
             cliente.setClieDireccion(direccion);
@@ -79,9 +79,8 @@ public class ClienteController extends AbstractMB implements Serializable{
             cliente.setClieMail(mail);
             cliente.setClieFechaNacimiento(fechaNacimiento);
             cliente.setClieEstado(true);
-            Almacen almacen = new Almacen();
-            almacen.setAlmaId(1);
-            cliente.setAlmacen(almacen);          
+            cliente.setClieCedula(cedula);
+            cliente.setAlmaId(almacen);
             clienteFacade.save(cliente);
             closeDialog();
             displayInfoMessageToUser("Cliente Guardado Correctamente");
@@ -132,7 +131,7 @@ public class ClienteController extends AbstractMB implements Serializable{
     }
     
     public void onRowSelect(SelectEvent event) {
-        setCedula(cliente.getClientePK().getClieCedula());
+        setCedula(cliente.getClieCedula());
         setNombres(cliente.getClieNombres());
         setApellidos(cliente.getClieApellidos());
         setDireccion(cliente.getClieDireccion());
@@ -210,7 +209,7 @@ public class ClienteController extends AbstractMB implements Serializable{
 
     public List<Cliente> getClientes() {
         if(clientes==null)
-            clientes=clienteFacade.findClienteByAlmaIdAndClieEstado(1, true);
+            clientes=clienteFacade.findClienteByAlmaIdAndClieEstado(LoginController.getInstance().getUsuario().getAlmaId(), true);
         return clientes;
     }
 

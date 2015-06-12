@@ -1,0 +1,284 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="content">
+        <b:panel look="primary" title="Facturación" style="vertical-align: central; margin: 0px auto !important;" >
+            <h:form id="frmPrincipal">
+                <p:growl id="messages" showDetail="false"/>
+                <b:panel title="Datos de la Factura" look="primary" style="width: 90%; min-width: 400px; margin: 0px auto">
+                    <h:form id="frmEncabezado">
+                        <p:outputPanel id="pnlDatosFact">
+                            <b:container id="pnlEncabezado" style="width: 100%">
+                                <b:row>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="Número:"/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="12">
+                                        <b:inputText value="#{facturaController.numero}" id="txtNumero"/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-md="3" col-sm="3" col-xs="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="CI/RUC: "/>
+                                    </b:column>
+                                    <b:column col-md="3" col-sm="2" col-xs="9">
+                                        <b:inputText value="#{facturaController.cedula}" id="txtCedula"/>
+
+                                    </b:column>
+                                    <b:column col-md="2" col-sm="3" col-xs="3">
+                                        <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmEncabezado" action="#{facturaController.buscarPorCedula()}" update="pnlDatosFact :frmPrincipal:messages" title="Buscar" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                        <p:commandButton value="" icon="ui-icon-contact"  onclick="PF('dlgClientes').show();" title="Seleccionar" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="Fecha: "/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="12">
+                                        <b:inputText value="#{facturaController.formateaFecha(facturaController.fecha)}" disabled="true" id="txtFecha"/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="Cliente: "/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="12">
+                                        <b:inputText value="#{facturaController.nombres}" disabled="true" id="txtCliente"/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="Dirección: "/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="12">
+                                        <b:inputText value="#{facturaController.direccion}" disabled="true" id="txtDireccion"/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="Teléfono: "/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="12">
+                                        <b:inputText value="#{facturaController.telefono}" disabled="true" id="txtTelefono"/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value="N.Guía: "/>
+                                    </b:column>
+                                    <b:column col-md="4" col-sm="4" col-xs="12">
+                                        <b:inputText value="#{facturaController.guia}" id="txtGuia"/>
+                                    </b:column>
+                                    <b:column col-md="1" col-sm="1" col-xs="12">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+                        </p:outputPanel>
+                        <p:dialog header="Listado de Clientes" id="mdlClientes" modal="true" widgetVar="dlgClientes">
+                            <ui:include src="listaClientes.xhtml"/>
+                            <p:commandButton value="Seleccionar" process=":frmPrincipal:frmEncabezado" style="width: 250px;" action="#{facturaController.selecciona()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact" onsuccess="PF('dlgClientes').hide();"/>
+                        </p:dialog>
+                    </h:form>
+                </b:panel>
+                <b:panel title="Detalle de la Factura" look="primary" style="width: 90%; min-width: 400px; margin: 0px auto">
+                    <h:form id="frmDetalle">
+                        <p:outputPanel id="pnlProd">
+                            <b:container style="width: 100%;" id="pnlProducto">
+                                <b:row>
+                                    <b:column col-xs="12" col-md="1" col-sm="1">
+                                        <h:outputText value="Código"/>
+                                    </b:column>
+                                    <b:column col-xs="11" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.codigo}" id="txtCodigo"/>
+                                    </b:column>
+                                    <b:column col-xs="1" col-md="2" col-sm="2">
+                                        <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmDetalle" action="#{facturaController.buscaArticuloPorCodigo()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:pnlProd"  class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                        <p:commandButton value="" icon="ui-icon-contact" onclick="PF('dlgItems').show();"  class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="1" col-sm="1">
+                                        <h:outputText value="Cantidad:"/>                                
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="1" col-sm="1">
+                                        <b:inputText value="#{facturaController.cantidad}" id="txtCantidad"/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="1" col-sm="1">
+                                        <h:outputText value="Precio:"/>                                
+                                    </b:column>
+                                    <b:column col-xs="10" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.precio}" id="txtPrecio"/>
+                                    </b:column>
+                                    <b:column col-xs="1" col-md="1" col-sm="1">
+                                        <p:commandButton value="Agregar" process=":frmPrincipal:frmDetalle" icon="ui-icon-cart"  class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.agregarItem()}" update="tblItems pnlResultados pnlProd :frmPrincipal:messages " style="width: 80px !important;" onsuccess="document.getElementById('frmPrincipal:frmDetalle:txtCodigo').focus();"/>
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+                            <p:dataTable styleClass="" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{item.numItem}" selection="#{facturaController.detalleSelected}" widgetVar="tablaItems">               
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle de La Factura"/>
+                                </f:facet>           
+                                <p:column headerText="CANTIDAD" priority="1" style="width: 10%">
+                                    <h:outputText value="#{item.defaCantidad}"/>
+                                </p:column>
+                                <p:column headerText="DESCRIPCION" priority="1" style="width:34%">
+                                    <h:outputText value="#{item.artiId.artiDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="P.Venta" priority="1" style="width: 10%">
+                                    <h:outputText value="#{facturaController.Formato(item.defaPrecioVenta)}"/>
+                                </p:column>
+                                <p:column headerText="V. Total" priority="1" style="width: 10%">
+                                    <h:outputText value="#{facturaController.Formato(item.defaPrecioVenta*item.defaCantidad)}"/>
+                                </p:column>
+                                <p:column headerText="Iva" priority="1" style="width: 6%">
+                                    <h:outputText value="#{item.artiId.artiIva?'SI':'NO'}"/>
+                                </p:column>
+                                <p:column headerText="Observaciones" priority="2" style="width: 30%" >
+                                    <h:outputText value="#{item.defaObservaciones}"/>
+                                </p:column>
+                            </p:dataTable>   
+                        </p:outputPanel>
+                        <p:outputPanel id="pnlResultados" style="width: 100%;">
+
+                            <b:container id="ctnResultados" style="width: 100%;">
+                                <b:row>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="0" col-md="7" col-sm="7">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="1" col-sm="1" style="text-align: right;">
+                                        <h:outputText value="Subtotal: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.Formato(facturaController.subtTotal)}" id="txtSubtotal" disabled="true" class="textosFactura"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="0" col-md="6" col-sm="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2" style="text-align: right;">
+                                        <h:outputText value="Subtotal Sin Iva: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.Formato(facturaController.subTotalSinIva)}" id="txtSubtotalSinIva" disabled="true" class="textosFactura"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="0" col-md="6" col-sm="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2" style="text-align: right;">
+                                        <h:outputText value="Subtotal Con Iva: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.Formato(facturaController.subTotalConIva)}" id="txtSubtotalConIva" disabled="true" class="textosFactura"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="0" col-md="6" col-sm="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2" style="text-align: right;">
+                                        <h:outputText value="Descuento: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.descuento}" id="txtDescuento" disabled="true" class="textosFactura"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="0" col-md="6" col-sm="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2" style="text-align: right;">
+                                        <h:outputText value="IVA: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.Formato(facturaController.iva)}" id="txtIva" disabled="true" class="textosFactura"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-xs="6" col-md="3" col-sm="3">
+                                        <p:commandButton value="Guardar" action="#{facturaController.guardarFactura()}" class="botonesMantenimientos btn-danger btn-lg" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                        </p:commandButton>             
+                                        <p:commandButton value="Nueva" class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.limpiarTodo()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados" process=":frmPrincipal:frmDetalle">
+                                            <p:confirm header="Nueva Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                    </b:column>
+
+                                    <b:column col-xs="0" col-md="5" col-sm="5">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2" style="text-align: right;">
+                                        <h:outputText value="TOTAL: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.Formato(facturaController.tota)}" id="txtTotal" disabled="true" class="textosFactura"/>
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+
+                        </p:outputPanel>
+                        <p:dialog header="Listado de Ítems" id="mdlItems" modal="true" widgetVar="dlgItems">
+                            <ui:include src="listaArticulos.xhtml"/>
+                            <p:commandButton value="Seleccionar" action="#{facturaController.seleccionaArticulo()}" process=":frmPrincipal:frmDetalle" style="width: 250px;"  update=":frmPrincipal:frmDetalle:pnlProd" onsuccess="PF('dlgItems').hide();"/>
+                        </p:dialog>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </h:form>
+
+                </b:panel>
+
+            </h:form>
+        </b:panel>
+    </ui:define>
+</ui:composition>
