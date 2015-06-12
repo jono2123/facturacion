@@ -78,4 +78,15 @@ public class ArticuloFacade extends AbstractFacade<Articulo>{
         articulo.setArtEstado(false);
         edit(articulo);
     }
+    
+    public Articulo findByCodigoAndAlmacen(Almacen almaId, String codigo){
+        Articulo articulo;
+        //Articulo.findByArtiCodigoAlmaIdAndArtiEstado
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("artiCodigo", codigo);
+        parameters.put("almaId", almaId);
+        parameters.put("estado", true);
+        articulo = super.findOneResult("Articulo.findByArtiCodigoAlmaIdAndArtiEstado", parameters);
+        return articulo;
+    }
 }

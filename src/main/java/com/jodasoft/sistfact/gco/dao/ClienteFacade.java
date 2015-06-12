@@ -5,6 +5,7 @@
  */
 package com.jodasoft.sistfact.gco.dao;
 
+import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Cliente;
 import com.jodasoft.sistfact.gco.util.Validacion;
 import com.jodasoft.sistfact.gco.util.ValidarAtributoUtil;
@@ -37,7 +38,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         return em;
     }
     
-    public List<Cliente> findClienteByAlmaIdAndClieEstado(int almaId, boolean estado){
+    public List<Cliente> findClienteByAlmaIdAndClieEstado(Almacen almaId, boolean estado){
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("almaId", almaId);
         parameters.put("clieEstado", estado);
@@ -47,12 +48,12 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
     public void save(Cliente cliente) throws ClienteValidadorException
     {
         try {
-             ValidarAtributoUtil.validarStringNuloVacio("Cedula/Ruc", cliente.getClientePK().getClieCedula());
+             ValidarAtributoUtil.validarStringNuloVacio("Cedula/Ruc", cliente.getClieCedula());
              ValidarAtributoUtil.validarStringNuloVacio("Nombres", cliente.getClieNombres());
              ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getClieApellidos());
              ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getClieDireccion());
              ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getClieTelefono());
-             Validacion.validadarCed_RUC(cliente.getClientePK().getClieCedula());
+             Validacion.validadarCed_RUC(cliente.getClieCedula());
              create(cliente);
          } catch (AtributoInvalidoException ex) {
              throw new ClienteValidadorException(ex.getMessage());
@@ -77,5 +78,15 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
     {
         cliente.setClieEstado(false);
         edit(cliente);
+    }
+    public Cliente findClienteByCedula(String cedula, Almacen almaId)
+    {
+        Cliente cliente;
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("clieCedula", cedula);
+        parameters.put("almaId", almaId);
+        parameters.put("clieEstado", true);
+        cliente = super.findOneResult("Cliente.findByClieCedulaAndClieAlmacenAndEstado", parameters);
+        return cliente;
     }
 }
