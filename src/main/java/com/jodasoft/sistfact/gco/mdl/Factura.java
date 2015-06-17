@@ -24,7 +24,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -39,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Factura.findAll", query = "SELECT f FROM Factura f"),
-    @NamedQuery(name = "Factura.findByFactId", query = "SELECT f FROM Factura f WHERE f.factId = :factId"),
     @NamedQuery(name = "Factura.findByFactNumero", query = "SELECT f FROM Factura f WHERE f.factNumero = :factNumero"),
     @NamedQuery(name = "Factura.findByFactNunAutorizacion", query = "SELECT f FROM Factura f WHERE f.factNunAutorizacion = :factNunAutorizacion"),
     @NamedQuery(name = "Factura.findByFactClaveAcceso", query = "SELECT f FROM Factura f WHERE f.factClaveAcceso = :factClaveAcceso"),
@@ -49,14 +47,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Factura.findByFactIva", query = "SELECT f FROM Factura f WHERE f.factIva = :factIva"),
     @NamedQuery(name = "Factura.findByFactDescuento", query = "SELECT f FROM Factura f WHERE f.factDescuento = :factDescuento"),
     @NamedQuery(name = "Factura.findByFactTotal", query = "SELECT f FROM Factura f WHERE f.factTotal = :factTotal"),
-    @NamedQuery(name = "Factura.findByFactFecha", query = "SELECT f FROM Factura f WHERE f.factFecha = :factFecha")})
+    @NamedQuery(name = "Factura.findByFactFecha", query = "SELECT f FROM Factura f WHERE f.factFecha = :factFecha"),
+    @NamedQuery(name = "Factura.findByFactId", query = "SELECT f FROM Factura f WHERE f.factId = :factId")})
 public class Factura implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "fact_id", nullable = false)
-    private Integer factId;
     @Column(name = "fact_numero")
     private Integer factNumero;
     @Size(max = 50)
@@ -82,30 +76,27 @@ public class Factura implements Serializable {
     @Column(name = "fact_fecha")
     @Temporal(TemporalType.DATE)
     private Date factFecha;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "fact_id", nullable = false)
+    private Integer factId;
+    @OneToMany(mappedBy = "factId", cascade = CascadeType.ALL)
+    private List<DetalleFactura> detalleFacturaList;
     @JoinColumn(name = "alma_id", referencedColumnName = "alma_id")
     @ManyToOne
     private Almacen almaId;
-    @JoinColumn(name = "clie_id", referencedColumnName = "clie_id")
+    @JoinColumn(name = "clie_id", referencedColumnName = "pers_id")
     @ManyToOne
-    private Cliente clieId;
+    private Persona clieId;
     @JoinColumn(name = "usua_id", referencedColumnName = "usua_id")
     @ManyToOne
     private Usuario usuaId;
-    @OneToMany(mappedBy = "factId", cascade = CascadeType.ALL)
-    private List<DetalleFactura> detalleFacturaList;
 
     public Factura() {
     }
 
     public Factura(Integer factId) {
-        this.factId = factId;
-    }
-
-    public Integer getFactId() {
-        return factId;
-    }
-
-    public void setFactId(Integer factId) {
         this.factId = factId;
     }
 
@@ -189,28 +180,12 @@ public class Factura implements Serializable {
         this.factFecha = factFecha;
     }
 
-    public Almacen getAlmaId() {
-        return almaId;
+    public Integer getFactId() {
+        return factId;
     }
 
-    public void setAlmaId(Almacen almaId) {
-        this.almaId = almaId;
-    }
-
-    public Cliente getClieId() {
-        return clieId;
-    }
-
-    public void setClieId(Cliente clieId) {
-        this.clieId = clieId;
-    }
-
-    public Usuario getUsuaId() {
-        return usuaId;
-    }
-
-    public void setUsuaId(Usuario usuaId) {
-        this.usuaId = usuaId;
+    public void setFactId(Integer factId) {
+        this.factId = factId;
     }
 
     @XmlTransient
@@ -220,6 +195,30 @@ public class Factura implements Serializable {
 
     public void setDetalleFacturaList(List<DetalleFactura> detalleFacturaList) {
         this.detalleFacturaList = detalleFacturaList;
+    }
+
+    public Almacen getAlmaId() {
+        return almaId;
+    }
+
+    public void setAlmaId(Almacen almaId) {
+        this.almaId = almaId;
+    }
+
+    public Persona getClieId() {
+        return clieId;
+    }
+
+    public void setClieId(Persona clieId) {
+        this.clieId = clieId;
+    }
+
+    public Usuario getUsuaId() {
+        return usuaId;
+    }
+
+    public void setUsuaId(Usuario usuaId) {
+        this.usuaId = usuaId;
     }
 
     @Override

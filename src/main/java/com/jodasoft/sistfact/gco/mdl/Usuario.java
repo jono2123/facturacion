@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"alma_id", "usua_id"}),
     @UniqueConstraint(columnNames = {"usua_nombre"})})
 @XmlRootElement
 @NamedQueries({
@@ -38,9 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByUsuaId", query = "SELECT u FROM Usuario u WHERE u.usuaId = :usuaId"),
     @NamedQuery(name = "Usuario.findByUsuaNombre", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre"),
     @NamedQuery(name = "Usuario.findByUsuaClave", query = "SELECT u FROM Usuario u WHERE u.usuaClave = :usuaClave"),
-    @NamedQuery(name = "Usuario.findByUsuaRol", query = "SELECT u FROM Usuario u WHERE u.usuaRol = :usuaRol"),
     @NamedQuery(name = "Usuario.findByUsuaNombreAndUsuaClaveAndEstado", query = "SELECT u FROM Usuario u WHERE u.usuaNombre = :usuaNombre and u.usuaClave = :usuaClave and u.usuaEstado = :usuaEstado"),
-    @NamedQuery(name = "Usuario.findByUsuaEstado", query = "SELECT u FROM Usuario u WHERE u.usuaEstado = :usuaEstado")})
+    @NamedQuery(name = "Usuario.findByUsuaEstadoAndUsuaAlmaId", query = "SELECT u FROM Usuario u WHERE u.usuaEstado = :usuaEstado and u.rolId.almaId = :almaId")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,17 +49,16 @@ public class Usuario implements Serializable {
     @Size(max = 30)
     @Column(name = "usua_nombre", length = 30)
     private String usuaNombre;
-    @Size(max = 30)
-    @Column(name = "usua_clave", length = 30)
+    @Size(max = 100)
+    @Column(name = "usua_clave", length = 100)
     private String usuaClave;
-    @Column(name = "usua_rol")
-    private Integer usuaRol;
     @Column(name = "usua_estado")
     private Boolean usuaEstado;
-   
-    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false)
-    @ManyToOne(optional = false)
-    private Almacen almaId;
+    @OneToMany(mappedBy = "usuaId")
+    private List<Factura> facturaList;
+    @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
+    @ManyToOne
+    private Rol rolId;
 
     public Usuario() {
     }
@@ -94,14 +91,6 @@ public class Usuario implements Serializable {
         this.usuaClave = usuaClave;
     }
 
-    public Integer getUsuaRol() {
-        return usuaRol;
-    }
-
-    public void setUsuaRol(Integer usuaRol) {
-        this.usuaRol = usuaRol;
-    }
-
     public Boolean getUsuaEstado() {
         return usuaEstado;
     }
@@ -110,14 +99,21 @@ public class Usuario implements Serializable {
         this.usuaEstado = usuaEstado;
     }
 
-   
-
-    public Almacen getAlmaId() {
-        return almaId;
+    @XmlTransient
+    public List<Factura> getFacturaList() {
+        return facturaList;
     }
 
-    public void setAlmaId(Almacen almaId) {
-        this.almaId = almaId;
+    public void setFacturaList(List<Factura> facturaList) {
+        this.facturaList = facturaList;
+    }
+
+    public Rol getRolId() {
+        return rolId;
+    }
+
+    public void setRolId(Rol rolId) {
+        this.rolId = rolId;
     }
 
     @Override

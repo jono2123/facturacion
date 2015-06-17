@@ -61,8 +61,8 @@ public class Articulo implements Serializable {
     private Double artiPrecioVenta;
     @Column(name = "arti_iva")
     private Boolean artiIva;
-    @Size(max = 2147483647)
-    @Column(name = "arti_descripcion", length = 2147483647)
+    @Size(max = 200)
+    @Column(name = "arti_descripcion", length = 200)
     private String artiDescripcion;
     @Size(max = 200)
     @Column(name = "arti_info_adicional", length = 200)
