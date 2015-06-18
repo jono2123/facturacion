@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="content">
+        <b:panel look="primary" title="Configuración del Negocio" style="vertical-align: central; margin: 0px auto !important;" >
+            <h:form>
+                <p:growl id="messages" showDetail="false"/>
+                <b:container style="width: 100%;">
+                    <b:row>
+                        <b:column>
+                            <div id="contentLeft">
+                                <b:container id="pnlDatos" style="width: 100%">
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Nombre del Negocio: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText  id="txtNombre" value="#{administracionController.almacen.almaNombre}"/>
+                                        </b:column>    
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Dirección: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtDireccion" value="#{administracionController.almacen.almaDireccion}"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Teléfono"/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtTelefono" value="#{administracionController.almacen.almaTelefono}"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Propietario: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtPropietario" value="#{administracionController.almacen.almaPropietario}"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="RUC: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtRUC" value="#{administracionController.almacen.almaRuc}"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="IVA: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtIVA" value="#{administracionController.almacen.almaIva}"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Servidor Imp: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtDireccionServidor" value="#{administracionController.almacen.almaDireccionServidor}"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="4" col-sm="4" col-xs="8">
+                                            <h:outputText value="Auto-numeración de facturas: "/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="4" col-sm="8">
+                                            <p:inputSwitch value="#{administracionController.almacen.almaFacturaAutonumerada}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
+                                        </b:column>
+                                    </b:row>
+                                     <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Número de Factura: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtNumeroFactura" value="#{administracionController.almacen.almaNumFactura}"/>
+                                        </b:column>
+                                    </b:row>
+
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <p:commandButton value="Guardar" class="botonesMantenimientos btn-danger btn-lg" action="#{administracionController.updateAlmacen()}" update="messages"/>
+                                        </b:column>
+                                    </b:row>
+
+                                </b:container>
+
+                            </div>
+
+                            <div id="contentRight">
+                                <p:graphicImage value="../../resources/images/config.png" width="100%"/>
+                            </div>
+                        </b:column>
+                    </b:row>
+                </b:container>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </b:panel>
+    </ui:define>
+</ui:composition>
+
+

@@ -9,6 +9,7 @@ import com.jodasoft.sistfact.gco.mdl.Usuario;
 import javax.inject.Named;
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -25,6 +26,11 @@ public class TemplateController implements Serializable {
     private String almacen;
     
     public TemplateController() {
+    }
+    
+    public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/public/login.xhtml?faces-redirect=true";
     }
 
     public Usuario getUsuario() {

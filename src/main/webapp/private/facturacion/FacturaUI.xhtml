@@ -8,6 +8,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:b="http://bootsfaces.net/ui">
     <ui:define name="content">
+        <h:outputScript library="js"  name="events.js"/>
         <b:panel look="primary" title="Facturación" style="vertical-align: central; margin: 0px auto !important;" >
             <h:form id="frmPrincipal">
                 <p:growl id="messages" showDetail="false"/>
@@ -131,7 +132,7 @@
                                     </b:column>
                                 </b:row>
                             </b:container>
-                            <p:dataTable styleClass="" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{item.numItem}" selection="#{facturaController.detalleSelected}" widgetVar="tablaItems">               
+                            <p:dataTable styleClass="" editable="true" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{item.numItem}" selection="#{facturaController.detalleSelected}" widgetVar="tablaItems">               
                                 <f:facet name="header">
                                     <h:outputText value="Detalle de La Factura"/>
                                 </f:facet>           
@@ -151,8 +152,21 @@
                                     <h:outputText value="#{item.artiId.artiIva?'SI':'NO'}"/>
                                 </p:column>
                                 <p:column headerText="Observaciones" priority="2" style="width: 30%" >
-                                    <h:outputText value="#{item.defaObservaciones}"/>
+                                    <p:cellEditor>
+                                        <f:facet name="output"> <h:outputText value="#{item.defaObservaciones}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{item.defaObservaciones}" style="width:100%" label="Observaciones"/></f:facet>
+                                    </p:cellEditor>
                                 </p:column>
+                               
+                                <p:column style="width:32px">
+                                    <p:rowEditor />
+                                </p:column>
+                                 <p:column style="width: 42px;">
+                                    <p:commandLink action="#{facturaController.quitar(item)}" title="Quitar" update="tblItems :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:graphicImage value="../../resources/images/remove.png" style="width: 100%;"/>
+                                    </p:commandLink>
+                                </p:column>
+                                
                             </p:dataTable>   
                         </p:outputPanel>
                         <p:outputPanel id="pnlResultados" style="width: 100%;">
@@ -246,7 +260,7 @@
                                 <b:row>
                                     <b:column col-xs="6" col-md="3" col-sm="3">
                                         <p:commandButton value="Guardar" action="#{facturaController.guardarFactura()}" class="botonesMantenimientos btn-danger btn-lg" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
-                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>             
                                         <p:commandButton value="Nueva" class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.limpiarTodo()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Nueva Factura" message="¿Está Seguro?" icon="ui-icon-alert" />

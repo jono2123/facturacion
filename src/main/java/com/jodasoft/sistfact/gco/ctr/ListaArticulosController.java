@@ -45,7 +45,7 @@ public class ListaArticulosController extends AbstractMB implements Serializable
 
     public List<Articulo> getArticulos() {
         if(articulos==null)
-            articulos=articuloFacade.listar(LoginController.getInstance().getUsuario().getAlmaId(), true);
+            articulos=articuloFacade.listar(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
         return articulos;
     }
 

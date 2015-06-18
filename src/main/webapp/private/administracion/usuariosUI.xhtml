@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="content">
+        <b:panel look="primary" title="Administración de Usuarios" style="vertical-align: central; margin: 0px auto !important;" >
+            <h:form>
+                <p:growl id="messages" showDetail="false"/>
+                <b:container style="width: 100%;">
+                    <b:row>
+                        <b:column>
+                            <div id="contentLeft">
+                                <b:container id="pnlDatos" style="width: 100%">
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Nombre: "/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText  id="txtNombre" value="#{usuarioController.nomUsuario}"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton  ajax="true" value="Nuevo" action="#{usuarioController.saveUsuario()}"   class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Contraseña"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputSecret  id="txtPass" value="#{usuarioController.contrasenia}"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos">
+                                                <p:confirm header="Modificar Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton> 
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Rol"/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:selectOneMenu value="#{usuarioController.rol}">
+                                                <f:selectItems value="#{usuarioController.roles}" var="rol" itemLabel="#{rol.rolNombre}" itemValue="#{rol.rolId}"/>
+                                            </b:selectOneMenu>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true" value="Eliminar"  class="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblUsuarios @form:pnlDatos">
+                                                <p:confirm header="Eliminar Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton> 
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true"  value="Limpiar"  class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                                <p:resetInput target="pnlDatos" />
+                                            </p:commandButton>
+                                        </b:column>
+                                    </b:row>
+                                    
+                                </b:container>
+
+                            </div>
+
+                            <div id="contentRight">
+                                <p:graphicImage value="../../resources/images/user.png" width="100%"/>
+                            </div>
+                        </b:column>
+                    </b:row>
+                    <b:row style="margin-top: 20px;">
+                        <b:column>
+                            <p:dataTable styleClass="" style="width: 100%" var="usuario" value="#{usuarioController.usuarios}" id="tblUsuarios"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{usuario.usuaId}" selection="#{usuarioController.usuario}" widgetVar="tablaUsuarios">
+                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{usuarioController.onRowSelect}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="Listado"/>
+                                </f:facet>
+                                <p:column   headerText="Nombre de Usuario" priority="1" style="width: 100%">
+                                    <h:outputText value="#{usuario.usuaNombre}"  />                                
+                                </p:column>
+                                <p:column   headerText="Rol" priority="1" style="width: 100%">
+                                    <h:outputText value="#{usuario.rolId.rolNombre}"  />
+                                </p:column>
+                                    
+                            </p:dataTable>
+                        </b:column>
+                    </b:row>
+                </b:container>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </b:panel>
+    </ui:define>
+</ui:composition>
+
+

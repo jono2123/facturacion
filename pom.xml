@@ -61,7 +61,12 @@
             <artifactId>all-themes</artifactId>  
             <version>1.0.10</version>  
         </dependency> 
-            
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -86,6 +91,12 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -94,23 +105,7 @@
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <version>2.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>localhost_8080/serviciosLocales/servicios.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <packageName>com.jodasoft.sistfact.gco.util.wsc</packageName>
-                            <wsdlLocation>http://localhost:8080/serviciosLocales/servicios?WSDL</wsdlLocation>
-                            <staleFile>${project.build.directory}/jaxws/stale/servicios.stale</staleFile>
-                        </configuration>
-                        <id>wsimport-generate-servicios</id>
-                        <phase>generate-sources</phase>
-                    </execution>
-                </executions>
+                
                 <configuration>
                     <!-- Needed with JAXP 1.5 -->
                     <vmArgs>
@@ -177,23 +172,7 @@
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <version>2.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>localhost_8080/serviciosLocales/servicios.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <packageName></packageName>
-                            <wsdlLocation>http://localhost:8080/serviciosLocales/servicios?WSDL</wsdlLocation>
-                            <staleFile>${project.build.directory}/jaxws/stale/servicios.stale</staleFile>
-                        </configuration>
-                        <id>wsimport-generate-servicios</id>
-                        <phase>generate-sources</phase>
-                    </execution>
-                </executions>
+                
                 <dependencies>
                     <dependency>
                         <groupId>javax.xml</groupId>

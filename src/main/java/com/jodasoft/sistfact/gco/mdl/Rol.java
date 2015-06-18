@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Rol.findAll", query = "SELECT r FROM Rol r"),
     @NamedQuery(name = "Rol.findByRolId", query = "SELECT r FROM Rol r WHERE r.rolId = :rolId"),
-    @NamedQuery(name = "Rol.findByRolNombre", query = "SELECT r FROM Rol r WHERE r.rolNombre = :rolNombre")})
+    @NamedQuery(name = "Rol.findByRolNombre", query = "SELECT r FROM Rol r WHERE r.rolNombre = :rolNombre"),
+    @NamedQuery(name = "Rol.findByAlmaIdAndEstado", query = "SELECT r FROM Rol r WHERE r.almaId = :almaId and r.rolEstado = :rolEstado"),
+    @NamedQuery(name = "Rol.findByRolEstado", query = "SELECT r FROM Rol r WHERE r.rolEstado = :rolEstado")})
 public class Rol implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,6 +46,8 @@ public class Rol implements Serializable {
     @Size(max = 30)
     @Column(name = "rol_nombre", length = 30)
     private String rolNombre;
+    @Column(name = "rol_estado")
+    private Boolean rolEstado;
     @JoinColumn(name = "alma_id", referencedColumnName = "alma_id")
     @ManyToOne
     private Almacen almaId;
@@ -73,6 +77,14 @@ public class Rol implements Serializable {
 
     public void setRolNombre(String rolNombre) {
         this.rolNombre = rolNombre;
+    }
+
+    public Boolean getRolEstado() {
+        return rolEstado;
+    }
+
+    public void setRolEstado(Boolean rolEstado) {
+        this.rolEstado = rolEstado;
     }
 
     public Almacen getAlmaId() {

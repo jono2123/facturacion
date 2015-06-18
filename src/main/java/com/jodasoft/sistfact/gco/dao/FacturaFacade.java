@@ -42,7 +42,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             ValidarAtributoUtil.validarDoubleNegativo("Total", factura.getFactTotal());
             ValidarAtributoUtil.validarDoubleNegativo("Iva", factura.getFactIva());
             ValidarAtributoUtil.validarObjetoNulo("Detalle", factura.getDetalleFacturaList());
-            ValidarAtributoUtil.validarObjetoNulo("Cliente", factura.getClieId().getClieCedula());
+            ValidarAtributoUtil.validarObjetoNulo("Cliente", factura.getClieId().getPersCedula());
             if(factura.getDetalleFacturaList().size()==0)
             {
                 throw new FacturaValidadorException("No se ha agregado ningun Ítem al detalle de la factura");

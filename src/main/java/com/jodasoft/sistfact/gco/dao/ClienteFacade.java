@@ -48,12 +48,12 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
     public void save(Cliente cliente) throws ClienteValidadorException
     {
         try {
-             ValidarAtributoUtil.validarStringNuloVacio("Cedula/Ruc", cliente.getClieCedula());
-             ValidarAtributoUtil.validarStringNuloVacio("Nombres", cliente.getClieNombres());
-             ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getClieApellidos());
-             ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getClieDireccion());
-             ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getClieTelefono());
-             Validacion.validadarCed_RUC(cliente.getClieCedula());
+             ValidarAtributoUtil.validarStringNuloVacio("Cedula/Ruc", cliente.getPersCedula());
+             ValidarAtributoUtil.validarStringNuloVacio("Nombres", cliente.getPersNombres());
+             ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getPersApellidos());
+             ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getPersDireccion());
+             ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getPersTelefono());
+             Validacion.validadarCed_RUC(cliente.getPersCedula());
              create(cliente);
          } catch (AtributoInvalidoException ex) {
              throw new ClienteValidadorException(ex.getMessage());
@@ -64,10 +64,10 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
     
     public void update(Cliente cliente) throws ClienteValidadorException{
         try {
-             ValidarAtributoUtil.validarStringNuloVacio("Nombres", cliente.getClieNombres());
-             ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getClieApellidos());
-             ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getClieDireccion());
-             ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getClieTelefono());
+              ValidarAtributoUtil.validarStringNuloVacio("Nombres", cliente.getPersNombres());
+             ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getPersApellidos());
+             ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getPersDireccion());
+             ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getPersTelefono());
              edit(cliente);
          } catch (AtributoInvalidoException ex) {
              throw new ClienteValidadorException(ex.getMessage());

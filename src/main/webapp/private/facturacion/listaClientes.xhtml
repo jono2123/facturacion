@@ -8,24 +8,24 @@
       xmlns:b="http://bootsfaces.net/ui">
     <h:body>
         <ui:composition>
-            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{listaClientesController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.clieId}" selection="#{listaClientesController.cliente}" widgetVar="tablaClientes" filteredValue="#{listaClientesController.clientesFiltrados}">
+            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{listaClientesController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.persId}" selection="#{listaClientesController.cliente}" widgetVar="tablaClientes" filteredValue="#{listaClientesController.clientesFiltrados}">
                 <f:facet name="header">
                     <h:outputText value="Listado"/>
                 </f:facet>
-                <p:column  filterBy="#{cliente.clieCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.clieCedula}">
-                    <h:outputText value="#{cliente.clieCedula}"  />
+                <p:column  filterBy="#{cliente.persCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.persCedula}">
+                    <h:outputText value="#{cliente.persCedula}"  />
                 </p:column>
-                <p:column headerText="Nombres" filterBy="#{cliente.clieNombres}" priority="1" style="width: 15%" sortBy="#{cliente.clieNombres}">
-                    <h:outputText value="#{cliente.clieNombres}"/>
+                <p:column headerText="Nombres" filterBy="#{cliente.persNombres}" priority="1" style="width: 15%" sortBy="#{cliente.persNombres}">
+                    <h:outputText value="#{cliente.persNombres}"/>
                 </p:column>
-                <p:column headerText="Apellidos" filterBy="#{cliente.clieApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.clieApellidos}">
-                    <h:outputText value="#{cliente.clieApellidos}"/>
+                <p:column headerText="Apellidos" filterBy="#{cliente.persApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.persApellidos}">
+                    <h:outputText value="#{cliente.persApellidos}"/>
                 </p:column>
                 <p:column headerText="Dirección" priority="2" style="width: 18%">
-                    <h:outputText value="#{cliente.clieDireccion}"/>
+                    <h:outputText value="#{cliente.persDireccion}"/>
                 </p:column>
                 <p:column headerText="e-Mail" priority="3" style="width: 18%">
-                    <h:outputText value="#{cliente.clieMail}"/>
+                    <h:outputText value="#{cliente.persTelefono}"/>
                 </p:column>
             </p:dataTable>
            

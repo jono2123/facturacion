@@ -85,7 +85,7 @@
     <h:body>
         <p:outputPanel rendered="#{!templateController.logueado}">
             <script type="text/javascript">
-                
+
 
                 window.location = "/sistFact/faces/public/login.xhtml";
 
@@ -99,10 +99,16 @@
                         <p:panelMenu style="width:100%;">
                             <p:submenu label="Facturación">
                                 <p:menuitem outcome="/private/facturacion/clienteUI.xhtml" value="Clientes" title="Módulo para el mantenimiento de clientes"/>
+                                <p:menuitem outcome="/private/facturacion/FacturaUI.xhtml" value="Facturar" title="Facturación de productos y/o servicios"/>
                             </p:submenu>
                             <p:submenu label="Inventario">
                                 <p:menuitem value="Items" outcome="/private/inventario/itemUI.xhtml"/>
                                 <p:menuitem value="Unidades de Medida" outcome="/private/inventario/unidadDeMedidaUI.xhtml"/>
+                            </p:submenu>
+                            <p:submenu label="Administración">
+                                <p:menuitem value="Configuraciones" outcome="/private/administracion/administracionAlmacen.xhtml"/>
+                                <p:menuitem value="Usuarios" outcome="/private/administracion/usuariosUI.xhtml"/>
+                                <p:menuitem value="Roles" outcome="/private/administracion/rolUI.xhtml"/>
                             </p:submenu>
                         </p:panelMenu>
 
@@ -111,7 +117,18 @@
                 </nav>
                 <div id="header" class="header Fixed">
                     <a href="#menu"></a>
-                    <h:outputText value="#{templateController.usuario.almaId.almaNombre}"/>
+                    <h:outputText value="#{templateController.usuario.rolId.almaId.almaNombre}"/>
+                    <div id="divUsuario" style="position: fixed; top: 0px; right: 10px; color: #fff">
+                        <h:form id="frmUsuario">
+                            <h:panelGrid columns="3">
+                                <h:outputText value="Usuario: " style="font-weight: bold; margin-right: 3px;"/>
+                                <h:outputText value="#{templateController.usuario.usuaNombre}" style="margin-right: 5px;"/>
+
+                                <p:commandButton value="Salir" process="@this" action="#{templateController.logout()}"/>
+                            </h:panelGrid>
+                        </h:form>
+
+                    </div>
                 </div>
 
 

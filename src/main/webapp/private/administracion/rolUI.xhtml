@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="content">
+        <b:panel look="primary" title="Administración de Roles" style="vertical-align: central; margin: 0px auto !important;" >
+            <h:form>
+                <p:growl id="messages" showDetail="false"/>
+                <b:container style="width: 100%;">
+                    <b:row>
+                        <b:column>
+                            <div id="contentLeft">
+                                <b:container id="pnlDatos" style="width: 100%">
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Nombre: "/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <b:inputText  id="txtNombre" value="#{rolController.nombre}"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton  ajax="true" value="Nuevo"    class="botonesMantenimientos btn-danger btn-lg" action="#{rolController.save()}" update="@form:messages @form:tblRoles @form:pnlDatos"/>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true" value="Modificar" action="#{rolController.updateRol()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblRoles @form:pnlDatos">
+                                                <p:confirm header="Modificar Rol" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton> 
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true" value="Eliminar" action="#{rolController.deleteRol()}"  class="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblRoles @form:pnlDatos">
+                                                <p:confirm header="Eliminar Rol" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton> 
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="8">
+                                            <h:outputText value=""/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton ajax="true"  value="Limpiar"  class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                                <p:resetInput target="pnlDatos" />
+                                            </p:commandButton>
+                                        </b:column>
+                                    </b:row>
+                                    
+                                </b:container>
+
+                            </div>
+
+                            <div id="contentRight">
+                                <p:graphicImage value="../../resources/images/user.png" width="100%"/>
+                            </div>
+                        </b:column>
+                    </b:row>
+                    <b:row style="margin-top: 20px;">
+                        <b:column>
+                            <p:dataTable styleClass="" style="width: 100%" var="rol" value="#{rolController.roles}" id="tblRoles"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{rol.rolId}" selection="#{rolController.rol}" widgetVar="tablaRoles">
+                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{rolController.onRowSelect}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="Listado"/>
+                                </f:facet>
+                                <p:column   headerText="Nombre de Usuario" priority="1" style="width: 100%">
+                                    <h:outputText value="#{rol.rolNombre}"  />                                
+                                </p:column>
+                                
+                                    
+                            </p:dataTable>
+                        </b:column>
+                    </b:row>
+                </b:container>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+        </b:panel>
+    </ui:define>
+</ui:composition>

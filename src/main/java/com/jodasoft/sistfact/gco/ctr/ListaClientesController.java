@@ -42,7 +42,7 @@ public class ListaClientesController extends AbstractMB implements Serializable 
 
     public List<Cliente> getClientes() {
         if(clientes==null)
-            clientes=clienteFacade.findClienteByAlmaIdAndClieEstado(LoginController.getInstance().getUsuario().getAlmaId(), true);
+            clientes=clienteFacade.findClienteByAlmaIdAndClieEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
         return clientes;
     }
 
