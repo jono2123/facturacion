@@ -5,18 +5,21 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Usuario;
 import javax.inject.Named;
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
+import java.util.List;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author javila
  */
 @Named(value = "templateController")
-@RequestScoped
+@SessionScoped
 public class TemplateController implements Serializable {
 
     /**
@@ -24,18 +27,23 @@ public class TemplateController implements Serializable {
      */
     private Usuario usuario;
     private String almacen;
+    private String url;
+    private List<Permiso> permisos;
+    private boolean tienePermiso;
     
+
     public TemplateController() {
     }
-    
+
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/public/login.xhtml?faces-redirect=true";
     }
 
     public Usuario getUsuario() {
-        if(usuario==null)
-            usuario=LoginController.getInstance().getUsuario();
+        if (usuario == null) {
+            usuario = LoginController.getInstance().getUsuario();
+        }
         return usuario;
     }
 
@@ -50,7 +58,32 @@ public class TemplateController implements Serializable {
     public void setAlmacen(String almacen) {
         this.almacen = almacen;
     }
-    public boolean getLogueado(){
+
+    public boolean getLogueado() {
         return LoginController.getInstance().estaLogueado();
     }
+
+    public boolean getTienePermiso() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String uri = request.getRequestURI();
+        uri = uri.substring(uri.indexOf("private")-1);
+        permisos=LoginController.getInstance().getPermisos();
+        if(uri.endsWith("principal.xhtml")){
+            return true;
+        }
+        for(Permiso permiso:permisos)
+        {
+            if(permiso.getVentId().getVentUrl().equals(uri)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    
+    public boolean getPuedeAcceder(){
+        return getLogueado() && getTienePermiso();
+    }
+    
 }

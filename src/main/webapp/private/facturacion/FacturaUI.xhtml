@@ -34,11 +34,11 @@
                                     <b:column col-md="1" col-sm="1" col-xs="12">
                                         <h:outputText value="CI/RUC: "/>
                                     </b:column>
-                                    <b:column col-md="3" col-sm="2" col-xs="9">
+                                    <b:column col-md="3" col-sm="3" col-xs="8">
                                         <b:inputText value="#{facturaController.cedula}" id="txtCedula"/>
 
                                     </b:column>
-                                    <b:column col-md="2" col-sm="3" col-xs="3">
+                                    <b:column col-md="2" col-sm="2" col-xs="4">
                                         <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmEncabezado" action="#{facturaController.buscarPorCedula()}" update="pnlDatosFact :frmPrincipal:messages" title="Buscar" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
                                         <p:commandButton value="" icon="ui-icon-contact"  onclick="PF('dlgClientes').show();" title="Seleccionar" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
                                     </b:column>
@@ -259,7 +259,7 @@
                                 </b:row>
                                 <b:row>
                                     <b:column col-xs="6" col-md="3" col-sm="3">
-                                        <p:commandButton value="Guardar" action="#{facturaController.guardarFactura()}" class="botonesMantenimientos btn-danger btn-lg" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar" action="#{facturaController.guardarFactura()}" class="botonesMantenimientos btn-danger btn-lg" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>             
                                         <p:commandButton value="Nueva" class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.limpiarTodo()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados" process=":frmPrincipal:frmDetalle">
@@ -280,7 +280,7 @@
                             </b:container>
 
                         </p:outputPanel>
-                        <p:dialog header="Listado de Ítems" id="mdlItems" modal="true" widgetVar="dlgItems">
+                        <p:dialog resizable="false" draggable="false" header="Listado de Ítems" id="mdlItems"  widgetVar="dlgItems" style="width: 80%;">
                             <ui:include src="listaArticulos.xhtml"/>
                             <p:commandButton value="Seleccionar" action="#{facturaController.seleccionaArticulo()}" process=":frmPrincipal:frmDetalle" style="width: 250px;"  update=":frmPrincipal:frmDetalle:pnlProd" onsuccess="PF('dlgItems').hide();"/>
                         </p:dialog>

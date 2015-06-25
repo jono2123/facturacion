@@ -8,9 +8,118 @@
                 xmlns:b="http://bootsfaces.net/ui">
     <ui:define name="content">
         <b:panel look="primary" title="Administración de Permisos" style="vertical-align: central; margin: 0px auto !important;" >
-            <h:form>
-                
-               
+            <h:form id="pnlDatos">
+                <p:growl id="messages"/>
+                <b:container style="width: 60%; margin: 0px auto;">
+                    <b:row>
+                        <b:column col-md="1" col-sm="1" col-xs="12">
+                            <h:outputText value="Rol: "/>
+                        </b:column>
+                        <b:column col-md="9" col-sm="9" col-xs="8">
+                            <b:inputText value="#{permisosController.rol.rolNombre}" id="Rol"/>
+                        </b:column> 
+                        <b:column col-md="2" col-sm="2" col-xs="4">
+                            <p:commandButton value="Seleccionar" onclick="PF('dlgRoles').show();" id="cmdSeleccionar" class="botonesMantenimientos btn-danger btn-lg"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column col-md="1" col-sm="1" col-xs="12">
+                            <h:outputText value="Módulo: "/>
+                        </b:column>
+                        <b:column col-md="5" col-sm="5" col-xs="12">
+                            <p:selectOneMenu class="form-control" style="width: 100%;" value="#{permisosController.idMod}" id="cboModulo">
+                                <p:ajax listener="#{permisosController.onModuloChange()}" update="cboProceso"/>
+                                <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+                                <f:selectItems  var="modulo" value="#{permisosController.modulos}" itemLabel="#{modulo.moduId.moduNombre}" itemValue="#{modulo.moduId.moduId}"/>
+
+                            </p:selectOneMenu>
+                        </b:column>
+                        <b:column col-md="1" col-sm="1" col-xs="12">
+                            <h:outputText value="Proceso: "/>
+                        </b:column>
+                        <b:column col-md="5" col-sm="5" col-xs="12">
+                            <b:selectOneMenu value="#{permisosController.idVent}" id="cboProceso">
+                                <f:selectItems value="#{permisosController.ventanas}" var="ventana" itemValue="#{ventana.ventId}" itemLabel="#{ventana.ventNombre}"/>
+                            </b:selectOneMenu>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column col-md="1" col-sm="1" col-xs="12">
+                            <h:outputText value="Permisos: "/>
+                        </b:column>
+                        <b:column col-md="2" col-sm="2" col-xs="8">
+                            <b:selectBooleanCheckbox value="#{permisosController.crear}" caption="Crear"/>
+                        </b:column>
+                        <b:column col-md="2" col-sm="2" col-xs="8">
+                            <b:selectBooleanCheckbox value="#{permisosController.modificar}" caption="Modificar"/>
+                        </b:column>
+                        <b:column col-md="2" col-sm="2" col-xs="8">
+                            <b:selectBooleanCheckbox value="#{permisosController.eliminar}" caption="Eliminar"/>
+                        </b:column>
+                        <b:column col-md="2" col-sm="2" col-xs="8">
+                            <b:selectBooleanCheckbox value="#{permisosController.consultar}" caption="Consultar"/>
+                        </b:column>
+                        <b:column col-md="1" col-sm="1" col-xs="12">
+                            <h:outputText value=""/>
+                        </b:column>
+                        <b:column col-md="1" col-sm="1" col-xs="4">
+                            <p:commandButton value="Agregar" id="cmdAgregar" action="#{permisosController.agregar()}" update="tblPermisos messages" class="botonesMantenimientos btn-danger btn-lg"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column col-md="12" col-sm="12" col-xs="12">
+
+                            <p:dataTable  id="tblPermisos" value="#{permisosController.permisos}" var="permiso">
+                                <f:facet name="header">
+                                    <h:outputText value="Permisos"/>
+                                </f:facet>
+
+                                <p:column headerText="Ventana">
+                                    <h:outputText value="#{permiso.ventId.ventNombre}"/>
+                                </p:column>
+                                <p:column headerText="Crear">
+                                    <p:commandLink action="#{permisosController.cambiaPermiso(permiso, 1)}" update="tblPermisos">
+                                        <p:graphicImage value="#{permiso.permCrear?'../../resources/images/check.png':'../../resources/images/uncheck.png'}" width="32px" />
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column headerText="Modificar">
+                                    <p:commandLink action="#{permisosController.cambiaPermiso(permiso, 2)}" update="tblPermisos">
+                                        <p:graphicImage value="#{permiso.permModificar?'../../resources/images/check.png':'../../resources/images/uncheck.png'}" width="32px" />
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column headerText="Eliminar">
+                                    <p:commandLink action="#{permisosController.cambiaPermiso(permiso, 3)}" update="tblPermisos">
+                                        <p:graphicImage value="#{permiso.permEliminar?'../../resources/images/check.png':'../../resources/images/uncheck.png'}" width="32px" />
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column headerText="Consultar">
+                                    <p:commandLink action="#{permisosController.cambiaPermiso(permiso, 4)}" update="tblPermisos">
+                                        <p:graphicImage value="#{permiso.permConsultar?'../../resources/images/check.png':'../../resources/images/uncheck.png'}" width="32px" />
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column style="width: 40px;">
+                                    <p:commandLink action="#{permisosController.borrarPermiso(permiso)}" update="tblPermisos">
+                                        <p:graphicImage value="../../resources/images/bin.png"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </b:column>
+                    </b:row>
+                </b:container>
+                <p:dialog id="dlgRoles" width="300px" widgetVar="dlgRoles" header="Seleccione un Rol" closable="false" resizable="false">
+                    <p:dataTable styleClass="" style="width: 100%" var="rol" value="#{permisosController.roles}" id="tblRoles"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{rol.rolId}" selection="#{permisosController.rol}" widgetVar="tablaRoles">
+                        <p:ajax event="rowSelect"  update="pnlDatos" listener="#{permisosController.onRowSelect}"/>
+                        <f:facet name="header">
+                            <h:outputText value="Listado"/>
+                        </f:facet>
+                        <p:column   headerText="Nombre de Rol" priority="1" style="width: 100%">
+                            <h:outputText value="#{rol.rolNombre}"  />                                
+                        </p:column>
+
+
+                    </p:dataTable>
+                    <p:commandButton class="botonesMantenimientos" value="Aceptar" update="pnlDatos" onsuccess="PF('dlgRoles').hide();"/>
+                </p:dialog>
             </h:form>
         </b:panel>
     </ui:define>

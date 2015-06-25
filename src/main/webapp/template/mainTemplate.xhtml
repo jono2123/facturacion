@@ -87,11 +87,21 @@
             <script type="text/javascript">
 
 
-                window.location = "/sistFact/faces/public/login.xhtml";
+                window.location = "/facturacion/faces/public/login.xhtml";
 
             </script>
         </p:outputPanel>
-        <p:outputPanel rendered="#{templateController.logueado}">       
+        <p:outputPanel rendered="#{templateController.logueado}">
+            <p:outputPanel rendered="#{!templateController.tienePermiso}">
+                <script type="text/javascript">
+
+                    alert('No tiene permiso para acceder a esta sección');
+                    window.location = "/facturacion/faces/private/principal.xhtml";
+
+                </script>
+            </p:outputPanel>
+        </p:outputPanel>
+        <p:outputPanel rendered="#{templateController.puedeAcceder}">       
             <div id="mainContainer" >
                 <nav id="menu">
                     <h:form>
@@ -109,6 +119,7 @@
                                 <p:menuitem value="Configuraciones" outcome="/private/administracion/administracionAlmacen.xhtml"/>
                                 <p:menuitem value="Usuarios" outcome="/private/administracion/usuariosUI.xhtml"/>
                                 <p:menuitem value="Roles" outcome="/private/administracion/rolUI.xhtml"/>
+                                <p:menuitem value="Permisos" outcome="/private/administracion/permisosUI.xhtml"/>
                             </p:submenu>
                         </p:panelMenu>
 

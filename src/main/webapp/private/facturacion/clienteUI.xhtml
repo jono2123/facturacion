@@ -23,7 +23,7 @@
                                             <b:inputText  id="txtCedula" value="#{clienteController.cedula}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.saveCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos"/>
+                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{clienteController.permiso.permCrear}" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.saveCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -34,7 +34,7 @@
                                             <b:inputText id="txtNombres" value="#{clienteController.nombres}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.updateCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Modificar" rendered="#{clienteController.permiso.permModificar}" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.updateCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
                                                 <p:confirm header="Modificar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -47,7 +47,7 @@
                                             <b:inputText value="#{clienteController.apellidos}" id="txtApellidos"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.deleteCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{clienteController.permiso.permEliminar}" class="botonesMantenimientos btn-danger btn-lg" action="#{clienteController.deleteCliente()}" update="@form:messages @form:tblClientes @form:pnlDatos">
                                                 <p:confirm  header="Eliminar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>

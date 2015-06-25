@@ -6,6 +6,7 @@
 package com.jodasoft.sistfact.gco.ctr;
 
 import com.jodasoft.sistfact.gco.mdl.Almacen;
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.util.exp.AlmacenValidadorException;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -26,7 +27,7 @@ public class AdministracionController extends AbstractMB implements Serializable
      * Creates a new instance of AdministracionController
      */
 
-    
+    private Permiso permiso;
     private Almacen almacen;
     @EJB
     private com.jodasoft.sistfact.gco.dao.AlmacenFacade almacenFacade;
@@ -63,6 +64,18 @@ public class AdministracionController extends AbstractMB implements Serializable
     public void setAlmacen(Almacen almacen) {
         this.almacen = almacen;
     }
+
+    public Permiso getPermiso() {
+        if(permiso==null)
+            permiso=LoginController.getInstance().getPermiso("Configuraciones");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
+    }
+    
+    
     
     
    

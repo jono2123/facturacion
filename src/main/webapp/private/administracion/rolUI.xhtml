@@ -24,7 +24,7 @@
                                             <b:inputText  id="txtNombre" value="#{rolController.nombre}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo"    class="botonesMantenimientos btn-danger btn-lg" action="#{rolController.save()}" update="@form:messages @form:tblRoles @form:pnlDatos"/>
+                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{rolController.permiso.permCrear}"    class="botonesMantenimientos btn-danger btn-lg" action="#{rolController.save()}" update="@form:messages @form:tblRoles @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -35,7 +35,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Modificar" action="#{rolController.updateRol()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblRoles @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Modificar" rendered="#{rolController.permiso.permModificar}" action="#{rolController.updateRol()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblRoles @form:pnlDatos">
                                                 <p:confirm header="Modificar Rol" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -48,7 +48,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" action="#{rolController.deleteRol()}"  class="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblRoles @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{rolController.permiso.permEliminar}" action="#{rolController.deleteRol()}"  class="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblRoles @form:pnlDatos">
                                                 <p:confirm header="Eliminar Rol" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>

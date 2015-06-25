@@ -9,9 +9,5 @@
             <var>bundle</var>
         </resource-bundle>
     </application>
-    <managed-bean>
-        <managed-bean-name>usuarioController</managed-bean-name>
-        <managed-bean-class>com.jodasoft.sistfact.gco.ctr.UsuarioController</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
+    
 </faces-config>

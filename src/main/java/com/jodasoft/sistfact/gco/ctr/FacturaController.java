@@ -9,18 +9,15 @@ import com.jodasoft.sistfact.gco.mdl.Articulo;
 import com.jodasoft.sistfact.gco.mdl.Cliente;
 import com.jodasoft.sistfact.gco.mdl.DetalleFactura;
 import com.jodasoft.sistfact.gco.mdl.Factura;
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.util.XmlManager;
 import com.jodasoft.sistfact.gco.util.exp.FacturaValidadorException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import org.primefaces.context.RequestContext;
 
@@ -56,6 +53,7 @@ public class FacturaController extends AbstractMB implements Serializable {
     private String nombres;
     private String direccion;
     private String telefono;
+    private Permiso permiso;
 
     //variables para el producto
     private String codigo;
@@ -440,6 +438,15 @@ public class FacturaController extends AbstractMB implements Serializable {
     
     public void setTota(double tota) {
         this.tota = tota;
+    }
+
+    public Permiso getPermiso() {
+        permiso=LoginController.getInstance().getPermiso("Facturar");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
     }
     
 }

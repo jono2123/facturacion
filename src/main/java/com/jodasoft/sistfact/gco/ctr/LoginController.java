@@ -5,13 +5,16 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Usuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 
 /**
@@ -27,6 +30,8 @@ public class LoginController extends AbstractMB implements Serializable {
      */
      @EJB
     private com.jodasoft.sistfact.gco.dao.UsuarioFacade usuarioFacade;
+      @EJB
+    private com.jodasoft.sistfact.gco.dao.PermisoFacade permisoFacade;
     public LoginController() {
     }
     
@@ -40,7 +45,7 @@ public class LoginController extends AbstractMB implements Serializable {
     private String nomUsuario;
     private String pass;
     private Usuario usuario;
-    
+    private List<Permiso> permisos;
     public String login(){
         usuario=null;
         usuario = usuarioFacade.findByUserAndPass(nomUsuario, pass);
@@ -87,7 +92,25 @@ public class LoginController extends AbstractMB implements Serializable {
     public boolean estaLogueado(){
         return usuario!=null;
     }
+
+    public List<Permiso> getPermisos() {
+        if(permisos==null)
+            permisos=permisoFacade.findByRol(usuario.getRolId());
+        return permisos;
+    }
+
+    public void setPermisos(List<Permiso> permisos) {
+        this.permisos = permisos;
+    }
     
+    public Permiso getPermiso(String nombre){
+        for(Permiso permiso:getPermisos()){
+            if(permiso.getVentId().getVentNombre().equals(nombre)){
+                return permiso;
+            }
+        }
+        return null;
+    }
     
     
     

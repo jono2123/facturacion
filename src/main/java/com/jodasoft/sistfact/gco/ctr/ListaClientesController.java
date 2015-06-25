@@ -65,7 +65,9 @@ public class ListaClientesController extends AbstractMB implements Serializable 
     public void setClientesFiltrados(List<Cliente> clientesFiltrados) {
         this.clientesFiltrados = clientesFiltrados;
     }
-    
+    public void reiniciaClientes(){
+        clientes=null;
+    }
     
     
 }

@@ -7,7 +7,7 @@ package com.jodasoft.sistfact.gco.ctr;
 
 import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Cliente;
-import com.jodasoft.sistfact.gco.mdl.Persona;
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.util.exp.ClienteValidadorException;
 
 import java.io.Serializable;
@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -23,7 +23,7 @@ import org.primefaces.event.SelectEvent;
  * @author javila
  */
 @Named(value = "clienteController")
-@RequestScoped
+@SessionScoped
 public class ClienteController extends AbstractMB implements Serializable{
 
     /**
@@ -38,6 +38,7 @@ public class ClienteController extends AbstractMB implements Serializable{
     private String telefono;
     private String mail;
     private Date fechaNacimiento;
+    private Permiso permiso;
     
     Cliente cliente;
     List<Cliente> clientes;
@@ -226,6 +227,16 @@ public class ClienteController extends AbstractMB implements Serializable{
 
     public void setClientesFiltrados(List<Cliente> clientesFiltrados) {
         this.clientesFiltrados = clientesFiltrados;
+    }
+
+    public Permiso getPermiso() {
+        if(permiso==null)
+            permiso=LoginController.getInstance().getPermiso("Clientes");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
     }
     
     

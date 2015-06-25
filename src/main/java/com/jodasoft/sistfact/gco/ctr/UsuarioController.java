@@ -5,6 +5,7 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Rol;
 import com.jodasoft.sistfact.gco.mdl.Usuario;
 import com.jodasoft.sistfact.gco.util.exp.UsuarioValidadorException;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -31,7 +33,7 @@ public class UsuarioController extends AbstractMB implements Serializable {
     private String nomUsuario;
     private String contrasenia;
     private int rol;
-
+    private Permiso permiso;
     private Usuario usuario;
     private List<Usuario> usuarios;
     private List<Rol> roles;
@@ -174,5 +176,17 @@ public class UsuarioController extends AbstractMB implements Serializable {
     public void setRoles(List<Rol> roles) {
         this.roles = roles;
     }
+
+    public Permiso getPermiso() {
+        if(permiso==null)
+            permiso=LoginController.getInstance().getPermiso("Usuarios");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
+    }
+    
+    
 
 }

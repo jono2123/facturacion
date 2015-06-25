@@ -68,5 +68,8 @@ public class ListaArticulosController extends AbstractMB implements Serializable
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
     }
+    public void reiniciaArticulos(){
+        articulos=null;
+    }
     
 }

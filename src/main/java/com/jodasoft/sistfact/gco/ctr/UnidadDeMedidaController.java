@@ -5,14 +5,14 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.UnidadDeMedida;
 import com.jodasoft.sistfact.gco.util.exp.UnidadDeMedidaValidadorException;
+import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -20,8 +20,8 @@ import org.primefaces.event.SelectEvent;
  * @author javila
  */
 @Named(value = "unidadDeMedidaController")
-@RequestScoped
-public class UnidadDeMedidaController extends AbstractMB {
+@SessionScoped
+public class UnidadDeMedidaController extends AbstractMB implements Serializable{
 
     /**
      * Creates a new instance of UnidadDeMedidaController
@@ -31,6 +31,7 @@ public class UnidadDeMedidaController extends AbstractMB {
     private String nombre;
     private List<UnidadDeMedida> unidades;
     private UnidadDeMedida unidad;
+    private Permiso permiso;
 
     public UnidadDeMedidaController() {
     }
@@ -118,6 +119,16 @@ public class UnidadDeMedidaController extends AbstractMB {
 
     public void setUnidad(UnidadDeMedida unidad) {
         this.unidad = unidad;
+    }
+
+    public Permiso getPermiso() {
+        if(permiso==null)
+            permiso=LoginController.getInstance().getPermiso("Unidades de Medida");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
     }
 
 }

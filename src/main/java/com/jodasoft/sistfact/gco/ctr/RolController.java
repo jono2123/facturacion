@@ -5,6 +5,7 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Rol;
 import com.jodasoft.sistfact.gco.util.exp.RolValidadorException;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -21,7 +23,7 @@ import org.primefaces.event.SelectEvent;
  * @author javila
  */
 @Named(value = "rolController")
-@RequestScoped
+@SessionScoped
 public class RolController extends AbstractMB implements Serializable{
 
     /**
@@ -30,6 +32,7 @@ public class RolController extends AbstractMB implements Serializable{
     private String nombre;
     private Rol rol;
     private List<Rol> roles;
+    private Permiso permiso;
     
     
      @EJB
@@ -103,6 +106,16 @@ public class RolController extends AbstractMB implements Serializable{
 
     public void setRoles(List<Rol> roles) {
         this.roles = roles;
+    }
+
+    public Permiso getPermiso() {
+        if(permiso==null)
+            permiso=LoginController.getInstance().getPermiso("Roles");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
     }
     
     

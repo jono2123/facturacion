@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ventana.findAll", query = "SELECT v FROM Ventana v"),
     @NamedQuery(name = "Ventana.findByVentId", query = "SELECT v FROM Ventana v WHERE v.ventId = :ventId"),
+    @NamedQuery(name = "Ventana.findByModuId", query = "SELECT v FROM Ventana v WHERE v.moduId = :moduId"),
     @NamedQuery(name = "Ventana.findByVentUrl", query = "SELECT v FROM Ventana v WHERE v.ventUrl = :ventUrl"),
     @NamedQuery(name = "Ventana.findByVentNombre", query = "SELECT v FROM Ventana v WHERE v.ventNombre = :ventNombre")})
 public class Ventana implements Serializable {

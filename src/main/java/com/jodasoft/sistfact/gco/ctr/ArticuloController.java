@@ -7,13 +7,16 @@ package com.jodasoft.sistfact.gco.ctr;
 
 import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Articulo;
+import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.UnidadDeMedida;
 import com.jodasoft.sistfact.gco.util.exp.ArticuloValidadorException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
@@ -22,9 +25,9 @@ import org.primefaces.event.SelectEvent;
  * @author javila
  */
 @Named(value = "articuloController")
-@RequestScoped
-public class ArticuloController extends AbstractMB {
-
+@SessionScoped
+public class ArticuloController extends AbstractMB  implements Serializable
+{
     /**
      * Creates a new instance of ArticuloController
      */
@@ -37,7 +40,7 @@ public class ArticuloController extends AbstractMB {
     private String infoAdicional;
     private List<UnidadDeMedida> unidades;
     private Articulo articulo;
-
+    private Permiso permiso;
     private List<Articulo> articulos;
     private List<Articulo> articulosFiltrados;
 
@@ -240,5 +243,17 @@ public class ArticuloController extends AbstractMB {
         return LoginController.getInstance().getUsuario().getRolId().getAlmaId();
 
     }
+
+    public Permiso getPermiso() {
+        if(permiso==null)
+            permiso=LoginController.getInstance().getPermiso("Items");
+        return permiso;
+    }
+
+    public void setPermiso(Permiso permiso) {
+        this.permiso = permiso;
+    }
+    
+    
 
 }
