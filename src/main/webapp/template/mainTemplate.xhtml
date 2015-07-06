@@ -107,9 +107,11 @@
                     <h:form>
 
                         <p:panelMenu style="width:100%;">
+                            <p:menuitem outcome="/private/principal.xhtml" value="Inicio"/>
                             <p:submenu label="Facturación">
                                 <p:menuitem outcome="/private/facturacion/clienteUI.xhtml" value="Clientes" title="Módulo para el mantenimiento de clientes"/>
                                 <p:menuitem outcome="/private/facturacion/FacturaUI.xhtml" value="Facturar" title="Facturación de productos y/o servicios"/>
+                                <p:menuitem outcome="/private/facturacion/reporteVentas.xhtml" value="Reporte de Ventas"/>
                             </p:submenu>
                             <p:submenu label="Inventario">
                                 <p:menuitem value="Items" outcome="/private/inventario/itemUI.xhtml"/>
@@ -129,17 +131,24 @@
                 <div id="header" class="header Fixed">
                     <a href="#menu"></a>
                     <h:outputText value="#{templateController.usuario.rolId.almaId.almaNombre}"/>
-                    <div id="divUsuario" style="position: fixed; top: 0px; right: 10px; color: #fff">
-                        <h:form id="frmUsuario">
+                    <h:form id="frmUsuario">
+                        <div id="divhome" style="position: fixed; top: 2px; left: 60px; color: #fff">
+                            
+                                <p:commandButton icon="fa fa-home" action="#{templateController.goHome()}" style="width: 35px; height: 35px; font-size: large;"/>
+                            
+                        </div>
+                        <div id="divUsuario" style="position: fixed; top: 2px; right: 10px; color: #fff">
+
                             <h:panelGrid columns="3">
                                 <h:outputText value="Usuario: " style="font-weight: bold; margin-right: 3px;"/>
                                 <h:outputText value="#{templateController.usuario.usuaNombre}" style="margin-right: 5px;"/>
 
                                 <p:commandButton value="Salir" process="@this" action="#{templateController.logout()}"/>
                             </h:panelGrid>
-                        </h:form>
 
-                    </div>
+
+                        </div>
+                    </h:form>
                 </div>
 
 

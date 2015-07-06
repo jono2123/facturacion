@@ -1,13 +1,206 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../template/mainTemplate.xhtml"
+                template="../../template/mainTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:b="http://bootsfaces.net/ui">
     <ui:define name="content">
+        <h:outputScript library="js"  name="events.js"/>
         <b:panel look="primary" title="Reporte de Ventas" style="margin: 0px auto !important;">
+            <h:form id="frmReporte">
+                <p:growl id="messages"/>
+                <b:tabView>
+                    <b:tab title="Reporte de ventas totales">
+                        <b:container style="width: 60%">
+                            <b:row >
+                                <b:column span="12">
+                                    <h2><h:outputText value="Buscar Por fechas"/></h2>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Desde: "/>
+                                </b:column>
+                                <b:column col-md="3" col-sm="3" col-xs="12">
+                                    <p:calendar navigator="true" id="dtpDesde" value="#{reporteVentasController.desde}"/>
+                                </b:column>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Hasta: "/>
+                                </b:column>
+                                <b:column col-md="3" col-sm="3" col-xs="12">
+                                    <p:calendar navigator="true" id="dtpHasta" value="#{reporteVentasController.hasta}"/>
+                                </b:column>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Estado: "/>
+                                </b:column>
+                                <b:column col-md="2" col-sm="2" col-xs="12">
+                                    <b:selectOneMenu value="#{reporteVentasController.estadoFactura}">
+                                        <f:selectItem itemLabel="Emitidas" itemValue="0"/>
+                                        <f:selectItem itemLabel="Impresas" itemValue="1"/>
+                                        <f:selectItem itemLabel="Anuladas" itemValue="2"/>
+                                    </b:selectOneMenu>
+                                </b:column>
+                                <b:column col-md="1" col-sm="2" col-xs="12">
+                                    <p:commandButton value="Buscar" action="#{reporteVentasController.buscarPorFechas()}" update="tblFacturas" class="botonesMantenimientos btn-danger btn-lg"/>
+                                </b:column>
+
+                            </b:row>
+                            <b:row>
+                                <b:column span="12">
+                                    <h2><h:outputText value="Buscar Por Cliente"/></h2>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Cedula: "/>
+                                </b:column>
+                                <b:column col-md="4" col-sm="4" col-xs="12">
+                                    <b:inputText value="#{reporteVentasController.cedula}" id="txtCedula"/>
+                                </b:column>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Estado: "/>
+                                </b:column>
+                                <b:column col-md="2" col-sm="2" col-xs="12">
+                                    <b:selectOneMenu value="#{reporteVentasController.estadoFacturaCliente}">
+                                        <f:selectItem itemLabel="Emitidas" itemValue="0"/>
+                                        <f:selectItem itemLabel="Impresas" itemValue="1"/>
+                                        <f:selectItem itemLabel="Anuladas" itemValue="2"/>
+                                    </b:selectOneMenu>
+                                </b:column>
+                                <b:column col-md="2" col-sm="2" col-xs="12">
+                                    <p:commandButton value="Buscar" action="#{reporteVentasController.buscarPorCedula()}" update="tblFacturas" class="botonesMantenimientos btn-danger btn-lg"/>
+                                </b:column>
+                            </b:row>
+                        </b:container>
+                        <p:dataTable widgetVar="tablaVentas" id="tblFacturas" value="#{reporteVentasController.facturas}" var="factura" filteredValue="#{reporteVentasController.facturasFiltradas}" >
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="2" headerText="N.Documento" sortBy="#{factura.factNumero}" filterBy="#{factura.factNumero}" filterMatchMode="contains"/>
+                                    <p:column colspan="3" headerText="Cliente"/>
+                                    <p:column rowspan="2" headerText="Fecha" sortBy="#{factura.factFecha}" />
+                                    <p:column rowspan="2" headerText="V. Venta" sortBy="#{factura.factTotal}"/>
+                                    <p:column rowspan="2" style="width: 150px;"/>
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="Cédula" filterBy="#{factura.clieId.persCedula}" filterMatchMode="contains" sortBy="#{factura.clieId.persCedula}"/>
+                                    <p:column headerText="Nombres" filterBy="#{factura.clieId.persNombres}" filterMatchMode="contains" sortBy="#{factura.clieId.persNombres}"/>
+                                    <p:column headerText="Apellidos" filterBy="#{factura.clieId.persApellidos}" filterMatchMode="contains" sortBy="#{factura.clieId.persApellidos}"/>
+                                </p:row> 
+                            </p:columnGroup>
+
+                            <p:column>
+                                <h:outputText value="#{factura.factNumero}"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{factura.clieId.persCedula}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{factura.clieId.persNombres}"/>
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{factura.clieId.persApellidos}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{reporteVentasController.formateaFecha(factura.factFecha)}"/>
+                            </p:column>
+                            <p:column >
+
+                                <h:outputText value="#{factura.factTotal}">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <p:commandLink update="tblFacturas :frmReporte:messages"  action="#{reporteVentasController.imprimirFactura(factura)}">
+                                    <h:graphicImage value="../../resources/images/print.png" style="width: 32px;" alt="imprimir"/>
+                                </p:commandLink>
+                                <p:commandLink rendered="#{factura.factEstado==0}"  action="#{reporteVentasController.verFactura(factura)}">
+                                    <h:graphicImage value="../../resources/images/edit.png" style="width: 32px; margin-left: 4px;" alt="imprimir"/>
+                                </p:commandLink>
+                                <p:commandLink action="#{reporteVentasController.abrirFactura(factura)}">
+                                    <h:graphicImage value="../../resources/images/view.png" style="width: 32px; margin-left: 4px;" alt="imprimir"/>
+                                </p:commandLink>
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="5" style="text-align:right" footerText="Total:" />
+                                    <p:column footerText="$#{reporteVentasController.Formato(reporteVentasController.total)}" />
+                                    <p:column style="width: 150px;" footerText=""/>
+                                </p:row>
+                            </p:columnGroup>
+                        </p:dataTable>
+
+                    </b:tab>
+                    <b:tab title="Ventas Por Item">
+                        <b:container style="width: 100%;">
+                            <b:row >
+                                <b:column span="12">
+                                    <h2><h:outputText value="Buscar Por fechas"/></h2>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Desde: "/>
+                                </b:column>
+                                <b:column col-md="3" col-sm="3" col-xs="12">
+                                    <p:calendar navigator="true" id="dtpDesdeItem" value="#{reporteVentasController.desdeItem}"/>
+                                </b:column>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Hasta: "/>
+                                </b:column>
+                                <b:column col-md="3" col-sm="3" col-xs="12">
+                                    <p:calendar navigator="true" id="dtpHastaItem" value="#{reporteVentasController.hastaItem}"/>
+                                </b:column>
+                                <b:column col-md="2" col-sm="2" col-xs="12">
+                                    <p:commandButton value="Buscar" class="botonesMantenimientos btn-danger btn-lg" action="#{reporteVentasController.buscarItemsPorFecha()}" update="tblVentasItems"/>
+                                </b:column>
+                                <b:column col-md="2" col-sm="2" col-xs="4" style="text-align: right;">
+                                    <h:commandLink>
+                                        <p:graphicImage value="../../resources/images/excel1.png"/>
+                                        <p:dataExporter type="xls" target="tblVentasItems" fileName="ventas" />  
+                                    </h:commandLink>
+                                    <p:commandLink action="#{reporteVentasController.actualizaItems()}" update="tblVentasItems" ajax="false">
+                                        <p:graphicImage value="../../resources/images/update.png"/> 
+                                    </p:commandLink>
+                                </b:column>
+                            </b:row>
+
+
+                        </b:container>
+
+                        <p:dataTable value="#{reporteVentasController.items}" id="tblVentasItems" var="item" rowKey="#{item.repoId}" filteredValue="#{reporteVentasController.itemsFiltrados}">
+                            <p:column headerText="Codigo" filterBy="#{item.codigo}" filterMatchMode="contains">
+                                <h:outputText value="#{item.codigo}"/>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{item.descripcion}" filterMatchMode="contains">
+                                <h:outputText value="#{item.descripcion}"/>
+                            </p:column>
+                            <p:column headerText="Costo">
+                                <h:outputText value="#{reporteVentasController.Formato(item.costo)}"/>
+                            </p:column>
+                            <p:column headerText="Precio">
+                                <h:outputText value="#{reporteVentasController.Formato(item.precio_venta_promedio)}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="#{reporteVentasController.Formato(item.cantidad)}"/>
+                            </p:column>
+                            <p:column headerText="Costo Venta">
+                                <h:outputText value="#{reporteVentasController.Formato(item.cantidad*item.costo)}"/>
+                            </p:column>
+                            <p:column headerText="V.Venta">
+                                <h:outputText value="#{reporteVentasController.Formato(item.cantidad*item.precio_venta_promedio)}"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </b:tab>
+
+                </b:tabView>
+
+            </h:form>
+
         </b:panel>
     </ui:define>
 </ui:composition>

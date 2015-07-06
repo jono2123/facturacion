@@ -79,6 +79,22 @@
                                             <p:inputSwitch value="#{administracionController.almacen.almaFacturaAutonumerada}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
                                         </b:column>
                                     </b:row>
+                                    <b:row>
+                                        <b:column col-md="4" col-sm="4" col-xs="8">
+                                            <h:outputText value="Separación de Decimal: "/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="4" col-sm="8">
+                                            <p:inputSwitch value="#{administracionController.almacen.almaComa}" style="width: 150px; height: 30px;" onLabel="Coma(,)" offLabel="Punto(,)" />
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column col-md="4" col-sm="4" col-xs="8">
+                                            <h:outputText value="Desglozar IVA del Precio: "/>
+                                        </b:column>
+                                        <b:column col-md="8" col-xs="4" col-sm="8">
+                                            <p:inputSwitch value="#{administracionController.almacen.almaDesglozar}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
+                                        </b:column>
+                                    </b:row>
                                      <b:row>
                                         <b:column col-md="2" col-sm="2" col-xs="12">
                                             <h:outputText value="Número de Factura: "/>

@@ -9,6 +9,62 @@
                 xmlns:b="http://bootsfaces.net/ui">
     <ui:define name="content">
         <b:panel look="primary" title="Página Principal" style="margin: 0px auto !important;">
+            <b:container style="width: 90%; margin: 0px auto;">
+                <b:row>
+                    <b:column col-sm="6" col-md="3">
+                        <b:thumbnail class="tumbnail">
+                            <p:graphicImage value="../resources/images/factura.png"/>
+                            <f:facet name="caption">
+                                <h3>Facturación</h3>
+                                <p>Descripción del modulo</p>
+                                <p>
+                                    <b:button look="primary" value="Más..."/>
+                                    <b:button value="Ingresar"/>
+                                </p>
+                            </f:facet>
+                        </b:thumbnail>
+                    </b:column>
+                    <b:column col-sm="6" col-md="3">
+                        <b:thumbnail class="tumbnail">
+                            <p:graphicImage value="../resources/images/catalogo.png"/>
+                            <f:facet name="caption">
+                                <h3>Inventarios</h3>
+                                <p>Descripción del modulo</p>
+                                <p>
+                                    <b:button look="primary" value="Más..."/>
+                                    <b:button value="Ingresar"/>
+                                </p>
+                            </f:facet>
+                        </b:thumbnail>
+                    </b:column>
+                     <b:column col-sm="6" col-md="3">
+                        <b:thumbnail class="tumbnail">
+                            <p:graphicImage value="../resources/images/staff.jpg"/>
+                            <f:facet name="caption">
+                                <h3>Recursos Humanos</h3>
+                                <p>Descripción del modulo</p>
+                                <p>
+                                    <b:button look="primary" value="Más..."/>
+                                    <b:button value="Ingresar"/>
+                                </p>
+                            </f:facet>
+                        </b:thumbnail>
+                    </b:column>
+                    <b:column col-sm="6" col-md="3">
+                        <b:thumbnail class="tumbnail">
+                            <p:graphicImage value="../resources/images/settings.png"/>
+                            <f:facet name="caption">
+                                <h3>Administración</h3>
+                                <p>Descripción del modulo</p>
+                                <p>
+                                    <b:button look="primary" value="Más..."/>
+                                    <b:button value="Ingresar"/>
+                                </p>
+                            </f:facet>
+                        </b:thumbnail>
+                    </b:column>
+                </b:row>
+            </b:container>
         </b:panel>
     </ui:define>
 </ui:composition>

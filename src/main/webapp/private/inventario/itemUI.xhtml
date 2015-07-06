@@ -40,7 +40,7 @@
                                     </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Precio Compra: "/>
+                                            <h:outputText value="Coste: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
                                             <b:inputText value="#{articuloController.precioCompra}" id="txtPrecioCompra"/>
@@ -121,7 +121,7 @@
                                 <p:column headerText="Descripción" filterBy="#{articulo.artiDescripcion}" filterMatchMode="contains" priority="1" style="width: 35%" sortBy="#{articulo.artiDescripcion}">
                                     <h:outputText value="#{articulo.artiDescripcion}"/>
                                 </p:column>
-                                <p:column headerText="P.Compra"  priority="2" style="width: 8%">
+                                <p:column headerText="Coste"  priority="2" style="width: 8%">
                                     <h:outputText value="#{articulo.artiPrecioCompra}"/>
                                 </p:column>
                                 <p:column headerText="P.Venta" priority="1" style="width: 8%">
