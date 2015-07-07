@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author javila
  */
 @Entity
+@Cacheable(false)
 @Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"fact_numero", "alma_id"})})
 @XmlRootElement
@@ -48,6 +50,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Factura.findByFactDescuento", query = "SELECT f FROM Factura f WHERE f.factDescuento = :factDescuento"),
     @NamedQuery(name = "Factura.findByFactTotal", query = "SELECT f FROM Factura f WHERE f.factTotal = :factTotal"),
     @NamedQuery(name = "Factura.findByFactFecha", query = "SELECT f FROM Factura f WHERE f.factFecha = :factFecha"),
+    @NamedQuery(name = "Factura.findByAlmaIdAndFactEstado", query = "SELECT f FROM Factura f WHERE f.almaId = :almaId and f.factEstado = :factEstado"),
+    @NamedQuery(name = "Factura.findByfactFechaRangeAndAlmaIdAndFactEstado", query = "SELECT f FROM Factura f WHERE f.almaId = :almaId and f.factEstado = :factEstado and f.factFecha between :fechaIni and :fechaFin"),
+    @NamedQuery(name = "Factura.findBypersCedulaAndAlmaIdAndEstado", query = "SELECT f FROM Factura f WHERE f.clieId.persCedula = :persCedula and f.factEstado = :factEstado and f.almaId = :almaId"),
     @NamedQuery(name = "Factura.findByFactId", query = "SELECT f FROM Factura f WHERE f.factId = :factId")})
 public class Factura implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -81,6 +86,8 @@ public class Factura implements Serializable {
     @Basic(optional = false)
     @Column(name = "fact_id", nullable = false)
     private Integer factId;
+    @Column(name = "fact_estado")
+    private Integer factEstado;
     @OneToMany(mappedBy = "factId", cascade = CascadeType.ALL)
     private List<DetalleFactura> detalleFacturaList;
     @JoinColumn(name = "alma_id", referencedColumnName = "alma_id")
@@ -219,6 +226,14 @@ public class Factura implements Serializable {
 
     public void setUsuaId(Usuario usuaId) {
         this.usuaId = usuaId;
+    }
+
+    public Integer getFactEstado() {
+        return factEstado;
+    }
+
+    public void setFactEstado(Integer factEstado) {
+        this.factEstado = factEstado;
     }
 
     @Override

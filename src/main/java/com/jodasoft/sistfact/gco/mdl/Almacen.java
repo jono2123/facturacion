@@ -74,7 +74,11 @@ public class Almacen implements Serializable {
     private Boolean almaFacturaAutonumerada;
     @Column(name = "alma_num_factura")
     private Integer almaNumFactura;
-
+    @Column(name="alma_coma")
+    private Boolean almaComa;
+    @Column(name="alma_desglozar")
+    private Boolean almaDesglozar;
+    
     public Almacen() {
     }
 
@@ -168,6 +172,22 @@ public class Almacen implements Serializable {
 
     public void setAlmaNumFactura(Integer almaNumFactura) {
         this.almaNumFactura = almaNumFactura;
+    }
+
+    public Boolean getAlmaComa() {
+        return almaComa;
+    }
+
+    public void setAlmaComa(Boolean almaComa) {
+        this.almaComa = almaComa;
+    }
+
+    public Boolean getAlmaDesglozar() {
+        return almaDesglozar;
+    }
+
+    public void setAlmaDesglozar(Boolean almaDesglozar) {
+        this.almaDesglozar = almaDesglozar;
     }
 
     @Override

@@ -7,6 +7,7 @@ package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author javila
  */
 @Entity
+@Cacheable(false)
 @Table(name = "detalle_factura", catalog = "dbfacturacion", schema = "public")
 @XmlRootElement
 @NamedQueries({
