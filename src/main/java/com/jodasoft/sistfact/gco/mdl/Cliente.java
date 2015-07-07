@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -48,6 +49,9 @@ public class Cliente extends  Persona implements Serializable  {
     private Integer clieCreditoDias;
     @Column(name = "clie_estado")
     private Boolean clieEstado;
+    @JoinColumn(name = "ticl_id", referencedColumnName = "ticl_id")
+    @ManyToOne
+    private TipoCliente ticlId;
     
 
     public Cliente() {
@@ -87,5 +91,15 @@ public class Cliente extends  Persona implements Serializable  {
     public void setClieEstado(Boolean clieEstado) {
         this.clieEstado = clieEstado;
     }
+
+    public TipoCliente getTiclId() {
+        return ticlId;
+    }
+
+    public void setTiclId(TipoCliente ticlId) {
+        this.ticlId = ticlId;
+    }
+    
+    
  
 }
