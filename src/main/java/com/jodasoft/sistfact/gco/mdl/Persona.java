@@ -81,6 +81,9 @@ public class Persona implements Serializable {
     @JoinColumn(name = "alma_id", referencedColumnName = "alma_id", nullable = false)
     @ManyToOne(optional = false)
     private Almacen almaId;
+    @JoinColumn(name = "zona_id", referencedColumnName = "zona_id", nullable = true)
+    @ManyToOne(optional = true)
+    private Zona zonaId;
    
 
     public Persona() {
@@ -181,6 +184,14 @@ public class Persona implements Serializable {
 
     public void setAlmaId(Almacen almaId) {
         this.almaId = almaId;
+    }
+
+    public Zona getZonaId() {
+        return zonaId;
+    }
+
+    public void setZonaId(Zona zonaId) {
+        this.zonaId = zonaId;
     }
 
    

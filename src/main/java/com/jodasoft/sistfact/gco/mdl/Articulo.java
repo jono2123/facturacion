@@ -6,8 +6,10 @@
 package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +19,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
+import static javax.persistence.ParameterMode.IN;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
@@ -28,6 +33,15 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author javila
  */
+@NamedStoredProcedureQuery(
+    name = "findArticuloPrecio",
+    resultClasses = Articulo.class,
+    procedureName = "articulo_precios",
+    parameters = {
+        @StoredProcedureParameter(mode=IN, name="tipo_id", type=Integer.class),
+        @StoredProcedureParameter(mode=IN, name="almaid", type=Integer.class)       
+    }
+)
 @Entity
 @Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"arti_codigo", "alma_id"})})
@@ -75,6 +89,7 @@ public class Articulo implements Serializable {
     @JoinColumn(name = "umed_id", referencedColumnName = "umed_id")
     @ManyToOne
     private UnidadDeMedida umedId;
+   
 
     public Articulo() {
     }

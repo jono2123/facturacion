@@ -78,6 +78,8 @@ public class Almacen implements Serializable {
     private Boolean almaComa;
     @Column(name="alma_desglozar")
     private Boolean almaDesglozar;
+    @Column(name="alma_diferenciar_precios")
+    private Boolean almaDiferenciarPrecios;
     
     public Almacen() {
     }
@@ -188,6 +190,14 @@ public class Almacen implements Serializable {
 
     public void setAlmaDesglozar(Boolean almaDesglozar) {
         this.almaDesglozar = almaDesglozar;
+    }
+
+    public Boolean getAlmaDiferenciarPrecios() {
+        return almaDiferenciarPrecios;
+    }
+
+    public void setAlmaDiferenciarPrecios(Boolean almaDiferenciarPrecios) {
+        this.almaDiferenciarPrecios = almaDiferenciarPrecios;
     }
 
     @Override
