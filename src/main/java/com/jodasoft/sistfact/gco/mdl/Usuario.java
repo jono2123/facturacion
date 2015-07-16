@@ -56,6 +56,8 @@ public class Usuario implements Serializable {
     private Boolean usuaEstado;
     @OneToMany(mappedBy = "usuaId")
     private List<Factura> facturaList;
+    @OneToMany(mappedBy = "usuaId")
+    private List<AlmacenTransaccion> almacenTransaccionList;
     @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
     @ManyToOne
     private Rol rolId;
@@ -106,6 +108,14 @@ public class Usuario implements Serializable {
 
     public void setFacturaList(List<Factura> facturaList) {
         this.facturaList = facturaList;
+    }
+    @XmlTransient
+    public List<AlmacenTransaccion> getAlmacenTransaccionList() {
+        return almacenTransaccionList;
+    }
+
+    public void setAlmacenTransaccionList(List<AlmacenTransaccion> almacenTransaccionList) {
+        this.almacenTransaccionList = almacenTransaccionList;
     }
 
     public Rol getRolId() {

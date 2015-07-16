@@ -39,6 +39,10 @@ public class TemplateController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/public/login.xhtml?faces-redirect=true";
     }
+    
+    public String goHome(){
+        return "/private/principal.xhtml?faces-redirect=true";
+    }
 
     public Usuario getUsuario() {
         if (usuario == null) {

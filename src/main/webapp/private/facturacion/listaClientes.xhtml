@@ -8,10 +8,8 @@
       xmlns:b="http://bootsfaces.net/ui">
     <h:body>
         <ui:composition>
-            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{listaClientesController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.persId}" selection="#{listaClientesController.cliente}" widgetVar="tablaClientes" filteredValue="#{listaClientesController.clientesFiltrados}">
-                <f:facet name="header">
-                    <h:outputText value="Listado"/>
-                </f:facet>
+            <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{listaClientesController.clientes}" id="tblClientes"  paginator="true" rows="5" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.persId}" selection="#{listaClientesController.cliente}" widgetVar="tablaClientes" filteredValue="#{listaClientesController.clientesFiltrados}">
+               
                 <p:column  filterBy="#{cliente.persCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.persCedula}">
                     <h:outputText value="#{cliente.persCedula}"  />
                 </p:column>
@@ -24,7 +22,7 @@
                 <p:column headerText="Dirección" priority="2" style="width: 18%">
                     <h:outputText value="#{cliente.persDireccion}"/>
                 </p:column>
-                <p:column headerText="e-Mail" priority="3" style="width: 18%">
+                <p:column headerText="Teléfono" priority="3" style="width: 18%">
                     <h:outputText value="#{cliente.persTelefono}"/>
                 </p:column>
             </p:dataTable>

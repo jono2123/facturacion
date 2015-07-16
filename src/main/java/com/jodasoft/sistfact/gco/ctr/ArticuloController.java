@@ -8,15 +8,20 @@ package com.jodasoft.sistfact.gco.ctr;
 import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Articulo;
 import com.jodasoft.sistfact.gco.mdl.Permiso;
+import com.jodasoft.sistfact.gco.mdl.PrecioVenta;
+import com.jodasoft.sistfact.gco.mdl.TipoCliente;
 import com.jodasoft.sistfact.gco.mdl.UnidadDeMedida;
 import com.jodasoft.sistfact.gco.util.exp.ArticuloValidadorException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
@@ -24,10 +29,12 @@ import org.primefaces.event.SelectEvent;
  *
  * @author javila
  */
-@Named(value = "articuloController")
-@SessionScoped
-public class ArticuloController extends AbstractMB  implements Serializable
-{
+//@Named(value = "articuloController")
+//@SessionScoped
+@ManagedBean(name = "articuloController")
+@ViewScoped
+public class ArticuloController extends AbstractMB implements Serializable {
+
     /**
      * Creates a new instance of ArticuloController
      */
@@ -43,6 +50,9 @@ public class ArticuloController extends AbstractMB  implements Serializable
     private Permiso permiso;
     private List<Articulo> articulos;
     private List<Articulo> articulosFiltrados;
+    private List<TipoCliente> tipos;
+    private List<PrecioVenta> precios;
+    private List<PrecioVenta> preciosAnteriores;
 
     /////////////////////ejb del facade
     @EJB
@@ -51,12 +61,20 @@ public class ArticuloController extends AbstractMB  implements Serializable
     @EJB
     private com.jodasoft.sistfact.gco.dao.UnidadDeMedidaFacade unidadDeMedidaFacade;
 
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.TipoClienteFacade tipoClienteFacade;
+
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.PrecioVentaFacade precioVentaFacade;
+
     public ArticuloController() {
     }
 
     //////////////////////funciones//////////////////////////////////////////////////
     private void reiniciaArticulo() {
         articulo = new Articulo();
+        precios = null;
+        preciosAnteriores = null;
     }
 
     public void vaciarTextos() {
@@ -67,9 +85,13 @@ public class ArticuloController extends AbstractMB  implements Serializable
         setUmedida_id(1);
         setIva(false);
         setInfoAdicional("");
+        articulo = new Articulo();
+        precios = null;
+        preciosAnteriores = null;
     }
 
     public void onRowSelect(SelectEvent event) {
+        preciosAnteriores = null;
         setCodigo(articulo.getArtiCodigo());
         setDescripcion(articulo.getArtiDescripcion());
         setPrecioCompra(articulo.getArtiPrecioCompra());
@@ -77,13 +99,30 @@ public class ArticuloController extends AbstractMB  implements Serializable
         setUmedida_id(articulo.getUmedId().getUmedId());
         setIva(articulo.getArtiIva());
         setInfoAdicional(articulo.getArtiInfoAdicional());
+        //setPrecios(articulo.getPrecioVentaList());
+        if (getDiferenciado()) {
+            precios = new ArrayList<PrecioVenta>();
+            for (TipoCliente tipo : getTipos()) {
+                PrecioVenta pVenta = new PrecioVenta();
+                pVenta.setArtiId(articulo);
+                pVenta.setTiclId(tipo);
+                pVenta.setPrecio(0d);
+                for (PrecioVenta precio : getPreciosAnteriores()) {
+                    if (precio.getArtiId().equals(articulo) && precio.getTiclId().equals(tipo)) {
+                        pVenta.setPrecio(precio.getPrecio());
+                        break;
+                    }
+                }
+                precios.add(pVenta);
+            }
+        }
     }
 
     public void saveArticulo() {
         try {
             articulo = new Articulo();
             Almacen almacen = LoginController.getInstance().getUsuario().getRolId().getAlmaId();
-           
+
             articulo.setAlmaId(almacen);
             articulo.setArtEstado(true);
             articulo.setArtiCodigo(codigo);
@@ -95,7 +134,17 @@ public class ArticuloController extends AbstractMB  implements Serializable
             UnidadDeMedida umed = new UnidadDeMedida();
             umed.setUmedId(umedida_id);
             articulo.setUmedId(umed);
-            articuloFacade.save(articulo);
+            if (getDiferenciado()) {
+
+                for (PrecioVenta precio : precios) {
+                    precio.setArtiId(articulo);
+                }
+            }
+            if (getDiferenciado()) {
+                articuloFacade.save(articulo, precios);
+            } else {
+                articuloFacade.save(articulo);
+            }
             closeDialog();
             displayInfoMessageToUser("Artículo Guardado Correctamente");
             articulos.add(articulo);
@@ -106,8 +155,9 @@ public class ArticuloController extends AbstractMB  implements Serializable
             displayErrorMessageToUser(ex.getMessage());
         } catch (javax.ejb.EJBException ex) {
             keepDialogOpen();
-            if(ex.getCausedByException().getCause().getLocalizedMessage().contains("llave duplicada viola restricción de unicidad"))
-            displayErrorMessageToUser("Ya existe un artículo con ese código");
+            if (ex.getCausedByException().getCause().getLocalizedMessage().contains("llave duplicada viola restricción de unicidad")) {
+                displayErrorMessageToUser("Ya existe un artículo con ese código");
+            }
         }
 
     }
@@ -124,7 +174,14 @@ public class ArticuloController extends AbstractMB  implements Serializable
             UnidadDeMedida umed = new UnidadDeMedida();
             umed.setUmedId(umedida_id);
             articulo.setUmedId(umed);
-            articuloFacade.update(articulo);
+            if (getDiferenciado()) {
+                for (PrecioVenta precio : getPreciosAnteriores()) {
+                    precioVentaFacade.deletePrecio(precio);
+                }
+                articuloFacade.update(articulo, precios);
+            } else {
+                articuloFacade.update(articulo);
+            }
             closeDialog();
             displayInfoMessageToUser("Artículo Modificado Correctamente");
             reiniciaArticulo();
@@ -245,15 +302,57 @@ public class ArticuloController extends AbstractMB  implements Serializable
     }
 
     public Permiso getPermiso() {
-        if(permiso==null)
-            permiso=LoginController.getInstance().getPermiso("Items");
+        if (permiso == null) {
+            permiso = LoginController.getInstance().getPermiso("Items");
+        }
         return permiso;
     }
 
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
-    
-    
+
+    public boolean getDiferenciado() {
+        return LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDiferenciarPrecios();
+    }
+
+    public List<TipoCliente> getTipos() {
+        if (tipos == null) {
+            tipos = tipoClienteFacade.findByAlmaIdAndEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
+        }
+        return tipos;
+    }
+
+    public void setTipos(List<TipoCliente> tipos) {
+        this.tipos = tipos;
+    }
+
+    public List<PrecioVenta> getPrecios() {
+        if (precios == null) {
+            precios = new ArrayList<PrecioVenta>();
+            for (TipoCliente tipo : getTipos()) {
+                PrecioVenta precio = new PrecioVenta();
+                precio.setTiclId(tipo);
+                precio.setPrecio(0d);
+                precios.add(precio);
+            }
+        }
+        return precios;
+    }
+
+    public void setPrecios(List<PrecioVenta> precios) {
+        this.precios = precios;
+    }
+
+    public List<PrecioVenta> getPreciosAnteriores() {
+        if (preciosAnteriores == null) {
+            preciosAnteriores = precioVentaFacade.findByArtiId(articulo);
+        }
+        return preciosAnteriores;
+    }
+
+    public void setPreciosAnteriores(List<PrecioVenta> preciosAnteriores) {
+        this.preciosAnteriores = preciosAnteriores;
+    }
 
 }

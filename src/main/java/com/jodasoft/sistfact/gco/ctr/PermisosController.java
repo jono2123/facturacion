@@ -16,14 +16,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author johnny
  */
-@Named(value = "permisosController")
-@SessionScoped
+//@Named(value = "permisosController")
+//@SessionScoped
+@ManagedBean(name = "permisosController")
+@ViewScoped
 public class PermisosController extends AbstractMB implements Serializable {
 
     /**
@@ -90,6 +94,18 @@ public class PermisosController extends AbstractMB implements Serializable {
         permiso.setVentId(ventana);
         permisoFacade.create(permiso);
         permisos.add(permiso);
+        limpiarTodo();
+    }
+    
+    public void limpiarTodo(){
+        idMod=0;
+        modulo=new Modulo();
+        idVent=0;
+        ventanas= new ArrayList<Ventana>();
+        crear=false;
+        consultar=false;
+        eliminar=false;
+        modificar=false;
     }
     
     public void borrarPermiso(Permiso perm){

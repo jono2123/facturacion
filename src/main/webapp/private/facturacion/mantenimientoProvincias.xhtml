@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <h:form id="frmProvincia">
+                <p:growl id="messagesProvincia"/>
+                <p:outputPanel id="pnlDatosProvincia">
+                    <b:container style="width: 100%">
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Pais: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <p:selectOneMenu value="#{provinciaController.idPais}" style="width: 100%" id="cboPais">
+                                    <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+                                    <f:selectItems value="#{provinciaController.paises}" var="pais" itemLabel="#{pais.paisNombre}" itemValue="#{pais.paisId}"/>
+                                </p:selectOneMenu>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value=""/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Nombre: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <b:inputText value="#{provinciaController.nombre}" id="txtNombre"/>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <p:commandButton value="Nueva" action="#{provinciaController.saveProvincia()}" process="@form" update="@form:pnlDatosProvincia @form:messagesProvincia"  class="botonesMantenimientos"/>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </p:outputPanel>
+
+            </h:form>
+
+        </ui:composition> 
+    </h:body>
+</html>
+
+

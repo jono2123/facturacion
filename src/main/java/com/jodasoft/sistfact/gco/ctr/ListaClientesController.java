@@ -13,14 +13,18 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author javila
  */
-@Named(value = "listaClientesController")
-@SessionScoped
+//@Named(value = "listaClientesController")
+//@SessionScoped
+@ManagedBean(name = "listaClientesController")
+@ViewScoped
 public class ListaClientesController extends AbstractMB implements Serializable {
 
     /**

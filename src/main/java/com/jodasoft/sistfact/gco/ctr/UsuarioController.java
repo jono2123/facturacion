@@ -17,14 +17,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author javila
  */
-@Named(value = "usuarioController")
-@SessionScoped
+//@Named(value = "usuarioController")
+//@SessionScoped
+@ManagedBean(name = "usuarioController")
+@ViewScoped
 public class UsuarioController extends AbstractMB implements Serializable {
 
     /**

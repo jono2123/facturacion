@@ -145,16 +145,26 @@
                                 <b:column col-md="1" col-sm="1" col-xs="12">
                                     <h:outputText value="Desde: "/>
                                 </b:column>
-                                <b:column col-md="3" col-sm="3" col-xs="12">
+                                <b:column col-md="2" col-sm="2" col-xs="12">
                                     <p:calendar navigator="true" id="dtpDesdeItem" value="#{reporteVentasController.desdeItem}"/>
                                 </b:column>
                                 <b:column col-md="1" col-sm="1" col-xs="12">
                                     <h:outputText value="Hasta: "/>
                                 </b:column>
-                                <b:column col-md="3" col-sm="3" col-xs="12">
+                                <b:column col-md="2" col-sm="2" col-xs="12">
                                     <p:calendar navigator="true" id="dtpHastaItem" value="#{reporteVentasController.hastaItem}"/>
                                 </b:column>
+                                 <b:column col-md="1" col-sm="1" col-xs="12">
+                                    <h:outputText value="Estado: "/>
+                                </b:column>
                                 <b:column col-md="2" col-sm="2" col-xs="12">
+                                    <b:selectOneMenu value="#{reporteVentasController.estadoFacturaItem}">
+                                        <f:selectItem itemLabel="Emitidas" itemValue="0"/>
+                                        <f:selectItem itemLabel="Impresas" itemValue="1"/>
+                                        <f:selectItem itemLabel="Anuladas" itemValue="2"/>
+                                    </b:selectOneMenu>
+                                </b:column>
+                                <b:column col-md="1" col-sm="1" col-xs="12">
                                     <p:commandButton value="Buscar" class="botonesMantenimientos btn-danger btn-lg" action="#{reporteVentasController.buscarItemsPorFecha()}" update="tblVentasItems"/>
                                 </b:column>
                                 <b:column col-md="2" col-sm="2" col-xs="4" style="text-align: right;">
@@ -198,7 +208,7 @@
                     </b:tab>
 
                 </b:tabView>
-
+                <p:remoteCommand name="conectarWs" process=":frmReporte" action="#{reporteVentasController.conectarWs()}" autoRun="true"/>
             </h:form>
 
         </b:panel>

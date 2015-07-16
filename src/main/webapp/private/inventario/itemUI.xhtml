@@ -19,10 +19,10 @@
                                             <h:outputText value="Código"/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText  id="txtCodigo" value="#{articuloController.codigo}"/>
+                                            <b:inputText tabindex="1"  id="txtCodigo" value="#{articuloController.codigo}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" rendered="#{articuloController.permiso.permCrear}" value="Nuevo" action="#{articuloController.saveArticulo()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblArticulos @form:pnlDatos"/>
+                                            <p:commandButton tabindex="9"  ajax="true" rendered="#{articuloController.permiso.permCrear}" value="Nuevo" action="#{articuloController.saveArticulo()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblArticulos @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -30,10 +30,10 @@
                                             <h:outputText value="Descripción: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText id="txtDescripcion" value="#{articuloController.descripcion}"/>
+                                            <b:inputText tabindex="2" id="txtDescripcion" value="#{articuloController.descripcion}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" rendered="#{articuloController.permiso.permModificar}" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.updateArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
+                                            <p:commandButton tabindex="10" ajax="true" rendered="#{articuloController.permiso.permModificar}" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.updateArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
                                                 <p:confirm header="Modificar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -43,23 +43,39 @@
                                             <h:outputText value="Coste: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText value="#{articuloController.precioCompra}" id="txtPrecioCompra"/>
+                                            <b:inputText tabindex="3" value="#{articuloController.precioCompra}" id="txtPrecioCompra"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" rendered="#{articuloController.permiso.permEliminar}" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.deleteArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
+                                            <p:commandButton tabindex="11" ajax="true" rendered="#{articuloController.permiso.permEliminar}" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.deleteArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
                                                 <p:confirm header="Eliminar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
                                     </b:row>
-                                    <b:row>
+                                    <b:row rendered="#{!articuloController.diferenciado}">
                                         <b:column col-md="2" col-xs="12">
                                             <h:outputText value="Precio Venta"/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText  value="#{articuloController.precioVenta}" id="txtPrecioVenta"/>
+                                            <b:inputText tabindex="4"  value="#{articuloController.precioVenta}" id="txtPrecioVenta"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                            <p:commandButton tabindex="12" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                                <p:resetInput target="pnlDatos" />
+                                            </p:commandButton>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row rendered="#{articuloController.diferenciado}">
+                                        <b:column col-md="2" col-xs="12">
+                                            <h:outputText value="Precio Venta"/>
+                                        </b:column>
+                                        <b:column col-md="7" col-xs="7">
+                                            <b:inputText  value="#{articuloController.precioVenta}" disabled="true" id="txtPrecioVentaDif"/>
+                                        </b:column>
+                                        <b:column col-md="1" col-xs="1">
+                                            <p:commandButton tabindex="5" value="..." style="width: 40px;" class="botonesMantenimientos btn-danger btn-lg" onclick="PF('dlgPrecios').show();"/>
+                                        </b:column>
+                                        <b:column col-md="2" col-xs="4">
+                                            <p:commandButton tabindex="13" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblArticulos @form:dlgPrecios">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>
@@ -69,7 +85,7 @@
                                             <h:outputText value="Tiene Iva: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <p:inputSwitch value="#{articuloController.iva}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
+                                            <p:inputSwitch tabindex="6" value="#{articuloController.iva}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
                                             <h:outputText value=""/>
@@ -80,7 +96,7 @@
                                             <h:outputText value="Unidad de Medida: "/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:selectOneMenu value="#{articuloController.umedida_id}"  >
+                                            <b:selectOneMenu tabindex="7" value="#{articuloController.umedida_id}"  >
                                                 <f:selectItems value="#{articuloController.unidades}" var="c" itemValue="#{c.umedId}" itemLabel="#{c.umedNombre}"/>
                                             </b:selectOneMenu>
                                         </b:column>
@@ -93,7 +109,7 @@
                                             <h:outputText value="Información Adicional:"/>
                                         </b:column>
                                         <b:column col-md="8" col-xs="8">
-                                            <b:inputText value="#{articuloController.infoAdicional}" id="txtInfoAdicional"/>
+                                            <b:inputText tabindex="8" value="#{articuloController.infoAdicional}" id="txtInfoAdicional"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
                                             <h:outputText value=""/>
@@ -111,7 +127,7 @@
                     <b:row style="margin-top: 20px;">
                         <b:column>
                             <p:dataTable styleClass="" style="width: 100%" var="articulo" value="#{articuloController.articulos}" id="tblArticulos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{articuloController.articulo}" widgetVar="tablaArticulos" filteredValue="#{articuloController.articulosFiltrados}">
-                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{articuloController.onRowSelect}"/>
+                                <p:ajax event="rowSelect"  update="@form:pnlDatos @form:dlgPrecios" listener="#{articuloController.onRowSelect}"/>
                                 <f:facet name="header">
                                     <h:outputText value="Listado"/>
                                 </f:facet>
@@ -144,6 +160,23 @@
                     <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>
+                <p:dialog id="dlgPrecios" header="PRECIOS POR TIPOS DE CLIENTES" widgetVar="dlgPrecios" closable="false" resizable="false" draggable="false" style="width: 450px; height: 400px">
+                    <p:dataTable value="#{articuloController.precios}" editable="true" var="precio" id="tblPrecios" style="width: 450px;">
+                        <p:column headerText="Tipo de Cliente">
+                            <h:outputText value="#{precio.ticlId.ticlDescripcion}"/>
+                        </p:column>
+                        <p:column headerText="Precio">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{precio.precio}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{precio.precio}" style="width:100%" label="Precio"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                    <b:commandButton value="Aceptar" ajax="true" look="primary" onclick="PF('dlgPrecios').hide();"/>
+                </p:dialog>
             </h:form>
         </b:panel>
     </ui:define>

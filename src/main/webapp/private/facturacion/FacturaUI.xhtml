@@ -14,6 +14,7 @@
                 <p:growl id="messages" showDetail="false"/>
                 <b:panel title="Datos de la Factura" look="primary" style="width: 90%; min-width: 400px; margin: 0px auto">
                     <h:form id="frmEncabezado">
+                        
                         <p:outputPanel id="pnlDatosFact">
                             <b:container id="pnlEncabezado" style="width: 100%">
                                 <b:row>
@@ -113,7 +114,7 @@
                                     </b:column>
                                     <b:column col-xs="1" col-md="2" col-sm="2">
                                         <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmDetalle" action="#{facturaController.buscaArticuloPorCodigo()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:pnlProd"  class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
-                                        <p:commandButton value="" icon="ui-icon-contact" onclick="PF('dlgItems').show();"  class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                        <p:commandButton value="" icon="ui-icon-contact" process=":frmPrincipal:frmDetalle" action="#{facturaController.cargarArticulos()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:mdlItems" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="1" col-sm="1">
                                         <h:outputText value="Cantidad:"/>                                
@@ -157,16 +158,16 @@
                                         <f:facet name="input"><p:inputText value="#{item.defaObservaciones}" style="width:100%" label="Observaciones"/></f:facet>
                                     </p:cellEditor>
                                 </p:column>
-                               
+
                                 <p:column style="width:32px">
                                     <p:rowEditor />
                                 </p:column>
-                                 <p:column style="width: 42px;">
+                                <p:column style="width: 42px;">
                                     <p:commandLink action="#{facturaController.quitar(item)}" title="Quitar" update="tblItems :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                         <p:graphicImage value="../../resources/images/remove.png" style="width: 100%;"/>
                                     </p:commandLink>
                                 </p:column>
-                                
+
                             </p:dataTable>   
                         </p:outputPanel>
                         <p:outputPanel id="pnlResultados" style="width: 100%;">
@@ -237,7 +238,26 @@
                                         <h:outputText value="Descuento: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.descuento}" id="txtDescuento" disabled="true" class="textosFactura"/>
+                                        <p:spinner value="#{facturaController.descuento}" max="100" min="0" id="txtDescuento" stepFactor="1" size="15">
+                                            <p:ajax update="pnlResultados" listener="#{facturaController.calcular()}" />
+                                        </p:spinner>                   
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="6" col-md="1" col-sm="1">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="0" col-md="6" col-sm="6">
+                                        <h:outputText value=""/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2" style="text-align: right;">
+                                        <h:outputText value="V.Descuento: "/>
+                                    </b:column>
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
+                                        <b:inputText value="#{facturaController.Formato(facturaController.valorDescuento)}" disabled="true" class="textosFactura"/>              
                                     </b:column>
                                 </b:row>
                                 <b:row>
@@ -273,7 +293,7 @@
                                         <p:commandButton rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios" action="#{facturaController.guardarCambios()}" class="botonesMantenimientos btn-danger btn-lg" style="width: 120px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
-                                        <p:commandButton rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios e imprimir" action="#{facturaController.guardarCambiosEImprimir()}" class="botonesMantenimientos btn-danger btn-lg" style="width: 180px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton  rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios e imprimir" action="#{facturaController.guardarCambiosEImprimir()}" class="botonesMantenimientos btn-danger btn-lg" style="width: 180px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
                                         <p:commandButton value="Cancelar" class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.cancelar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
@@ -294,7 +314,7 @@
                             </b:container>
 
                         </p:outputPanel>
-                        <p:dialog resizable="false" draggable="false" header="Listado de Ítems" id="mdlItems"  widgetVar="dlgItems" style="width: 80%;">
+                        <p:dialog resizable="false" draggable="false" header="Listado de Ítems" id="mdlItems"  widgetVar="dlgItems" style="width: 600px;">
                             <ui:include src="listaArticulos.xhtml"/>
                             <p:commandButton value="Seleccionar" action="#{facturaController.seleccionaArticulo()}" process=":frmPrincipal:frmDetalle" style="width: 250px;"  update=":frmPrincipal:frmDetalle:pnlProd" onsuccess="PF('dlgItems').hide();"/>
                         </p:dialog>
@@ -302,10 +322,11 @@
                             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                         </p:confirmDialog>
+                        
                     </h:form>
 
                 </b:panel>
-
+                <p:remoteCommand name="conectarWs" process=":frmPrincipal" action="#{facturaController.conectarWs()}" autoRun="true"/>
             </h:form>
         </b:panel>
     </ui:define>

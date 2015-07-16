@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <h:form id="frmPais">
+                <p:growl id="messagesPais"/>
+                <p:outputPanel id="pnlDatosPais">
+                    <b:container style="width: 100%">
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Nombre: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <b:inputText value="#{paisController.nombre}" id="txtNombre"/>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <p:commandButton value="Nuevo" action="#{paisController.savePais()}" update="@form:pnlDatosPais @form:messagesPais"  class="botonesMantenimientos"/>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </p:outputPanel>
+
+            </h:form>
+
+        </ui:composition> 
+    </h:body>
+</html>

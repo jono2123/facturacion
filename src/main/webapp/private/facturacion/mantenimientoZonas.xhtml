@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <h:form id="frmZona">
+                <p:growl id="messagesZona"/>
+                <p:outputPanel id="pnlDatosZona">
+                    <b:container style="width: 100%">
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Pais: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <p:selectOneMenu value="#{zonaController.idPais}" style="width: 100%" id="cboPais">
+                                    <p:ajax listener="#{zonaController.onPaisChange()}" update="cboProvincia cboCiudad"/>
+                                    <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+                                    <f:selectItems value="#{zonaController.paises}" var="pais" itemLabel="#{pais.paisNombre}" itemValue="#{pais.paisId}"/>
+                                </p:selectOneMenu>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value=""/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Provincia: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <p:selectOneMenu value="#{zonaController.idProvincia}" style="width: 100%" id="cboProvincia">
+                                    <p:ajax listener="#{zonaController.onProvinciaChange()}" update="cboCiudad"/>
+                                    <f:selectItem itemLabel="Seleccione una..." itemValue="0"/>
+                                    <f:selectItems value="#{zonaController.provincias}" var="provincia" itemLabel="#{provincia.provNombre}" itemValue="#{provincia.provId}"/>
+                                </p:selectOneMenu>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value=""/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Ciudad: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <p:selectOneMenu value="#{zonaController.idCiudad}" style="width: 100%" id="cboCiudad">
+                                    <f:selectItem itemLabel="Seleccione una..." itemValue="0"/>
+                                    <f:selectItems value="#{zonaController.ciudades}" var="ciudad" itemLabel="#{ciudad.ciudNombre}" itemValue="#{ciudad.ciudId}"/>
+                                </p:selectOneMenu>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value=""/>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <h:outputText value="Nombre: "/>
+                            </b:column>
+                            <b:column col-md="8" col-sm="8" col-xs="12">
+                                <b:inputText value="#{zonaController.nombre}" id="txtNombre"/>
+                            </b:column>
+                            <b:column col-md="2" col-sm="2" col-xs="12">
+                                <p:commandButton value="Nueva" action="#{zonaController.saveZona()}" process="@form" update="@form:pnlDatosZona @form:messagesZona"  class="botonesMantenimientos"/>
+                            </b:column>
+                        </b:row>
+                    </b:container>
+                </p:outputPanel>
+
+            </h:form>
+
+        </ui:composition> 
+    </h:body>
+</html>
+

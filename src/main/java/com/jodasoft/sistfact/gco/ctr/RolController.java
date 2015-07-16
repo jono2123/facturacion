@@ -16,14 +16,18 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author javila
  */
-@Named(value = "rolController")
-@SessionScoped
+//@Named(value = "rolController")
+//@SessionScoped
+@ManagedBean(name = "rolController")
+@ViewScoped
 public class RolController extends AbstractMB implements Serializable{
 
     /**

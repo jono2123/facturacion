@@ -37,6 +37,7 @@
 
         <script type="text/javascript" src="http://hammerjs.github.io/dist/hammer.min.js"></script>
         <h:outputScript library="js" name="common.js" />
+    
         <h:outputScript library="js" name="menu/jquery.mmenu.min.js"/>
         <h:outputScript library="js" name="menu/addons/jquery.mmenu.dragopen.min.js"/>
         <h:outputScript library="js" name="menu/addons/jquery.mmenu.fixedelements.min.js"/>
@@ -110,6 +111,7 @@
                             <p:menuitem outcome="/private/principal.xhtml" value="Inicio"/>
                             <p:submenu label="Facturación">
                                 <p:menuitem outcome="/private/facturacion/clienteUI.xhtml" value="Clientes" title="Módulo para el mantenimiento de clientes"/>
+                                <p:menuitem outcome="/private/facturacion/tipoClienteUI.xhtml" value="Tipos de Cliente" title="Majeno de Tipos de Clientes"/>
                                 <p:menuitem outcome="/private/facturacion/FacturaUI.xhtml" value="Facturar" title="Facturación de productos y/o servicios"/>
                                 <p:menuitem outcome="/private/facturacion/reporteVentas.xhtml" value="Reporte de Ventas"/>
                             </p:submenu>

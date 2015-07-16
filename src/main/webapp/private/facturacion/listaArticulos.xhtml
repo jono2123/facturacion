@@ -8,7 +8,7 @@
       xmlns:b="http://bootsfaces.net/ui">
     <h:body>
         <ui:composition>
-            <p:dataTable styleClass="" style="width: 100%" var="articulo" value="#{listaArticulosController.articulos}" id="tblArticulos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{listaArticulosController.articulo}" widgetVar="tablaArticulos" filteredValue="#{listaArticulosController.articulosFiltrados}">               
+            <p:dataTable styleClass="" style="width: 600px" var="articulo" value="#{listaArticulosController.articulos}" id="tblArticulos"  paginator="true" rows="5" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{listaArticulosController.articulo}" widgetVar="tablaArticulos" filteredValue="#{listaArticulosController.articulosFiltrados}">               
                 <f:facet name="header">
                     <h:outputText value="Listado"/>
                 </f:facet>

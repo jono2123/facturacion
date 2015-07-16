@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -123,6 +124,29 @@ public abstract class AbstractFacade<T> {
 
         } catch (NoResultException e) {
             System.out.println("No result found for named query: " + namedQuery);
+        } catch (Exception e) {
+            System.out.println("Error while running query: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    
+    protected List<T> findAllResultsFunction(String functionName, Map<String, Object> parameters) {
+        List<T> result = null;
+
+        try {
+            StoredProcedureQuery query = getEntityManager().createNamedStoredProcedureQuery(functionName);
+
+            // Method that will populate parameters if they are passed not null and empty
+            if (parameters != null && !parameters.isEmpty()) {
+                populateQueryParameters(query, parameters);
+            }
+
+            result = (List<T>) query.getResultList();
+
+        } catch (NoResultException e) {
+            System.out.println("No result found for named query: " + functionName);
         } catch (Exception e) {
             System.out.println("Error while running query: " + e.getMessage());
             e.printStackTrace();

@@ -14,13 +14,17 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author javila
  */
-@Named(value = "administracionController")
-@RequestScoped
+//@Named(value = "administracionController")
+//@RequestScoped
+@ManagedBean(name="administracionController")
+@ViewScoped
 public class AdministracionController extends AbstractMB implements Serializable{
 
     /**

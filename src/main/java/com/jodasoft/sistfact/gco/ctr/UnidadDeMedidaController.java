@@ -13,14 +13,18 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author javila
  */
-@Named(value = "unidadDeMedidaController")
-@SessionScoped
+//@Named(value = "unidadDeMedidaController")
+//@SessionScoped
+@ManagedBean(name = "unidadDeMedidaController")
+@ViewScoped
 public class UnidadDeMedidaController extends AbstractMB implements Serializable{
 
     /**
