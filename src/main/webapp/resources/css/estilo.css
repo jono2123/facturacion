@@ -3,7 +3,7 @@
     padding: 0;
 }
 #mainContainer{
-    width: 90%;
+    width: 100%;
     margin: 0px auto;
     font-size: 1.0em;
     height: auto;
@@ -11,10 +11,10 @@
 
 #header{
     width: 100%;
-    border: 1px solid black;
+    border: 0px;
 }
 #content{
-    margin-top: 43px;
+    margin-top: 40px;
     width: 100%;
     border: none;
     height: auto !important;
@@ -22,19 +22,19 @@
 }
 #fotter{
     width: 100%;
-    border: 1px solid black;
+    border: 0px;
 }
 
 #left{
     width: 25%;
     float: left;
-    border: 1px solid black;
+    border: 0px;
 
 }
 #right{
     width: 100%;
     float: left;
-    border: 1px solid black;
+    border: 0px;
 
 }
 
@@ -91,6 +91,21 @@
     height: 22px;
     padding: 1px;
 }
+
+.tresColumnas .ui-datagrid-column {
+    width: 33.33%; border: none;height: 100%;
+}
+
+.cuatroColumnas .ui-datagrid-column {
+    width: 25%;
+    border:0px !important;
+    height: 100%;
+}
+.cuatroColumnas{
+    border:0px !important;
+    
+}
+
 #nav{
     height:25px;
     border-bottom:1px solid #ddd;
@@ -117,7 +132,7 @@
 @media screen and (max-width: 700px) {
 
     #contentLeft{
-        width: 98%;
+        width: 100%;
         padding-left: 2%;
         float: left;
     }

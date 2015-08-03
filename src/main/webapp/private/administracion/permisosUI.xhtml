@@ -19,7 +19,7 @@
                             <b:inputText value="#{permisosController.rol.rolNombre}" id="Rol"/>
                         </b:column> 
                         <b:column col-md="2" col-sm="2" col-xs="4">
-                            <p:commandButton value="Seleccionar" onclick="PF('dlgRoles').show();" id="cmdSeleccionar" class="botonesMantenimientos btn-danger btn-lg"/>
+                            <p:commandButton value="Seleccionar" onclick="PF('dlgRoles').show();" id="cmdSeleccionar" styleClass="botonesMantenimientos btn-danger btn-lg"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -27,7 +27,7 @@
                             <h:outputText value="Módulo: "/>
                         </b:column>
                         <b:column col-md="5" col-sm="5" col-xs="12">
-                            <p:selectOneMenu class="form-control" style="width: 100%;" value="#{permisosController.idMod}" id="cboModulo">
+                            <p:selectOneMenu styleClass="form-control" style="width: 100%;" value="#{permisosController.idMod}" id="cboModulo">
                                 <p:ajax listener="#{permisosController.onModuloChange()}" update="cboProceso"/>
                                 <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
                                 <f:selectItems  var="modulo" value="#{permisosController.modulos}" itemLabel="#{modulo.moduId.moduNombre}" itemValue="#{modulo.moduId.moduId}"/>
@@ -63,7 +63,7 @@
                             <h:outputText value=""/>
                         </b:column>
                         <b:column col-md="1" col-sm="1" col-xs="4">
-                            <p:commandButton value="Agregar" id="cmdAgregar" action="#{permisosController.agregar()}" update="pnlDatos tblPermisos messages" class="botonesMantenimientos btn-danger btn-lg"/>
+                            <p:commandButton value="Agregar" id="cmdAgregar" action="#{permisosController.agregar()}" update="pnlDatos tblPermisos messages" styleClass="botonesMantenimientos btn-danger btn-lg"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -118,7 +118,7 @@
 
 
                     </p:dataTable>
-                    <p:commandButton class="botonesMantenimientos" value="Aceptar" update="pnlDatos" onsuccess="PF('dlgRoles').hide();"/>
+                    <p:commandButton styleClass="botonesMantenimientos" value="Aceptar" update="pnlDatos" onsuccess="PF('dlgRoles').hide();"/>
                 </p:dialog>
             </h:form>
         </b:panel>

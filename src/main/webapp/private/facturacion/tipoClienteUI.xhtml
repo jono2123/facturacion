@@ -24,7 +24,7 @@
                                             <b:inputText  id="txtCodigo" value="#{tipoClienteController.descripcion}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{tipoClienteController.permiso.permCrear}" action="#{tipoClienteController.saveTipo()}"  class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos"/>
+                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{tipoClienteController.permiso.permCrear}" action="#{tipoClienteController.saveTipo()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -35,7 +35,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Modificar" rendered="#{tipoClienteController.permiso.permModificar}" action="#{tipoClienteController.updateTipo()}"  class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Modificar" rendered="#{tipoClienteController.permiso.permModificar}" action="#{tipoClienteController.updateTipo()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos">
                                                 <p:confirm header="Modificar Tipo de Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -48,7 +48,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{tipoClienteController.permiso.permEliminar}" action="#{tipoClienteController.deleteTipo()}"  class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{tipoClienteController.permiso.permEliminar}" action="#{tipoClienteController.deleteTipo()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos">
                                                 <p:confirm header="Eliminar Tipo de Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -61,7 +61,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" action="#{tipoClienteController.vaciaTextos()}" value="Limpiar" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblTipos">
+                                            <p:commandButton ajax="true" action="#{tipoClienteController.vaciaTextos()}" value="Limpiar" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblTipos">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>

@@ -22,7 +22,7 @@
                                             <b:inputText tabindex="1"  id="txtCodigo" value="#{articuloController.codigo}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="9"  ajax="true" rendered="#{articuloController.permiso.permCrear}" value="Nuevo" action="#{articuloController.saveArticulo()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblArticulos @form:pnlDatos"/>
+                                            <p:commandButton tabindex="9"  ajax="true" rendered="#{articuloController.permiso.permCrear}" value="Nuevo" action="#{articuloController.saveArticulo()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblArticulos @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -33,7 +33,7 @@
                                             <b:inputText tabindex="2" id="txtDescripcion" value="#{articuloController.descripcion}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="10" ajax="true" rendered="#{articuloController.permiso.permModificar}" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.updateArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
+                                            <p:commandButton tabindex="10" ajax="true" rendered="#{articuloController.permiso.permModificar}" value="Modificar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.updateArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
                                                 <p:confirm header="Modificar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -46,7 +46,7 @@
                                             <b:inputText tabindex="3" value="#{articuloController.precioCompra}" id="txtPrecioCompra"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="11" ajax="true" rendered="#{articuloController.permiso.permEliminar}" value="Eliminar" class="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.deleteArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
+                                            <p:commandButton tabindex="11" ajax="true" rendered="#{articuloController.permiso.permEliminar}" value="Eliminar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.deleteArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
                                                 <p:confirm header="Eliminar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -59,7 +59,7 @@
                                             <b:inputText tabindex="4"  value="#{articuloController.precioVenta}" id="txtPrecioVenta"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="12" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                            <p:commandButton tabindex="12" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>
@@ -72,10 +72,10 @@
                                             <b:inputText  value="#{articuloController.precioVenta}" disabled="true" id="txtPrecioVentaDif"/>
                                         </b:column>
                                         <b:column col-md="1" col-xs="1">
-                                            <p:commandButton tabindex="5" value="..." style="width: 40px;" class="botonesMantenimientos btn-danger btn-lg" onclick="PF('dlgPrecios').show();"/>
+                                            <p:commandButton tabindex="5" value="..." style="width: 40px;" styleClass="botonesMantenimientos btn-danger btn-lg" onclick="PF('dlgPrecios').show();"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="13" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblArticulos @form:dlgPrecios">
+                                            <p:commandButton tabindex="13" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblArticulos @form:dlgPrecios">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>

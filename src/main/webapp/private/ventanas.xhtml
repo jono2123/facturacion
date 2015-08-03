@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="content">
+        <b:panel look="primary" title="#{ventanasController.modulo.moduNombre}" style="margin: 0px auto !important;">
+            <p:dataGrid value="#{ventanasController.ventanas}"  var="ventana" columns="4" styleClass="cuatroColumnas" >
+                  <b:thumbnail>
+                        <p:link outcome="#{ventana.ventUrl}">
+                            <p:graphicImage value="#{ventana.ventIcono}" width="140px"/>
+                        </p:link>
+                        <f:facet name="caption">
+                            <h3><h:outputText value="#{ventana.ventNombre}"/></h3>
+                            <p><h:outputText value="#{ventana.ventDescripcion}"/></p>
+
+                        </f:facet>
+                    </b:thumbnail>
+
+            </p:dataGrid>
+        </b:panel>
+    </ui:define>
+</ui:composition>
+

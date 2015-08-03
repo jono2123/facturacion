@@ -6,6 +6,7 @@
 package com.jodasoft.sistfact.gco.mdl;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -16,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -56,8 +59,8 @@ public class Almacen implements Serializable {
     @Size(max = 13)
     @Column(name = "alma_ruc", length = 13)
     private String almaRuc;
-    @Size(max = 15)
-    @Column(name = "alma_telefono", length = 15)
+    @Size(max = 30)
+    @Column(name = "alma_telefono", length = 30)
     private String almaTelefono;
     @Column(name = "alma_estado")
     private Integer almaEstado;
@@ -80,6 +83,22 @@ public class Almacen implements Serializable {
     private Boolean almaDesglozar;
     @Column(name="alma_diferenciar_precios")
     private Boolean almaDiferenciarPrecios;
+    @Column(name="alma_fecha_creacion")
+    @Temporal(TemporalType.DATE)
+    private Date almaFechaCreacion;
+    @Column(name="alma_dia_corte")
+    private Integer almaDiaCorte;
+    @Size(max = 100)
+    @Column(name = "alma_email", length = 100)
+    private String almaEmail;
+    @Column(name = "alma_metodo_pago")
+    private Integer almaMetodoPago;
+    @Column(name = "alma_meses_vencidos")
+    private Integer almaMesesVencidos;
+    @Column(name = "alma_mes_contado")
+    private Boolean almaMesContado;
+    @Column(name = "alma_num_copias")
+    private Integer almaNumCopias;
     
     public Almacen() {
     }
@@ -200,6 +219,64 @@ public class Almacen implements Serializable {
         this.almaDiferenciarPrecios = almaDiferenciarPrecios;
     }
 
+    public Date getAlmaFechaCreacion() {
+        return almaFechaCreacion;
+    }
+
+    public void setAlmaFechaCreacion(Date almaFechaCreacion) {
+        this.almaFechaCreacion = almaFechaCreacion;
+    }
+
+    public Integer getAlmaDiaCorte() {
+        return almaDiaCorte;
+    }
+
+    public void setAlmaDiaCorte(Integer almaDiaCorte) {
+        this.almaDiaCorte = almaDiaCorte;
+    }
+
+    public String getAlmaEmail() {
+        return almaEmail;
+    }
+
+    public void setAlmaEmail(String almaEmail) {
+        this.almaEmail = almaEmail;
+    }
+
+    public Integer getAlmaMetodoPago() {
+        return almaMetodoPago;
+    }
+
+    public void setAlmaMetodoPago(Integer almaMetodoPago) {
+        this.almaMetodoPago = almaMetodoPago;
+    }
+
+    public Integer getAlmaMesesVencidos() {
+        return almaMesesVencidos;
+    }
+
+    public void setAlmaMesesVencidos(Integer almaMesesVencidos) {
+        this.almaMesesVencidos = almaMesesVencidos;
+    }
+
+    public Boolean getAlmaMesContado() {
+        return almaMesContado;
+    }
+
+    public void setAlmaMesContado(Boolean almaMesContado) {
+        this.almaMesContado = almaMesContado;
+    }
+
+    public Integer getAlmaNumCopias() {
+        return almaNumCopias;
+    }
+
+    public void setAlmaNumCopias(Integer almaNumCopias) {
+        this.almaNumCopias = almaNumCopias;
+    }
+
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -219,7 +296,7 @@ public class Almacen implements Serializable {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "com.jodasoft.sistfact.gco.mdl.Almacen[ almaId=" + almaId + " ]";

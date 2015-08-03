@@ -8,18 +8,14 @@ package com.jodasoft.sistfact.gco.ctr;
 import com.jodasoft.sistfact.gco.mdl.AlmacenTransaccion;
 import com.jodasoft.sistfact.gco.mdl.Factura;
 import com.jodasoft.sistfact.gco.mdl.ItemVendido;
-import com.jodasoft.sistfact.gco.mdl.ReporteItemVendido;
 import com.jodasoft.sistfact.gco.util.XmlManager;
 import com.jodasoft.sistfact.gco.util.exp.AlmacenTransaccionValidadorException;
-import com.jodasoft.sistfact.gco.util.exp.FacturaValidadorException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
@@ -56,10 +52,10 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
     private com.jodasoft.sistfact.gco.dao.AlmacenFacade almacenFacade;
     @EJB
     private com.jodasoft.sistfact.gco.dao.ReporteItemVendidoFacade reporteItemFacade;
-    
+
     @EJB
     private com.jodasoft.sistfact.gco.dao.ItemVendidoFacade ItemVendidoFacade;
-    
+
     @EJB
     private com.jodasoft.sistfact.gco.dao.AmacenTransaccionFacade transaccionFacade;
 
@@ -97,9 +93,10 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
     public void setTotal(double total) {
         this.total = total;
     }
-    public void conectarWs(){
+
+    public void conectarWs() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        String functionCrear="creaWebSocket('"+LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDireccionServidor()+"')";
+        String functionCrear = "creaWebSocket('" + LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDireccionServidor() + "')";
         requestContext.execute(functionCrear);
     }
 
@@ -161,9 +158,9 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
             total = total + factura.getFactTotal();
         }
     }
-    
-    public void buscarItemsPorFecha(){
-        items= ItemVendidoFacade.findByDateRangeAndAlmaId(desdeItem, hastaItem, LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId().intValue(),estadoFacturaItem);
+
+    public void buscarItemsPorFecha() {
+        items = ItemVendidoFacade.findByDateRangeAndAlmaId(desdeItem, hastaItem, LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId().intValue(), estadoFacturaItem);
     }
 
     public int getEstadoFactura() {
@@ -219,7 +216,9 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
                 facturaFacade.edit(factura);
                 facturas.remove(factura);
                 String xml = new XmlManager().createFactura(factura);
-                print(xml);
+                for (int i = 0; i < LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaNumCopias(); i++) {
+                    print(xml);
+                }
                 guardaTransaccion(factura);
             } catch (Exception ex) {
                 keepDialogOpen();
@@ -227,12 +226,14 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
             }
         } else {
             String xml = new XmlManager().createFactura(factura);
-            print(xml);
+            for (int i = 0; i < LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaNumCopias(); i++) {
+                print(xml);
+            }
         }
 
     }
 
-     public void guardaTransaccion(Factura factura) throws AlmacenTransaccionValidadorException{
+    public void guardaTransaccion(Factura factura) throws AlmacenTransaccionValidadorException {
         AlmacenTransaccion transaccion = new AlmacenTransaccion();
         transaccion.setTransConcepto("FACTURA");
         transaccion.setTransFecha(new Date());
@@ -240,7 +241,7 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
         transaccion.setUsuaId(factura.getUsuaId());
         transaccionFacade.save(transaccion);
     }
-    
+
     public void print(String xml) {
         RequestContext requestContext = RequestContext.getCurrentInstance();
 
@@ -263,7 +264,7 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
 
     public void actualizaItems() {
         items = null;
-        itemsFiltrados=null;
+        itemsFiltrados = null;
     }
 
 }

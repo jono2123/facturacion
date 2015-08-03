@@ -58,9 +58,18 @@ public class XmlManager {
         encabezado.addContent(telefono);
 
         Element fecha = new Element("fecha");
-        fecha.setText(fact.getFactFecha().toLocaleString().substring(0, fact.getFactFecha().toLocaleString().indexOf(" ")));
+        fecha.setText(fact.getFactFecha().toGMTString().substring(0, fact.getFactFecha().toGMTString().indexOf(":")-3));
         encabezado.addContent(fecha);
-
+        
+        Element ciudad = new Element("ciudad");
+        if(fact.getClieId().getZonaId()!=null)
+        {
+            ciudad.setText(fact.getClieId().getZonaId().getCiudId().getCiudNombre());
+        }else{
+            ciudad.setText("");
+        }
+        encabezado.addContent(ciudad);
+        
         factura.addContent(encabezado);
 
         Element detalle = new Element("detalle");
@@ -86,6 +95,10 @@ public class XmlManager {
             Element valorTotal = new Element("vtotal");
             valorTotal.setText(Formato(deta.getDefaCantidad() * deta.getDefaPrecioVenta()));
             item.addContent(valorTotal);
+            
+            Element observaciones = new Element("observaciones");
+            observaciones.setText(deta.getDefaObservaciones());
+            item.addContent(observaciones);
 
             detalle.addContent(item);
 

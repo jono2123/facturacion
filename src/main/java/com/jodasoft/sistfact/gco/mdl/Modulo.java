@@ -49,6 +49,10 @@ public class Modulo implements Serializable {
     private Double moduValor;
     @Column(name = "modu_valor_transaccion", precision = 17, scale = 17)
     private Double moduValorTransaccion;
+    @Column(name= "modu_descripcion", length = 300)
+    private String moduDescripcion;
+    @Column(name= "modu_icono", length = 200)
+    private String moduIcono;
     @OneToMany(mappedBy = "moduId")
     private List<Ventana> ventanaList;
     @OneToMany(mappedBy = "moduId")
@@ -91,6 +95,22 @@ public class Modulo implements Serializable {
 
     public void setModuValorTransaccion(Double moduValorTransaccion) {
         this.moduValorTransaccion = moduValorTransaccion;
+    }
+
+    public String getModuDescripcion() {
+        return moduDescripcion;
+    }
+
+    public void setModuDescripcion(String moduDescripcion) {
+        this.moduDescripcion = moduDescripcion;
+    }
+
+    public String getModuIcono() {
+        return moduIcono;
+    }
+
+    public void setModuIcono(String moduIcono) {
+        this.moduIcono = moduIcono;
     }
 
     @XmlTransient

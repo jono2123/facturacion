@@ -24,7 +24,7 @@
                                             <b:inputText  id="txtCodigo" value="#{unidadDeMedidaController.nombre}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" rendered="#{unidadDeMedidaController.permiso.permCrear}" value="Nuevo" action="#{unidadDeMedidaController.saveUmed()}"  class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUnidades @form:pnlDatos"/>
+                                            <p:commandButton  ajax="true" rendered="#{unidadDeMedidaController.permiso.permCrear}" value="Nuevo" action="#{unidadDeMedidaController.saveUmed()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUnidades @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -35,7 +35,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Modificar" rendered="#{unidadDeMedidaController.permiso.permModificar}" action="#{unidadDeMedidaController.updateUmed()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUnidades @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Modificar" rendered="#{unidadDeMedidaController.permiso.permModificar}" action="#{unidadDeMedidaController.updateUmed()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUnidades @form:pnlDatos">
                                                 <p:confirm header="Modificar Unidad de Medida" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -48,7 +48,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{unidadDeMedidaController.permiso.permEliminar}" action="#{unidadDeMedidaController.deleteUmed()}" class="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblUnidades @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{unidadDeMedidaController.permiso.permEliminar}" action="#{unidadDeMedidaController.deleteUmed()}" styleClass="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblUnidades @form:pnlDatos">
                                                 <p:confirm header="Eliminar Unidad de Medida" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -61,7 +61,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true"  value="Limpiar" action="#{unidadDeMedidaController.vaciaTextos()}" class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                            <p:commandButton ajax="true"  value="Limpiar" action="#{unidadDeMedidaController.vaciaTextos()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>

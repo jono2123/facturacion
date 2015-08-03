@@ -43,7 +43,7 @@
                                     </b:selectOneMenu>
                                 </b:column>
                                 <b:column col-md="1" col-sm="2" col-xs="12">
-                                    <p:commandButton value="Buscar" action="#{reporteVentasController.buscarPorFechas()}" update="tblFacturas" class="botonesMantenimientos btn-danger btn-lg"/>
+                                    <p:commandButton value="Buscar" action="#{reporteVentasController.buscarPorFechas()}" update="tblFacturas" styleClass="botonesMantenimientos btn-danger btn-lg"/>
                                 </b:column>
 
                             </b:row>
@@ -70,7 +70,7 @@
                                     </b:selectOneMenu>
                                 </b:column>
                                 <b:column col-md="2" col-sm="2" col-xs="12">
-                                    <p:commandButton value="Buscar" action="#{reporteVentasController.buscarPorCedula()}" update="tblFacturas" class="botonesMantenimientos btn-danger btn-lg"/>
+                                    <p:commandButton value="Buscar" action="#{reporteVentasController.buscarPorCedula()}" update="tblFacturas" styleClass="botonesMantenimientos btn-danger btn-lg"/>
                                 </b:column>
                             </b:row>
                         </b:container>
@@ -165,7 +165,7 @@
                                     </b:selectOneMenu>
                                 </b:column>
                                 <b:column col-md="1" col-sm="1" col-xs="12">
-                                    <p:commandButton value="Buscar" class="botonesMantenimientos btn-danger btn-lg" action="#{reporteVentasController.buscarItemsPorFecha()}" update="tblVentasItems"/>
+                                    <p:commandButton value="Buscar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{reporteVentasController.buscarItemsPorFecha()}" update="tblVentasItems"/>
                                 </b:column>
                                 <b:column col-md="2" col-sm="2" col-xs="4" style="text-align: right;">
                                     <h:commandLink>

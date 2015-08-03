@@ -80,6 +80,6 @@ public class AbstractMB {
     }
 
     public String formateaFecha(Date fec) {
-        return fec.toLocaleString().substring(0, fec.toLocaleString().indexOf(" "));
+        return fec.toGMTString().substring(0, fec.toGMTString().indexOf(":")-3);
     }
 }

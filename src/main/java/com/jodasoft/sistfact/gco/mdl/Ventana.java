@@ -49,6 +49,12 @@ public class Ventana implements Serializable {
     @Size(max = 50)
     @Column(name = "vent_nombre", length = 50)
     private String ventNombre;
+    @Column(name= "vent_descripcion", length = 300)
+    private String ventDescripcion;
+    @Column(name= "vent_icono", length = 200)
+    private String ventIcono;
+    @Column(name="vent_mostrar_menu")
+    private Boolean ventMostrarMenu;
     @JoinColumn(name = "modu_id", referencedColumnName = "modu_id")
     @ManyToOne
     private Modulo moduId;
@@ -94,6 +100,14 @@ public class Ventana implements Serializable {
         this.moduId = moduId;
     }
 
+    public Boolean getVentMostrarMenu() {
+        return ventMostrarMenu;
+    }
+
+    public void setVentMostrarMenu(Boolean ventMostrarMenu) {
+        this.ventMostrarMenu = ventMostrarMenu;
+    }
+
     @XmlTransient
     public List<Permiso> getPermisoList() {
         return permisoList;
@@ -101,6 +115,22 @@ public class Ventana implements Serializable {
 
     public void setPermisoList(List<Permiso> permisoList) {
         this.permisoList = permisoList;
+    }
+
+    public String getVentDescripcion() {
+        return ventDescripcion;
+    }
+
+    public void setVentDescripcion(String ventDescripcion) {
+        this.ventDescripcion = ventDescripcion;
+    }
+
+    public String getVentIcono() {
+        return ventIcono;
+    }
+
+    public void setVentIcono(String ventIcono) {
+        this.ventIcono = ventIcono;
     }
 
     @Override

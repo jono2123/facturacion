@@ -24,7 +24,7 @@
                                             <b:inputText  id="txtNombre" value="#{usuarioController.nomUsuario}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{usuarioController.permiso.permCrear}" action="#{usuarioController.saveUsuario()}"   class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos"/>
+                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{usuarioController.permiso.permCrear}" action="#{usuarioController.saveUsuario()}"   styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos"/>
                                         </b:column>
                                     </b:row>
                                     <b:row>
@@ -35,7 +35,7 @@
                                             <b:inputSecret  id="txtPass" value="#{usuarioController.contrasenia}"/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" rendered="#{usuarioController.permiso.permModificar}" value="Modificar" class="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos">
+                                            <p:commandButton ajax="true" action="#{usuarioController.updateUsuario()}" rendered="#{usuarioController.permiso.permModificar}" value="Modificar" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos">
                                                 <p:confirm header="Modificar Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -50,7 +50,7 @@
                                             </b:selectOneMenu>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{usuarioController.permiso.permEliminar}"  class="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblUsuarios @form:pnlDatos">
+                                            <p:commandButton ajax="true" value="Eliminar"  rendered="#{usuarioController.permiso.permEliminar}" action="#{usuarioController.deleteUsuario()}"  styleClass="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblUsuarios @form:pnlDatos">
                                                 <p:confirm header="Eliminar Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
                                             </p:commandButton> 
                                         </b:column>
@@ -63,7 +63,7 @@
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true"  value="Limpiar"  class="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
+                                            <p:commandButton ajax="true"  value="Limpiar"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
                                                 <p:resetInput target="pnlDatos" />
                                             </p:commandButton>
                                         </b:column>

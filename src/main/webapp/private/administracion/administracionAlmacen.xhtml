@@ -111,13 +111,20 @@
                                             <b:inputText id="txtNumeroFactura" value="#{administracionController.almacen.almaNumFactura}"/>
                                         </b:column>
                                     </b:row>
-
+                                    <b:row>
+                                        <b:column col-md="2" col-sm="2" col-xs="12">
+                                            <h:outputText value="Número de Copias por Factura: "/>
+                                        </b:column>
+                                        <b:column col-md="10" col-sm="10" col-xs="12">
+                                            <b:inputText id="txtNumeroCopias" value="#{administracionController.almacen.almaNumCopias}"/>
+                                        </b:column>
+                                    </b:row>
                                     <b:row>
                                         <b:column col-md="2" col-sm="2" col-xs="12">
                                             <h:outputText value=""/>
                                         </b:column>
                                         <b:column col-md="10" col-sm="10" col-xs="12">
-                                            <p:commandButton value="Guardar" rendered="#{administracionController.permiso.permModificar}" class="botonesMantenimientos btn-danger btn-lg" action="#{administracionController.updateAlmacen()}" update="messages"/>
+                                            <p:commandButton value="Guardar" rendered="#{administracionController.permiso.permModificar}" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{administracionController.updateAlmacen()}" update="messages"/>
                                         </b:column>
                                     </b:row>
 

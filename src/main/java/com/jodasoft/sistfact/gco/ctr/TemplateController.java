@@ -72,7 +72,7 @@ public class TemplateController implements Serializable {
         String uri = request.getRequestURI();
         uri = uri.substring(uri.indexOf("private")-1);
         permisos=LoginController.getInstance().getPermisos();
-        if(uri.endsWith("principal.xhtml")){
+        if(uri.endsWith("principal.xhtml")||uri.endsWith("ventanas.xhtml")){
             return true;
         }
         for(Permiso permiso:permisos)

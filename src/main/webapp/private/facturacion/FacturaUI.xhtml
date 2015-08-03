@@ -40,8 +40,8 @@
 
                                     </b:column>
                                     <b:column col-md="2" col-sm="2" col-xs="4">
-                                        <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmEncabezado" action="#{facturaController.buscarPorCedula()}" update="pnlDatosFact :frmPrincipal:messages" title="Buscar" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
-                                        <p:commandButton value="" icon="ui-icon-contact"  onclick="PF('dlgClientes').show();" title="Seleccionar" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                        <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmEncabezado" action="#{facturaController.buscarPorCedula()}" update="pnlDatosFact :frmPrincipal:messages" title="Buscar" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                        <p:commandButton value="" icon="ui-icon-contact"  onclick="PF('dlgClientes').show();" title="Seleccionar" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
                                     </b:column>
                                     <b:column col-md="1" col-sm="1" col-xs="12">
                                         <h:outputText value="Fecha: "/>
@@ -109,17 +109,17 @@
                                     <b:column col-xs="12" col-md="1" col-sm="1">
                                         <h:outputText value="Código"/>
                                     </b:column>
-                                    <b:column col-xs="11" col-md="2" col-sm="2">
+                                    <b:column col-xs="8" col-md="2" col-sm="2">
                                         <b:inputText value="#{facturaController.codigo}" id="txtCodigo"/>
                                     </b:column>
-                                    <b:column col-xs="1" col-md="2" col-sm="2">
-                                        <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmDetalle" action="#{facturaController.buscaArticuloPorCodigo()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:pnlProd"  class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
-                                        <p:commandButton value="" icon="ui-icon-contact" process=":frmPrincipal:frmDetalle" action="#{facturaController.cargarArticulos()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:mdlItems" class="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                    <b:column col-xs="4" col-md="2" col-sm="2">
+                                        <p:commandButton value="" icon="ui-icon-search" process=":frmPrincipal:frmDetalle" action="#{facturaController.buscaArticuloPorCodigo()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:pnlProd"  styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
+                                        <p:commandButton value="" icon="ui-icon-contact" process=":frmPrincipal:frmDetalle" action="#{facturaController.cargarArticulos()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:mdlItems" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 35px !important;"/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="1" col-sm="1">
                                         <h:outputText value="Cantidad:"/>                                
                                     </b:column>
-                                    <b:column col-xs="12" col-md="1" col-sm="1">
+                                    <b:column col-xs="12" col-md="2" col-sm="2">
                                         <b:inputText value="#{facturaController.cantidad}" id="txtCantidad"/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="1" col-sm="1">
@@ -129,8 +129,14 @@
                                         <b:inputText value="#{facturaController.precio}" id="txtPrecio"/>
                                     </b:column>
                                     <b:column col-xs="1" col-md="1" col-sm="1">
-                                        <p:commandButton value="Agregar" process=":frmPrincipal:frmDetalle" icon="ui-icon-cart"  class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.agregarItem()}" update="tblItems pnlResultados pnlProd :frmPrincipal:messages " style="width: 80px !important;" onsuccess="document.getElementById('frmPrincipal:frmDetalle:txtCodigo').focus();"/>
+                                        <p:commandButton value="Agregar" process=":frmPrincipal:frmDetalle" icon="ui-icon-cart"  styleClass="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.agregarItem()}" update="tblItems pnlResultados pnlProd :frmPrincipal:messages " style="width: 80px !important;" onsuccess="document.getElementById('frmPrincipal:frmDetalle:txtCodigo').focus();"/>
                                     </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column span="12">
+                                        <h:outputText value="Descripción:" style="font-weight: bold;"/>
+                                        <h:outputText value="#{facturaController.descripcion}"/>
+                                    </b:column>       
                                 </b:row>
                             </b:container>
                             <p:dataTable styleClass="" editable="true" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{item.numItem}" selection="#{facturaController.detalleSelected}" widgetVar="tablaItems">               
@@ -187,7 +193,7 @@
                                         <h:outputText value="Subtotal: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.Formato(facturaController.subtTotal)}" id="txtSubtotal" disabled="true" class="textosFactura"/>
+                                        <b:inputText value="#{facturaController.Formato(facturaController.subtTotal)}" id="txtSubtotal" disabled="true" styleClass="textosFactura"/>
                                     </b:column>
                                 </b:row>
                                 <b:row>
@@ -204,7 +210,7 @@
                                         <h:outputText value="Subtotal Iva 0%: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.Formato(facturaController.subTotalSinIva)}" id="txtSubtotalSinIva" disabled="true" class="textosFactura"/>
+                                        <b:inputText value="#{facturaController.Formato(facturaController.subTotalSinIva)}" id="txtSubtotalSinIva" disabled="true" styleClass="textosFactura"/>
                                     </b:column>
                                 </b:row>
                                 <b:row>
@@ -221,7 +227,7 @@
                                         <h:outputText value="Subtotal Con 12%: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.Formato(facturaController.subTotalConIva)}" id="txtSubtotalConIva" disabled="true" class="textosFactura"/>
+                                        <b:inputText value="#{facturaController.Formato(facturaController.subTotalConIva)}" id="txtSubtotalConIva" disabled="true" styleClass="textosFactura"/>
                                     </b:column>
                                 </b:row>
                                 <b:row>
@@ -257,7 +263,7 @@
                                         <h:outputText value="V.Descuento: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.Formato(facturaController.valorDescuento)}" disabled="true" class="textosFactura"/>              
+                                        <b:inputText value="#{facturaController.Formato(facturaController.valorDescuento)}" disabled="true" styleClass="textosFactura"/>              
                                     </b:column>
                                 </b:row>
                                 <b:row>
@@ -274,29 +280,29 @@
                                         <h:outputText value="IVA: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.Formato(facturaController.iva)}" id="txtIva" disabled="true" class="textosFactura"/>
+                                        <b:inputText value="#{facturaController.Formato(facturaController.iva)}" id="txtIva" disabled="true" styleClass="textosFactura"/>
                                     </b:column>
                                 </b:row>
                                 <b:row>
                                     <b:column rendered="#{!facturaController.modificar}" col-xs="6" col-md="5" col-sm="5">
-                                        <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar" action="#{facturaController.soloGuardar()}" class="botonesMantenimientos btn-danger btn-lg" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar" action="#{facturaController.soloGuardar()}" styleClass="botonesMantenimientos btn-danger btn-lg" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
-                                        <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar e Imprimir" action="#{facturaController.guardarEImprimir()}" class="botonesMantenimientos btn-danger btn-lg" style="width: 150px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar e Imprimir" action="#{facturaController.guardarEImprimir()}" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 150px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
-                                        <p:commandButton value="Nueva" class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.limpiarTodo()}" ajax="false" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton value="Nueva" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.limpiarTodo()}" ajax="false" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Nueva Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
                                     </b:column>
                                     <b:column rendered="#{facturaController.modificar}" col-xs="6" col-md="5" col-sm="5">
-                                        <p:commandButton rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios" action="#{facturaController.guardarCambios()}" class="botonesMantenimientos btn-danger btn-lg" style="width: 120px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios" action="#{facturaController.guardarCambios()}" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 120px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
-                                        <p:commandButton  rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios e imprimir" action="#{facturaController.guardarCambiosEImprimir()}" class="botonesMantenimientos btn-danger btn-lg" style="width: 180px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton  rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios e imprimir" action="#{facturaController.guardarCambiosEImprimir()}" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 180px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
-                                        <p:commandButton value="Cancelar" class="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.cancelar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                        <p:commandButton value="Cancelar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.cancelar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlProd :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
                                             <p:confirm header="Cancelar" message="¿Está Seguro?" icon="ui-icon-alert" />
                                         </p:commandButton>
                                     </b:column>
@@ -308,7 +314,7 @@
                                         <h:outputText value="TOTAL: "/>
                                     </b:column>
                                     <b:column col-xs="12" col-md="2" col-sm="2">
-                                        <b:inputText value="#{facturaController.Formato(facturaController.tota)}" id="txtTotal" disabled="true" class="textosFactura"/>
+                                        <b:inputText value="#{facturaController.Formato(facturaController.tota)}" id="txtTotal" disabled="true" styleClass="textosFactura"/>
                                     </b:column>
                                 </b:row>
                             </b:container>

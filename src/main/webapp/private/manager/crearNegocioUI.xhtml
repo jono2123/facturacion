@@ -1,0 +1,406 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../../template/mainTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="content">
+        <b:panel look="primary" title="CREACIÓN DE UN NUEVO NEGOCIO" style="margin: 0px auto !important;">
+            <h:form id="frmPrincipal">
+                <p:growl id="mensajes"/>
+                <p:wizard id="wzrDatos">
+                    <p:tab id="tabDetalles">
+                        <p:panel header="Detalles de Negocio" style="height: 100%;">
+                            <b:container style="width: 100%;">
+                                <b:row>
+                                    <b:column>
+                                        <div id="contentLeft">
+                                            <p:messages/>
+                                            <b:container style="width: 100%; margin: 0px auto;">
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Nombre de la Empresa: *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaNombre}" id="txtNombre" required="true" requiredMessage="Ingrese un nombre de empresa" />
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="RUC o CC *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaRuc}" id="txtRUC" required="true" requiredMessage="Ingrese una cédula o RUC" />
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Dirección *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaDireccion}" id="txtDireccion" required="true" requiredMessage="Ingrese una dirección del establecimiento"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Telefono(s) *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaTelefono}" id="txtTelefono" required="true" maxlength="30" requiredMessage="Ingrese al menos un número de teléfono"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="E-Mail"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaEmail}" id="txtMail"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Nombre del propietario o administrador *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaPropietario}" id="txtNomPropietario" required="true" requiredMessage="Ingrese un nombre de propietario"/>
+                                                    </b:column>
+                                                </b:row>
+                                            </b:container>
+                                        </div>
+                                        <div id="contentRight">
+
+                                        </div>   
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+
+                        </p:panel>
+                    </p:tab>
+                    <p:tab>
+                        <p:panel header="Configuraciones de la empresa">
+                            <b:container style="width: 100%;">
+                                <b:row>
+                                    <b:column>
+                                        <div id="contentLeft">
+                                            <p:messages/>
+                                            <b:container style="width: 100%; margin: 0px auto;">
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Método de Pago: *"/>
+                                                    </b:column>
+                                                    <b:column  col-md="8" col-sm="12" col-xs="12">
+                                                        <b:selectOneMenu value="#{crearAlmacenController.almacen.almaMetodoPago}" id="cboPago" >
+                                                            <f:selectItem itemLabel="Mensual" itemValue="0"/>
+                                                            <f:selectItem itemLabel="Por Transacción" itemValue="1"/>
+                                                            <f:selectItem itemLabel="Compra" itemValue="1"/>
+                                                        </b:selectOneMenu>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Auto-numerar facturas *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <p:inputSwitch value="#{crearAlmacenController.almacen.almaFacturaAutonumerada}" id="isAutonumear" offLabel="NO" onLabel="SI"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Número de Factura actual: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaNumFactura}" id="txtNumFactura"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Desglozar Iva del Precio de Venta *"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <p:inputSwitch value="#{crearAlmacenController.almacen.almaDesglozar}" onLabel="SI" offLabel="NO" id="isDesglozar"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Valor del IVA"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaIva}" id="txtIVA" required="true" maxlength="3" requiredMessage="Ingrese el valor del IVA"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Diferenciar Precios por tipo de cliente"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <p:inputSwitch value="#{crearAlmacenController.almacen.almaDiferenciarPrecios}" onLabel="SI" offLabel="NO" id="isDiferenciarPrecios"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Dirección Ip del servidor de impresión"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="12" col-xs="12">
+                                                        <b:inputText value="#{crearAlmacenController.almacen.almaDireccionServidor}" id="txtDireccioServidor"/>
+                                                    </b:column>
+                                                </b:row>
+                                            </b:container>
+                                        </div>
+                                        <div id="contentRight">
+
+                                        </div>   
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab>
+                        <p:panel header="Selección de Módulos">
+                            <b:container style="width: 100%;">
+                                <b:row>
+                                    <b:column>
+                                        <div id="contentLeft">
+                                            <p:messages/>
+                                            <b:container style="width: 100%; margin: 0px auto;">
+                                                <b:row>
+                                                    <b:column span="12">
+                                                        <h:outputText value="Facturación  "/>
+                                                        <p:selectBooleanCheckbox value="#{crearAlmacenController.facturacion}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column span="12">
+                                                        <h:outputText value="Inventario  "/>
+                                                        <p:selectBooleanCheckbox value="#{crearAlmacenController.inventario}"/>
+                                                    </b:column>
+                                                </b:row>
+                                            </b:container>
+                                        </div>
+                                        <div id="contentRight">
+
+                                        </div>   
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab>
+                        <p:panel header="Creación de Usuarios Y Roles">
+                            <b:container style="width: 100%;">
+                                <b:row>
+                                    <b:column>
+                                        <div id="contentLeft">
+                                            <p:messages/>
+                                            <b:container style="width: 100%; margin: 0px auto;">
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Nombre de un rol para el administrador: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-xs="12" col-sm="12">
+                                                        <b:inputText value="#{crearAlmacenController.nombreRolAdministrador}" id="txtNombreRolAdministrador" required="true" requiredMessage="Ingrese un nombre de rol administrador"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Nombre de usuario administrador: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-xs="12" col-sm="12">
+                                                        <b:inputText value="#{crearAlmacenController.nombreUsuarioAdministrador}" id="txtNombreUsuarioAdministrador" required="true" requiredMessage="Ingrese un nombre de usuario administrador" />
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Password de usuario administrador: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-xs="12" col-sm="12">
+                                                        <p:password feedback="true" match="txtPasswordUsuarioAdministradorConfirm" weakLabel="Débil" goodLabel="Buena" label="Password" promptLabel="Por favorr ingrese una clave" strongLabel="Fuerte" validatorMessage="Los passwords no coinciden"  value="#{crearAlmacenController.passwordUsuarioAdministrador}" id="txtPasswordUsuarioAdministrador" rendered="true" requiredMessage="Ingrese un password para el usuario"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="12" col-xs="12">
+                                                        <h:outputText value="Password de usuario administrador: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-xs="12" col-sm="12">
+                                                        <p:password value="#{crearAlmacenController.passwordUsuarioAdministradorConfirm}" id="txtPasswordUsuarioAdministradorConfirm"  />
+                                                    </b:column>
+                                                </b:row>
+                                            </b:container>
+                                        </div>
+                                        <div id="contentRight">
+
+                                        </div>   
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+                        </p:panel>
+
+                    </p:tab>
+                    <p:tab>
+                        <p:panel header="Confirmación:" id="pnlConfirmacion">
+                            <b:container style="width: 100%;">
+                                <b:row>
+                                    <b:column>
+
+                                        <p:messages/>
+                                        <b:panel title="DETALLES DE LA EMPRESA">
+                                            <b:container style="width: 100%;">
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Nombre de la Empresa: " style="font-weight: bold;"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaNombre}" id="lblNombre" />
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="RUC o CC: " style="font-weight: bold;"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaRuc}" id="lblRUC"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Dirección: " style="font-weight: bold;"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaDireccion}" id="lblDireccion"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Telefono(s): " style="font-weight: bold;"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaTelefono}" id="lblTelefono"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="E-Mail" style="font-weight: bold;"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaEmail}" id="lblMail"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Nombre del propietario o administrador *" style="font-weight: bold;"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaPropietario}" id="lblNomPropietario" />
+                                                    </b:column>
+                                                </b:row>
+                                            </b:container>
+                                        </b:panel>
+                                        <b:panel title="DETALLES DE CONFIGURACIÓN">
+
+
+                                            <b:container style="width: 100%; margin: 0px auto;">
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Método de Pago: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.obtenMetodoDePago(crearAlmacenController.almacen.almaMetodoPago)}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Auto-numerar facturas: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaFacturaAutonumerada?'SI':'NO'}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Número de Factura actual: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaNumFactura}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Desglozar Iva del Precio de Venta: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaDesglozar?'SI':'NO'}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Valor del IVA"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaIva}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Diferenciar Precios por tipo de cliente"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaDiferenciarPrecios?'SI':'NO'}"/>
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Dirección Ip del servidor de impresión"/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-sm="8" col-xs="8">
+                                                        <h:outputText value="#{crearAlmacenController.almacen.almaDireccionServidor}" id="lblDireccioServidor"/>
+                                                    </b:column>
+                                                </b:row>
+                                            </b:container>
+                                        </b:panel>
+                                        <b:panel title="DETALLE DE LOS MÓDULOS CONTRATADOS">
+                                            <h:outputText value="Facturación" rendered="#{crearAlmacenController.facturacion}"/>
+                                            <br/>
+                                            <h:outputText value="Inventario" rendered="#{crearAlmacenController.inventario}"/>
+
+                                        </b:panel>
+                                        <b:panel title="DETALLE DE LOS ROLES Y USUARIOS">
+                                            <b:container style="width: 100%; margin: 0px auto;">
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Nombre de un rol para el administrador: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-xs="8" col-sm="8">
+                                                        <h:outputText value="#{crearAlmacenController.nombreRolAdministrador}" id="lblNombreRolAdministrador" />
+                                                    </b:column>
+                                                </b:row>
+                                                <b:row>
+                                                    <b:column col-md="4" col-sm="4" col-xs="4">
+                                                        <h:outputText value="Nombre de usuario administrador: "/>
+                                                    </b:column>
+                                                    <b:column col-md="8" col-xs="8" col-sm="8">
+                                                        <h:outputText value="#{crearAlmacenController.nombreUsuarioAdministrador}" id="lblNombreUsuarioAdministrador" />
+                                                    </b:column>
+                                                </b:row>
+
+                                            </b:container>
+
+                                        </b:panel>
+
+                                    </b:column>
+                                </b:row>
+                            </b:container>
+                        </p:panel>
+                        <p:commandButton value="Imprimir" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                            <p:printer target="pnlConfirmacion" />
+                        </p:commandButton>
+                        <p:commandButton value="Crear" action="#{crearAlmacenController.crear()}" update="mensajes wzrDatos" style="display:block;margin-bottom: 20px"/> 
+                    </p:tab>
+                </p:wizard> 
+            </h:form>
+        </b:panel>
+    </ui:define>
+</ui:composition>
+
+

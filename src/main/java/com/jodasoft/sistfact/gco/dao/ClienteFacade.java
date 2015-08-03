@@ -53,6 +53,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
              ValidarAtributoUtil.validarStringNuloVacio("Apellidos", cliente.getPersApellidos());
              ValidarAtributoUtil.validarStringNuloVacio("Dirección", cliente.getPersDireccion());
              ValidarAtributoUtil.validarStringNuloVacio("Telefono", cliente.getPersTelefono());
+             ValidarAtributoUtil.validarObjetoNulo("Tipo de Cliente", cliente.getTiclId());
              Validacion.validadarCed_RUC(cliente.getPersCedula());
              create(cliente);
          } catch (AtributoInvalidoException ex) {

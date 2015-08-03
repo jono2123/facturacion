@@ -8,6 +8,7 @@ package com.jodasoft.sistfact.gco.mdl;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName = "pers_id")
 @Table(catalog = "dbfacturacion", schema = "public")
+@Cacheable(false)
 @NamedQueries({
     @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
     @NamedQuery(name = "Cliente.findByAlmaId", query = "SELECT c FROM Cliente c WHERE c.almaId = :almaId"),

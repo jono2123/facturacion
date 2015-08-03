@@ -53,10 +53,10 @@ public class FacturaController extends AbstractMB implements Serializable {
 
     @EJB
     private com.jodasoft.sistfact.gco.dao.AlmacenFacade almacenFacade;
-    
+
     @EJB
     private com.jodasoft.sistfact.gco.dao.PrecioVentaFacade precioVentaFacade;
-    
+
     @EJB
     private com.jodasoft.sistfact.gco.dao.AmacenTransaccionFacade transaccionFacade;
 
@@ -75,6 +75,7 @@ public class FacturaController extends AbstractMB implements Serializable {
     private double cantidad;
     private double precio;
     private Articulo articulo;
+    private String descripcion;
 
     //variables para la factura
     private Factura factura;
@@ -136,6 +137,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         articulo = ListaArticulosController.getInstance().getArticulo();
         setCodigo(articulo.getArtiCodigo());
         setPrecio(articulo.getArtiPrecioVenta());
+        setDescripcion(articulo.getArtiDescripcion());
         setCantidad(1);
     }
 
@@ -163,6 +165,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         setSubTotalSinIva(0);
         setIva(0);
         setDescuento(0);
+        setDescripcion("");
         setValorDescuento(0);
         factura = new Factura();
         i = 0;
@@ -171,8 +174,8 @@ public class FacturaController extends AbstractMB implements Serializable {
          numero = LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaNumFactura();
          }*/
     }
-    
-    public void guardaTransaccion(Factura factura) throws AlmacenTransaccionValidadorException{
+
+    public void guardaTransaccion(Factura factura) throws AlmacenTransaccionValidadorException {
         AlmacenTransaccion transaccion = new AlmacenTransaccion();
         transaccion.setTransConcepto("FACTURA");
         transaccion.setTransFecha(new Date());
@@ -208,18 +211,18 @@ public class FacturaController extends AbstractMB implements Serializable {
         } else {
             if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDiferenciarPrecios()) {
                 PrecioVenta pVenta = precioVentaFacade.findByArtIdAndTiclId(articulo, cliente.getTiclId());
-                if(pVenta!=null)
-                {
+                if (pVenta != null) {
                     setPrecio(pVenta.getPrecio());
-                }
-                else{
-                    articulo=null;
+                    setDescripcion(articulo.getArtiDescripcion());
+                } else {
+                    articulo = null;
                     displayErrorMessageToUser("No se ha asignado un precio de venta para este artículo y este tipo de cliente");
                     setPrecio(0);
                     return;
                 }
             } else {
                 setPrecio(articulo.getArtiPrecioVenta());
+                setDescripcion(articulo.getArtiDescripcion());
             }
             setCantidad(1);
         }
@@ -261,6 +264,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         setCodigo("");
         setCantidad(0);
         setPrecio(0);
+        setDescripcion("");
     }
 
     public void calcular() {
@@ -338,7 +342,9 @@ public class FacturaController extends AbstractMB implements Serializable {
         closeDialog();
         displayInfoMessageToUser("Factura Modificada Correctamente");
         String xml = new XmlManager().createFactura(factura);
-        print(xml);
+        for (int i = 0; i < LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaMetodoPago(); i++) {
+            print(xml);
+        }
         limpiarTodo();
         return "reporteVentas.xhtml?faces-redirect=true";
     }
@@ -360,7 +366,7 @@ public class FacturaController extends AbstractMB implements Serializable {
 
     public void guardarEImprimir() {
         //RequestContext requestContext = RequestContext.getCurrentInstance();
-       
+
         factura = new Factura();
         factura.setFactEstado(1);
         if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaFacturaAutonumerada()) {
@@ -374,7 +380,9 @@ public class FacturaController extends AbstractMB implements Serializable {
             closeDialog();
             displayInfoMessageToUser("Factura Guardada Correctamente");
             String xml = new XmlManager().createFactura(factura);
-            print(xml);
+            for (int i = 0; i < LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaNumCopias(); i++) {
+                print(xml);
+            }
             guardaTransaccion(factura);
             limpiarTodo();
         } catch (FacturaValidadorException ex) {
@@ -410,21 +418,20 @@ public class FacturaController extends AbstractMB implements Serializable {
     public int getNumero() {
         return numero;
     }
-    
-    public void conectarWs(){
+
+    public void conectarWs() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        String functionCrear="creaWebSocket('"+LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDireccionServidor()+"')";
+        String functionCrear = "creaWebSocket('" + LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDireccionServidor() + "')";
         requestContext.execute(functionCrear);
     }
 
     public void print(String xml) {
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        
+
         String mensaje = xml.substring(xml.indexOf("<f"), xml.lastIndexOf(">") + 1);
 
         String funcion = "enviaMensaje('" + mensaje + "')";
-       
-        
+
         requestContext.execute(funcion);
     }
 
@@ -660,6 +667,14 @@ public class FacturaController extends AbstractMB implements Serializable {
 
     public void setValorDescuento(double valorDescuento) {
         this.valorDescuento = valorDescuento;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public static FacturaController getInstance() {

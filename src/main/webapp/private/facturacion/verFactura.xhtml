@@ -132,7 +132,7 @@
                                 <h:outputText value="Subtotal: "/>
                             </b:column>
                             <b:column col-xs="12" col-md="2" col-sm="2">
-                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalConIva + verFacturaController.factura.factSubtotalSinIva)}" id="txtSubtotal" disabled="true" class="textosFactura"/>
+                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalConIva + verFacturaController.factura.factSubtotalSinIva)}" id="txtSubtotal" disabled="true" styleClass="textosFactura"/>
                             </b:column>
                         </b:row>
                         <b:row>
@@ -149,7 +149,7 @@
                                 <h:outputText value="Subtotal Sin Iva: "/>
                             </b:column>
                             <b:column col-xs="12" col-md="2" col-sm="2">
-                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalSinIva)}" id="txtSubtotalSinIva" disabled="true" class="textosFactura"/>
+                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalSinIva)}" id="txtSubtotalSinIva" disabled="true" styleClass="textosFactura"/>
                             </b:column>
                         </b:row>
                         <b:row>
@@ -166,7 +166,7 @@
                                 <h:outputText value="Subtotal Con Iva: "/>
                             </b:column>
                             <b:column col-xs="12" col-md="2" col-sm="2">
-                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalConIva)}" id="txtSubtotalConIva" disabled="true" class="textosFactura"/>
+                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalConIva)}" id="txtSubtotalConIva" disabled="true" styleClass="textosFactura"/>
                             </b:column>
                         </b:row>
                         <b:row>
@@ -183,7 +183,7 @@
                                 <h:outputText value="Descuento: "/>
                             </b:column>
                             <b:column col-xs="12" col-md="2" col-sm="2">
-                                <b:inputText value="#{verFacturaController.factura.factDescuento}" id="txtDescuento" disabled="true" class="textosFactura"/>
+                                <b:inputText value="#{verFacturaController.factura.factDescuento}" id="txtDescuento" disabled="true" styleClass="textosFactura"/>
                             </b:column>
                         </b:row>
                         <b:row>
@@ -201,15 +201,15 @@
                                 <h:outputText value="IVA: "/>
                             </b:column>
                             <b:column col-xs="12" col-md="2" col-sm="2">
-                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factIva)}" id="txtIva" disabled="true" class="textosFactura"/>
+                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factIva)}" id="txtIva" disabled="true" styleClass="textosFactura"/>
                             </b:column>
                         </b:row>
                         <b:row>
                             <b:column  col-xs="6" col-md="5" col-sm="5">
-                                <p:commandButton rendered="#{verFacturaController.puedeAnular}" action="#{verFacturaController.anular()}" update="messages pnlResultados" value="Anular Factura" class="botonesMantenimientos btn-danger btn-lg" style="width: 120px;">
+                                <p:commandButton rendered="#{verFacturaController.puedeAnular}" action="#{verFacturaController.anular()}" update="messages pnlResultados" value="Anular Factura" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 120px;">
                                      <p:confirm  header="Anular Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                 </p:commandButton>
-                                <p:commandButton value="Salir" action="#{verFacturaController.salir()}" class="botonesMantenimientos btn-danger btn-lg"/>
+                                <p:commandButton value="Salir" action="#{verFacturaController.salir()}" styleClass="botonesMantenimientos btn-danger btn-lg"/>
                             </b:column>
                             <b:column col-xs="0" col-md="3" col-sm="3">
                                 <h:outputText value=""/>
@@ -218,7 +218,7 @@
                                 <h:outputText value="TOTAL: "/>
                             </b:column>
                             <b:column col-xs="12" col-md="2" col-sm="2">
-                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factTotal)}" id="txtTotal" disabled="true" class="textosFactura"/>
+                                <b:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factTotal)}" id="txtTotal" disabled="true" styleClass="textosFactura"/>
                             </b:column>
                         </b:row>
                     </b:container>
