@@ -27,14 +27,14 @@
                                     <p:selectOneMenu style="width: 80%" tabindex="8" value="#{clienteController.tipo}" id="cboTipoCliente">
                                         <f:selectItems value="#{clienteController.tipos}" var="tipo" itemLabel="#{tipo.ticlDescripcion}" itemValue="#{tipo.ticlId}"/>
                                     </p:selectOneMenu>
-                                   
-                                        <p:selectOneMenu style="width: 80%" value="#{clienteController.idPais}" id="cboPais">
-                                            <p:ajax listener="#{clienteController.onPaisChange}" update="cboProvincia cboCiudad cboZona"/>
-                                            <f:selectItem itemLabel="País..." itemValue="0"/>
-                                            <f:selectItems value="#{clienteController.paises}" var="pais" itemLabel="#{pais.paisNombre}" itemValue="#{pais.paisId}"/>
-                                        </p:selectOneMenu>
-                                       
-                                   
+
+                                    <p:selectOneMenu style="width: 80%" value="#{clienteController.idPais}" id="cboPais">
+                                        <p:ajax listener="#{clienteController.onPaisChange}" update="cboProvincia cboCiudad cboZona"/>
+                                        <f:selectItem itemLabel="País..." itemValue="0"/>
+                                        <f:selectItems value="#{clienteController.paises}" var="pais" itemLabel="#{pais.paisNombre}" itemValue="#{pais.paisId}"/>
+                                    </p:selectOneMenu>
+
+
 
                                     <p:selectOneMenu value="#{clienteController.idProvincia}" id="cboProvincia" style="width: 80%">
                                         <p:ajax listener="#{clienteController.onProvinciaChange()}" update="cboCiudad cboZona"/>
@@ -53,6 +53,9 @@
                                 </p:panelGrid>
                                 <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
                                     <p:commandButton tabindex="9"  ajax="true" value="Nuevo" rendered="#{clienteController.permiso.permCrear}" action="#{clienteController.saveCliente()}" update="@form:messages @form:pnlDatos"/>                   
+                                    <p:commandButton tabindex="10" ajax="true" value="Modificar" rendered="#{clienteController.permiso.permModificar}" action="#{clienteController.updateCliente()}" update="@form:messages @form:pnlDatos">
+                                        <p:confirm header="Modificar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                    </p:commandButton> 
                                 </p:panelGrid> 
                             </div>
                         </div>
