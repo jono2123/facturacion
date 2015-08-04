@@ -97,7 +97,6 @@
 }
 
 .cuatroColumnas .ui-datagrid-column {
-    width: 25%;
     border:0px !important;
     height: 100%;
 }
@@ -119,7 +118,7 @@
 }
 
 #contentLeft{
-    width: 60%;
+    width: 65%;
     padding-left: 5%;
     float: left;
 }

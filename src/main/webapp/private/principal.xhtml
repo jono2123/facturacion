@@ -1,31 +1,38 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../template/mainTemplate.xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:b="http://bootsfaces.net/ui">
-    <ui:define name="content">
-        <h:form>
-            <b:panel look="primary" title="Página Principal" style="margin: 0px auto !important;">
-                <p:dataGrid value="#{principalControlador.modulos}" var="modulo" columns="3">
-                       <b:thumbnail>
-                            <p:commandLink action="#{principalControlador.ingresar(modulo.moduId)}">
-                                <p:graphicImage value="#{modulo.moduId.moduIcono}" width="180px"/>
-                            </p:commandLink>
-                            <f:facet name="caption">
-                                <h3><h:outputText value="#{modulo.moduId.moduNombre}"/></h3>
-                                <p><h:outputText value="#{modulo.moduId.moduDescripcion}"/></p>
-                                <p>
-                                    <b:commandButton look="primary" value="Ingresar" action="#{principalControlador.ingresar(modulo.moduId)}"/>
-                                </p>
-                            </f:facet>
-                        </b:thumbnail>
-                </p:dataGrid>
-            </b:panel>
-        </h:form>
-    </ui:define>
-</ui:composition>
+                template="/WEB-INF/template.xhtml">
 
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect">
+                    <h2 class="BigTopic">Página Principal</h2>
+                    <h:form id="Principal">
+                        <p:dataGrid value="#{principalControlador.modulos}" var="modulo" columns="3" layout="grid" style="height: 100%;">
+                            <f:facet name="header">
+                                Módulos Disponibles
+                            </f:facet>
+                            <p:panel header="#{modulo.moduId.moduNombre}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <p:commandLink action="#{principalControlador.ingresar(modulo.moduId)}">
+                                        <p:graphicImage value="#{modulo.moduId.moduIcono}" style="width: 50%; min-width: 140px;"/>
+                                    </p:commandLink>
+                                </h:panelGrid>
+                                <p><h:outputText value="#{modulo.moduId.moduDescripcion}"/></p>
+                                        <p>
+                                            <p:commandButton  value="Ingresar" action="#{principalControlador.ingresar(modulo.moduId)}"/>
+                                        </p>
+                            </p:panel>
+                        </p:dataGrid>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

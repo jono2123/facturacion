@@ -1,0 +1,34 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/modena">
+
+    <div class="Animated05" id="layout-menu-cover">
+        <h:form>
+            <pm:menu>
+                <p:menuitem outcome="/private/principal.xhtml" value="Inicio"/>
+                <p:submenu label="Facturación">
+                    <p:menuitem outcome="/private/facturacion/clienteUI.xhtml" value="Clientes" title="Módulo para el mantenimiento de clientes"/>
+                    <p:menuitem outcome="/private/facturacion/tipoClienteUI.xhtml" value="Tipos de Cliente" title="Majeno de Tipos de Clientes"/>
+                    <p:menuitem outcome="/private/facturacion/FacturaUI.xhtml" value="Facturar" title="Facturación de productos y/o servicios"/>
+                    <p:menuitem outcome="/private/facturacion/reporteVentas.xhtml" value="Reporte de Ventas"/>
+                </p:submenu>
+                <p:submenu label="Inventario">
+                    <p:menuitem value="Items" outcome="/private/inventario/itemUI.xhtml"/>
+                    <p:menuitem value="Unidades de Medida" outcome="/private/inventario/unidadDeMedidaUI.xhtml"/>
+                </p:submenu>
+                <p:submenu label="Administración">
+                    <p:menuitem value="Configuraciones" outcome="/private/administracion/administracionAlmacen.xhtml"/>
+                    <p:menuitem value="Usuarios" outcome="/private/administracion/usuariosUI.xhtml"/>
+                    <p:menuitem value="Roles" outcome="/private/administracion/rolUI.xhtml"/>
+                    <p:menuitem value="Permisos" outcome="/private/administracion/permisosUI.xhtml"/>
+                </p:submenu>
+            </pm:menu>
+        </h:form>
+
+    </div>
+
+</ui:composition>

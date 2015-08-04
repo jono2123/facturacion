@@ -1,50 +1,54 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:b="http://bootsfaces.net/ui">
-    <h:head>
-        <title>Acceder al sistema</title>
-        <h:outputStylesheet library="css" name="estilo.css"/>
-        <h:outputStylesheet library="css" name="themes/jodasoft.min.css"/>
-    </h:head>
-    <h:body>
-        <p:growl id="messages"/>
-        <h:form id="loginForm">
-            <b:panel title="Iniciar Sesión" look="primary" style="width: 40%; min-width: 300px; margin: 40px auto">
-                <p:graphicImage value="../resources/images/logo3.JPG" style="width: 100%;"/>
-                <b:container id="pnlDatos" style="width: 100%">
-                    <b:row>                                                      
-                        <b:column col-md="3" col-xs="12">
-                            <h:outputText value="Usuario:"/>
-                        </b:column>
-                        <b:column col-md="9" col-xs="12">
-                            <b:inputText value="#{loginController.nomUsuario}" id="txtUsuario"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column col-md="3" col-xs="12">
-                            <h:outputText value="Contraseña:"/>
-                        </b:column>
-                        <b:column col-md="9" col-xs="12">
-                            <b:inputSecret value="#{loginController.pass}" id="txtPassword"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column span="2">
-                            <h:outputText value=""/>
-                        </b:column>
-                        <b:column span="3">
-                            <p:commandButton value="Acceder" action="#{loginController.login()}" styleClass="botonesMantenimientos btn-danger btn" update="messages"/>
-                        </b:column>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-                    </b:row>
-                </b:container>
-            </b:panel> 
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Acceso al Sistema</title>
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body styleClass="GrayModena Geometry" style="height:auto;">
+        <h:form>
+        <div class="Wid90 DispBlock MarAuto MarTopPerc5 TexAlCenter">
+            <div class="Wid33 MarAuto WidAutoOnMobile">
+                <div class="EmptyBox30"></div>
+                <div class="Card ShadowEffect">
+                    <div class="EmptyBox20"></div>
+                    <div class="Wid100 OvHidden BigTopic Fs30"><h:graphicImage name="images/logoJoDa.png" library="modena-layout" style="width:40%; max-width:200px;"/><i class=" Fs60 DispBlock"></i> Acceso al Sistema</div>
+                    <div class="EmptyBox30"></div>
+                    <div class="Wid100"><p:inputText placeholder="Usuario" styleClass="Wid80 TexAlCenter Fs18" value="#{loginController.nomUsuario}"/></div>
+                    <div class="EmptyBox10"></div>
+                    <div class="Wid100"><p:inputText type="password" placeholder="Contraseña" styleClass="Wid80 TexAlCenter Fs18" value="#{loginController.pass}"/></div>
+                    <div class="EmptyBox30"></div>
+                    <div class="EmptyBox30"></div>
+                    <div class="Wid50 Fleft Responsive50"><p:commandButton value="Ingresar al Sistema" icon="fa fa-sign-in" styleClass=" Fs18 White RaisedButton Fright FloatNoneOnMobile" ajax="false" action="#{loginController.login()}"/></div>
+                    <div class="EmptyBox5 ShowOnMobile"></div>
+                    <div class="Wid50 Fleft Responsive50"><p:commandButton value="Olvido la contraseña ?" icon="fa fa-lock" styleClass="RedButton Fs18 White RaisedButton Fleft FloatNoneOnMobile"/></div>
+                    
+                    <div class="EmptyBox20"></div>
+                </div>
+                <div class="Wid100 TexAlCenter MarTop20 Fs14 FontRobotoRegular Gray">
+                    <i class="fa fa-copyright"></i>  JODA Soluciones Tecnológicas <br/> Todos Los derechos reservados
+                    </div>
+            </div>
+        </div>
         </h:form>
+        <h:outputStylesheet name="css/core-layout.css" library="modena-layout" />
+        <h:outputStylesheet name="css/animate.css" library="modena-layout" />
+        <h:outputStylesheet name="css/modena-font.css" library="modena-layout" />
+        <h:outputStylesheet name="css/ripple-effect.css" library="modena-layout" />
+        <h:outputStylesheet name="css/font-awesome.css" library="modena-layout" />
+        <h:outputStylesheet name="css/modena-layout.css" library="modena-layout" />
     </h:body>
+
 </html>
 

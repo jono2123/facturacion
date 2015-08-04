@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                 xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect TexAlCenter">
+                    <h:form>
+                        <b:panel look="primary" title="Página Principal" style="margin: 0px auto !important;">
+                            <p:dataGrid value="#{principalControlador.modulos}" var="modulo" columns="3">
+                                <b:thumbnail>
+                                    <p:commandLink action="#{principalControlador.ingresar(modulo.moduId)}">
+                                        <p:graphicImage value="#{modulo.moduId.moduIcono}" width="180px"/>
+                                    </p:commandLink>
+                                    <f:facet name="caption">
+                                        <h3><h:outputText value="#{modulo.moduId.moduNombre}"/></h3>
+                                        <p><h:outputText value="#{modulo.moduId.moduDescripcion}"/></p>
+                                        <p>
+                                            <b:commandButton look="primary" value="Ingresar" action="#{principalControlador.ingresar(modulo.moduId)}"/>
+                                        </p>
+                                    </f:facet>
+                                </b:thumbnail>
+                            </p:dataGrid>
+                        </b:panel>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
