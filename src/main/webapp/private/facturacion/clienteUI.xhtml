@@ -11,101 +11,93 @@
             <div class="Container100">
                 <div class="ContainerIndent">
                     <div class="Card ShadowEffect  ">
-                        <div class="Container70 Responsive">
 
-                            <div class="ContainerIndent">
-                                <h2 class="BigTopic">Mantenimiento de Clientes</h2>
-                                <p:panelGrid columns="2" id="pnlDatos" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                    <p:inputText tabindex="1" styleClass="Wid90" placeholder="Cédula" value="#{clienteController.cedula}"/>
-                                    <p:inputText tabindex="2" styleClass="Wid90" placeholder="Nombres" value="#{clienteController.nombres}"/>
-                                    <p:inputText tabindex="3" styleClass="Wid90" placeholder="Apellidos" value="#{clienteController.apellidos}"/>
-                                    <p:inputText tabindex="4" styleClass="Wid90" placeholder="Dirección" value="#{clienteController.direccion}"/>
-                                    <p:inputText tabindex="5" styleClass="Wid90" placeholder="Telefono" value="#{clienteController.telefono}"/>
-                                    <p:inputText tabindex="6" styleClass="Wid90" placeholder="E-Mail" value="#{clienteController.mail}"/>
-                                    <p:calendar  tabindex="7" styleClass="Wid90" placeholder="Fecha de Nacimiento" navigator="true" value="#{clienteController.fechaNacimiento}" yearRange="c-70:c"/>
+                        <h2 class="BigTopic">Mantenimiento de Clientes</h2>
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-9,ui-grid-col-3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                            <p:panelGrid columns="2" id="pnlDatos" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                <p:inputText tabindex="1" styleClass="Wid90" placeholder="Cédula" value="#{clienteController.cedula}"/>
+                                <p:inputText tabindex="2" styleClass="Wid90" placeholder="Nombres" value="#{clienteController.nombres}"/>
+                                <p:inputText tabindex="3" styleClass="Wid90" placeholder="Apellidos" value="#{clienteController.apellidos}"/>
+                                <p:inputText tabindex="4" styleClass="Wid90" placeholder="Dirección" value="#{clienteController.direccion}"/>
+                                <p:inputText tabindex="5" styleClass="Wid90" placeholder="Telefono" value="#{clienteController.telefono}"/>
+                                <p:inputText tabindex="6" styleClass="Wid90" placeholder="E-Mail" value="#{clienteController.mail}"/>
+                                <p:calendar  tabindex="7" styleClass="Wid90" placeholder="Fecha de Nacimiento" navigator="true" value="#{clienteController.fechaNacimiento}" yearRange="c-70:c"/>
 
-                                    <p:selectOneMenu style="width: 80%" tabindex="8" value="#{clienteController.tipo}" id="cboTipoCliente">
-                                        <f:selectItems value="#{clienteController.tipos}" var="tipo" itemLabel="#{tipo.ticlDescripcion}" itemValue="#{tipo.ticlId}"/>
-                                    </p:selectOneMenu>
+                                <p:selectOneMenu style="width: 80%" tabindex="8" value="#{clienteController.tipo}" id="cboTipoCliente">
+                                    <f:selectItems value="#{clienteController.tipos}" var="tipo" itemLabel="#{tipo.ticlDescripcion}" itemValue="#{tipo.ticlId}"/>
+                                </p:selectOneMenu>
 
-                                    <p:selectOneMenu tabindex="9" style="width: 80%" value="#{clienteController.idPais}" id="cboPais">
-                                        <p:ajax listener="#{clienteController.onPaisChange}" update="cboProvincia cboCiudad cboZona"/>
-                                        <f:selectItem itemLabel="País..." itemValue="0"/>
-                                        <f:selectItems value="#{clienteController.paises}" var="pais" itemLabel="#{pais.paisNombre}" itemValue="#{pais.paisId}"/>
-                                    </p:selectOneMenu>
-
+                                <p:selectOneMenu tabindex="9" style="width: 80%" value="#{clienteController.idPais}" id="cboPais">
+                                    <p:ajax listener="#{clienteController.onPaisChange}" update="cboProvincia cboCiudad cboZona"/>
+                                    <f:selectItem itemLabel="País..." itemValue="0"/>
+                                    <f:selectItems value="#{clienteController.paises}" var="pais" itemLabel="#{pais.paisNombre}" itemValue="#{pais.paisId}"/>
+                                </p:selectOneMenu>
 
 
-                                    <p:selectOneMenu tabindex="10" value="#{clienteController.idProvincia}" id="cboProvincia" style="width: 80%">
-                                        <p:ajax listener="#{clienteController.onProvinciaChange()}" update="cboCiudad cboZona"/>
-                                        <f:selectItem itemLabel="Provincia..." itemValue="0"/>
-                                        <f:selectItems value="#{clienteController.provincias}" var="provincia" itemLabel="#{provincia.provNombre}" itemValue="#{provincia.provId}"/>
-                                    </p:selectOneMenu>
-                                    <p:selectOneMenu tabindex="11" value="#{clienteController.idCiudad}" id="cboCiudad" style="width: 80%">
-                                        <p:ajax listener="#{clienteController.onCiudadChange()}" update="cboZona"/>
-                                        <f:selectItem itemLabel="Ciudad..." itemValue="0"/>
-                                        <f:selectItems value="#{clienteController.ciudades}" var="ciudad" itemLabel="#{ciudad.ciudNombre}" itemValue="#{ciudad.ciudId}"/>
-                                    </p:selectOneMenu>
-                                    <p:selectOneMenu tabindex="12" value="#{clienteController.idZona}" id="cboZona" style="width: 80%">
-                                        <f:selectItem itemLabel="Zona..." itemValue="0"/>
-                                        <f:selectItems value="#{clienteController.zonas}" var="zona" itemLabel="#{zona.zonaNombre}" itemValue="#{zona.zonaId}"/>
-                                    </p:selectOneMenu>
-                                </p:panelGrid>
 
-                            </div>
-                        </div>
-                        <div class="Container30">
-                            <div class="ContainerIndent">
-                                <h2 class="BigTopic">Acciones</h2>
-                                <p:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                    <p:commandButton tabindex="13" style="width: 80%;"  ajax="true" value="Nuevo" rendered="#{clienteController.permiso.permCrear}" action="#{clienteController.saveCliente()}" update="@form:messages @form:pnlDatos tblClientes"/>                   
-                                    <h:outputText value=""/>
-                                    <p:commandButton style="width: 80%;" tabindex="14" ajax="true" value="Modificar" rendered="#{clienteController.permiso.permModificar}" action="#{clienteController.updateCliente()}" update="@form:messages @form:pnlDatos tblClientes">
-                                        <p:confirm header="Modificar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                    </p:commandButton> 
-                                    <h:outputText value=""/>
-                                    <p:commandButton style="width: 80%;" tabindex="15" ajax="true" value="Eliminar" rendered="#{clienteController.permiso.permEliminar}" action="#{clienteController.deleteCliente()}" update="@form:messages  @form:pnlDatos tblClientes">
-                                        <p:confirm  header="Eliminar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                    </p:commandButton> 
-                                    <h:outputText value=""/>
-                                    <p:commandButton style="width: 80%;" tabindex="16" ajax="true"  value="Limpiar" update="@form:pnlDatos tblClientes" action="#{clienteController.vaciaTextos()}">
-                                        <p:resetInput target="pnlDatos" />
-                                    </p:commandButton>
-                                </p:panelGrid> 
-                            </div>
-                        </div>
+                                <p:selectOneMenu tabindex="10" value="#{clienteController.idProvincia}" id="cboProvincia" style="width: 80%">
+                                    <p:ajax listener="#{clienteController.onProvinciaChange()}" update="cboCiudad cboZona"/>
+                                    <f:selectItem itemLabel="Provincia..." itemValue="0"/>
+                                    <f:selectItems value="#{clienteController.provincias}" var="provincia" itemLabel="#{provincia.provNombre}" itemValue="#{provincia.provId}"/>
+                                </p:selectOneMenu>
+                                <p:selectOneMenu tabindex="11" value="#{clienteController.idCiudad}" id="cboCiudad" style="width: 80%">
+                                    <p:ajax listener="#{clienteController.onCiudadChange()}" update="cboZona"/>
+                                    <f:selectItem itemLabel="Ciudad..." itemValue="0"/>
+                                    <f:selectItems value="#{clienteController.ciudades}" var="ciudad" itemLabel="#{ciudad.ciudNombre}" itemValue="#{ciudad.ciudId}"/>
+                                </p:selectOneMenu>
+                                <p:selectOneMenu tabindex="12" value="#{clienteController.idZona}" id="cboZona" style="width: 80%">
+                                    <f:selectItem itemLabel="Zona..." itemValue="0"/>
+                                    <f:selectItems value="#{clienteController.zonas}" var="zona" itemLabel="#{zona.zonaNombre}" itemValue="#{zona.zonaId}"/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <p:panelGrid columns="1"  layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                <p:commandButton tabindex="13" style="width: 100%; max-width: 150px;"  ajax="true" value="Nuevo" rendered="#{clienteController.permiso.permCrear}" action="#{clienteController.saveCliente()}" update="@form:messages @form:pnlDatos tblClientes"/>                   
+
+                                <p:commandButton style="width: 100%; max-width: 150px;" tabindex="14" ajax="true" value="Modificar" rendered="#{clienteController.permiso.permModificar}" action="#{clienteController.updateCliente()}" update="@form:messages @form:pnlDatos tblClientes">
+                                    <p:confirm header="Modificar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                </p:commandButton> 
+
+                                <p:commandButton style="width: 100%; max-width: 150px;" tabindex="15" ajax="true" value="Eliminar" rendered="#{clienteController.permiso.permEliminar}" action="#{clienteController.deleteCliente()}" update="@form:messages  @form:pnlDatos tblClientes">
+                                    <p:confirm  header="Eliminar Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                </p:commandButton> 
+
+                                <p:commandButton style="width: 100%; max-width: 150px;" tabindex="16" ajax="true"  value="Limpiar" update="@form:pnlDatos tblClientes" action="#{clienteController.vaciaTextos()}">
+                                    <p:resetInput target="pnlDatos" />
+                                </p:commandButton>
+                            </p:panelGrid> 
+                        </p:panelGrid>
                     </div>
                 </div>
             </div>
             <div class="Container100">
                 <div class="ContainerIndent">
                     <p:dataTable styleClass="" style="width: 100%" var="cliente" value="#{clienteController.clientes}" id="tblClientes"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{cliente.persId}" selection="#{clienteController.cliente}" widgetVar="tablaClientes" filteredValue="#{clienteController.clientesFiltrados}">
-                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{clienteController.onRowSelect}"/>
-                                <f:facet name="header">
-                                    <h:outputText value="Listado"/>
-                                </f:facet>
-                                <p:column  filterBy="#{cliente.persCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.persCedula}">
-                                    <h:outputText value="#{cliente.persCedula}"  />
-                                </p:column>
-                                <p:column headerText="Nombres" filterBy="#{cliente.persNombres}" priority="1" style="width: 15%" sortBy="#{cliente.persNombres}">
-                                    <h:outputText value="#{cliente.persNombres}"/>
-                                </p:column>
-                                <p:column headerText="Apellidos" filterBy="#{cliente.persApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.persApellidos}">
-                                    <h:outputText value="#{cliente.persApellidos}"/>
-                                </p:column>
-                                <p:column headerText="Dirección" priority="2" style="width: 18%">
-                                    <h:outputText value="#{cliente.persDireccion}"/>
-                                </p:column>
-                                <p:column headerText="Teléfono" priority="2" style="width: 9%">
-                                    <h:outputText value="#{cliente.persTelefono}"/>
-                                </p:column>
-                                <p:column headerText="e-Mail" priority="3" style="width: 18%">
-                                    <h:outputText value="#{cliente.persMail}"/>
-                                </p:column>
-                                <p:column headerText="f. Nacimiento" priority="3" style="width: 10%">
-                                    <h:outputText value="#{clienteController.formateaFecha(cliente.persFechaNacimiento)}"/>
-                                </p:column>
-                            </p:dataTable>
+                        <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{clienteController.onRowSelect}"/>
+                        <f:facet name="header">
+                            <h:outputText value="Listado"/>
+                        </f:facet>
+                        <p:column  filterBy="#{cliente.persCedula}" filterMatchMode="contains" headerText="CI/RUC" priority="1" style="width: 10%" sortBy="#{cliente.persCedula}">
+                            <h:outputText value="#{cliente.persCedula}"  />
+                        </p:column>
+                        <p:column headerText="Nombres" filterBy="#{cliente.persNombres}" priority="1" style="width: 15%" sortBy="#{cliente.persNombres}">
+                            <h:outputText value="#{cliente.persNombres}"/>
+                        </p:column>
+                        <p:column headerText="Apellidos" filterBy="#{cliente.persApellidos}" priority="1" style="width: 15%" sortBy="#{cliente.persApellidos}">
+                            <h:outputText value="#{cliente.persApellidos}"/>
+                        </p:column>
+                        <p:column headerText="Dirección" priority="2" style="width: 18%">
+                            <h:outputText value="#{cliente.persDireccion}"/>
+                        </p:column>
+                        <p:column headerText="Teléfono" priority="2" style="width: 9%">
+                            <h:outputText value="#{cliente.persTelefono}"/>
+                        </p:column>
+                        <p:column headerText="e-Mail" priority="3" style="width: 18%">
+                            <h:outputText value="#{cliente.persMail}"/>
+                        </p:column>
+                        <p:column headerText="f. Nacimiento" priority="3" style="width: 10%">
+                            <h:outputText value="#{clienteController.formateaFecha(cliente.persFechaNacimiento)}"/>
+                        </p:column>
+                    </p:dataTable>
                 </div>
             </div>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
