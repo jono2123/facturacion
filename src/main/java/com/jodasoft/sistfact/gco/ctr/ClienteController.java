@@ -65,6 +65,7 @@ public class ClienteController extends AbstractMB implements Serializable {
     private int idProvincia;
     private int idCiudad;
     private int idZona;
+    private int activeIndex;
 
     Cliente cliente;
     List<Cliente> clientes;
@@ -81,11 +82,41 @@ public class ClienteController extends AbstractMB implements Serializable {
 
     ///constructor/////////////////////////
     public ClienteController() {
+        activeIndex = 0;
     }
 
     //funciones///////////////////////////
     private void reiniciaCliente() {
         cliente = new Cliente();
+    }
+
+    public void guardar() {
+        if (cliente == null) {
+            cliente = new Cliente();
+        }
+        if (cliente.getPersId() == null) {
+            if (permiso.getPermCrear()) {
+                saveCliente();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        } else {
+            if(permiso.getPermModificar()){
+                updateCliente();
+            }else{
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+            
+        }
+        activeIndex = 0;
+    }
+
+    public void nuevoCliente() {
+        activeIndex = 1;
+        vaciaTextos();
     }
 
     public void vaciaTextos() {
@@ -104,15 +135,52 @@ public class ClienteController extends AbstractMB implements Serializable {
         idProvincia = 0;
         idCiudad = 0;
         idZona = 0;
+        cliente = new Cliente();
 
     }
-    
-    public void refrescaPais(){
-        pais=null;
-        paises=null;
-        provincias=null;
-        ciudades=null;
-        zonas=null;
+
+    public void editarCliente(Cliente cliente) {
+
+        activeIndex = 1;
+        this.cliente = cliente;
+        setCedula(cliente.getPersCedula());
+        setNombres(cliente.getPersNombres());
+        setApellidos(cliente.getPersApellidos());
+        setDireccion(cliente.getPersDireccion());
+        setTelefono(cliente.getPersTelefono());
+        setMail(cliente.getPersMail());
+        setFechaNacimiento(cliente.getPersFechaNacimiento());
+        setTipo(cliente.getTiclId().getTiclId());
+        if (cliente.getZonaId() != null) {
+            zona = cliente.getZonaId();
+            paises = paisFacade.findAll();
+            pais = cliente.getZonaId().getCiudId().getProvId().getPaisId();
+            idPais = pais.getPaisId();
+            provincias = pais.getProvinciaList();
+            provincia = zona.getCiudId().getProvId();
+            idProvincia = provincia.getProvId();
+            ciudades = provincia.getCiudadList();
+            ciudad = zona.getCiudId();
+            idCiudad = ciudad.getCiudId();
+            zonas = ciudad.getZonaList();
+            idZona = zona.getZonaId();
+        } else {
+            idPais = 0;
+            provincias = null;
+            ciudades = null;
+            zonas = null;
+            idProvincia = 0;
+            idCiudad = 0;
+            idZona = 0;
+        }
+    }
+
+    public void refrescaPais() {
+        pais = null;
+        paises = null;
+        provincias = null;
+        ciudades = null;
+        zonas = null;
         idPais = 0;
         idProvincia = 0;
         idCiudad = 0;
@@ -196,13 +264,14 @@ public class ClienteController extends AbstractMB implements Serializable {
         }
     }
 
-    public void deleteCliente() {
+    public void deleteCliente(Cliente cliente) {
         try {
-            cliente.setClieEstado(false);
-            clienteFacade.delete(cliente);
+            this.cliente = cliente;
+            this.cliente.setClieEstado(false);
+            clienteFacade.delete(this.cliente);
             closeDialog();
             displayInfoMessageToUser("Cliente Eliminado Correctamente");
-            clientes.remove(cliente);
+            clientes.remove(this.cliente);
             reiniciaCliente();
             vaciaTextos();
         } catch (Exception ex) {
@@ -252,9 +321,9 @@ public class ClienteController extends AbstractMB implements Serializable {
             idCiudad = 0;
             idZona = 0;
             provincias = pais.getProvinciaList();
-            ciudades=null;
-            zonas=null;
-            
+            ciudades = null;
+            zonas = null;
+
         } else {
             provincias = null;
             ciudades = null;
@@ -272,7 +341,7 @@ public class ClienteController extends AbstractMB implements Serializable {
             ciudades = provincia.getCiudadList();
             idCiudad = 0;
             idZona = 0;
-            zonas=null;
+            zonas = null;
         } else {
             ciudades = null;
             zonas = null;
@@ -512,6 +581,14 @@ public class ClienteController extends AbstractMB implements Serializable {
 
     public void setIdZona(int idZona) {
         this.idZona = idZona;
+    }
+
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
     }
 
 }

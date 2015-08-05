@@ -40,7 +40,7 @@
 
 .tumbnail{
     height: 475px;
-    
+
 }
 
 .botonesMantenimientos{
@@ -87,7 +87,7 @@
 
 }
 .textosFactura{
-    
+
     height: 22px;
     padding: 1px;
 }
@@ -102,7 +102,7 @@
 }
 .cuatroColumnas{
     border:0px !important;
-    
+
 }
 
 #nav{
@@ -117,6 +117,39 @@
     width: 60px;
 }
 
+.columnas9{
+    width: 75%;
+    vertical-align: top;
+    margin-top: 0;
+}
+.columnas3{
+    width: 25%;
+    vertical-align: top;
+    margin-top: 0;
+}
+.columnas0{
+    width: 0%;
+    vertical-align: top;
+    margin-top: 0;
+}
+.panelBotones{
+    visibility: visible;
+
+}
+.botonesGrandes{
+    height: 38px;
+
+}
+.botonesChicos{
+    height: 0px;
+}
+
+.panelBotonesChicos{
+    visibility: hidden;
+    height: 0px;
+}
+
+
 #contentLeft{
     width: 65%;
     padding-left: 5%;
@@ -128,16 +161,23 @@
     padding-left: 5%;
 }
 
+
 @media screen and (max-width: 700px) {
 
-    #contentLeft{
-        width: 100%;
-        padding-left: 2%;
-        float: left;
+    .panelBotones{
+        visibility: hidden;
+        height: 0px;
+
     }
-    #contentRight{
-        width: 0%;
-        float:left;
-        display: none;
+    .panelBotonesChicos{
+        visibility: visible;
     }
+    .botonesGrandes{
+        height: 0px;
+
+    }
+    .botonesChicos{
+        height: 38px;
+    }
+
 }
