@@ -1,184 +1,128 @@
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../../template/mainTemplate.xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:b="http://bootsfaces.net/ui">
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="content">
-        <b:panel look="primary" title="Mantenimiento de Ítems" style="vertical-align: central; margin: 0px auto !important;" >
-            <h:form>
-                <p:growl id="messages" showDetail="false"/>
-                <b:container style="width: 100%;">
-                    <b:row>
-                        <b:column>
-                            <div id="contentLeft">
-                                <b:container id="pnlDatos" style="width: 100%">
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Código"/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText tabindex="1"  id="txtCodigo" value="#{articuloController.codigo}"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="9"  ajax="true" rendered="#{articuloController.permiso.permCrear}" value="Nuevo" action="#{articuloController.saveArticulo()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblArticulos @form:pnlDatos"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Descripción: "/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText tabindex="2" id="txtDescripcion" value="#{articuloController.descripcion}"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="10" ajax="true" rendered="#{articuloController.permiso.permModificar}" value="Modificar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.updateArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
-                                                <p:confirm header="Modificar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                            </p:commandButton> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Coste: "/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText tabindex="3" value="#{articuloController.precioCompra}" id="txtPrecioCompra"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="11" ajax="true" rendered="#{articuloController.permiso.permEliminar}" value="Eliminar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{articuloController.deleteArticulo()}" update="@form:messages @form:tblArticulos @form:pnlDatos">
-                                                <p:confirm header="Eliminar Artículo" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                            </p:commandButton> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row rendered="#{!articuloController.diferenciado}">
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Precio Venta"/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText tabindex="4"  value="#{articuloController.precioVenta}" id="txtPrecioVenta"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="12" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
-                                                <p:resetInput target="pnlDatos" />
-                                            </p:commandButton>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row rendered="#{articuloController.diferenciado}">
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Precio Venta"/>
-                                        </b:column>
-                                        <b:column col-md="7" col-xs="7">
-                                            <b:inputText  value="#{articuloController.precioVenta}" disabled="true" id="txtPrecioVentaDif"/>
-                                        </b:column>
-                                        <b:column col-md="1" col-xs="1">
-                                            <p:commandButton tabindex="5" value="..." style="width: 40px;" styleClass="botonesMantenimientos btn-danger btn-lg" onclick="PF('dlgPrecios').show();"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton tabindex="13" ajax="true"  value="Limpiar" action="#{articuloController.vaciarTextos()}" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblArticulos @form:dlgPrecios">
-                                                <p:resetInput target="pnlDatos" />
-                                            </p:commandButton>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Tiene Iva: "/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <p:inputSwitch tabindex="6" value="#{articuloController.iva}" style="width: 60px; height: 30px;" onLabel="SI" offLabel="NO" />
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Unidad de Medida: "/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:selectOneMenu tabindex="7" value="#{articuloController.umedida_id}"  >
-                                                <f:selectItems value="#{articuloController.unidades}" var="c" itemValue="#{c.umedId}" itemLabel="#{c.umedNombre}"/>
-                                            </b:selectOneMenu>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Información Adicional:"/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText tabindex="8" value="#{articuloController.infoAdicional}" id="txtInfoAdicional"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                    </b:row>
-                                </b:container>
+        <h:form id='form1'>
+            <p:growl id="messages" showDetail="false"/>  
+            <p:accordionPanel multiple="false" id="acordion" activeIndex="#{articuloController.activeIndex}">
+                <p:tab id="tab1" closable="false" title="Articulos">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <p:dataTable editable="true"  editMode="cell" styleClass="" style="width: 100%" var="articulo" value="#{articuloController.articulos}" id="tblArticulos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{articuloController.articulo}" widgetVar="tablaArticulos" filteredValue="#{articuloController.articulosFiltrados}">
+                                <p:ajax event="rowSelect"  update=" @form:acordion:tab1:pnlDatos" listener="#{articuloController.onRowSelect}"/>
 
-                            </div>
-
-                            <div id="contentRight">
-                                <p:graphicImage value="../../resources/images/products.png" width="100%"/>
-                            </div>
-                        </b:column>
-                    </b:row>
-                    <b:row style="margin-top: 20px;">
-                        <b:column>
-                            <p:dataTable styleClass="" style="width: 100%" var="articulo" value="#{articuloController.articulos}" id="tblArticulos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{articulo.artiId}" selection="#{articuloController.articulo}" widgetVar="tablaArticulos" filteredValue="#{articuloController.articulosFiltrados}">
-                                <p:ajax event="rowSelect"  update="@form:pnlDatos @form:dlgPrecios" listener="#{articuloController.onRowSelect}"/>
-                                <f:facet name="header">
-                                    <h:outputText value="Listado"/>
-                                </f:facet>
                                 <p:column  filterBy="#{articulo.artiCodigo}" filterMatchMode="contains" headerText="Código" priority="1" style="width: 10%" sortBy="#{articulo.artiCodigo}">
                                     <h:outputText value="#{articulo.artiCodigo}"  />
                                 </p:column>
                                 <p:column headerText="Descripción" filterBy="#{articulo.artiDescripcion}" filterMatchMode="contains" priority="1" style="width: 35%" sortBy="#{articulo.artiDescripcion}">
                                     <h:outputText value="#{articulo.artiDescripcion}"/>
                                 </p:column>
-                                <p:column headerText="Coste"  priority="2" style="width: 8%">
+                                <p:column headerText="Coste"  priority="2" style="width: 12%">
                                     <h:outputText value="#{articulo.artiPrecioCompra}"/>
                                 </p:column>
-                                <p:column headerText="P.Venta" priority="1" style="width: 8%">
+                                <p:column headerText="P.Venta" priority="1" style="width: 12%">
                                     <h:outputText value="#{articulo.artiPrecioVenta}"/>
                                 </p:column>
-                                <p:column headerText="Tiene Iva" priority="2" style="width: 5%">
+                                <p:column headerText="Tiene Iva" priority="2" style="width: 6%">
                                     <h:outputText value="#{articulo.artiIva?'SI':'NO'}"/>
                                 </p:column>
+                                <!--
                                 <p:column headerText="Unidad de Medida" priority="3" style="width: 10%">
                                     <h:outputText value="#{articulo.umedId.umedNombre}"/>
                                 </p:column>
                                 <p:column headerText="Inf. Adicional" priority="3" style="width: 24%">
                                     <h:outputText value="#{articulo.artiInfoAdicional}"/>
                                 </p:column>
+                                -->
+                                <p:column style="width: 15%" priority="1">
+                                    <f:facet name="header">
+                                        <h:panelGrid columns="2" style="width: 100%;">
+                                            <h:outputText value="Acciones"/>
+                                            <p:commandButton icon="fa fa-plus" title="Nuevo Articulo" action="#{articuloController.nuevoArticulo()}" styleClass="BlueTextButton RaisedButton" update="@form:acordion @form:acordion:tab1:pnlDatos"/>
+                                        </h:panelGrid>
+
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-edit" title="Editar Articulo"  action="#{articuloController.editArticulo(articulo)}" update="@form:acordion @form:acordion:tab1:pnlDatos"/>
+                                    <p:commandButton icon="fa fa-remove" title="Eliminar Articulo" action="#{articuloController.deleteArticulo(articulo)}" rendered="#{articuloController.permiso.permEliminar}" update="@form:messages @form:acordion:tab1:tblArticulos @form:acordion:tab2:pnlDatos">
+                                        <p:confirm  header="Eliminar Articulo" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                </p:column>
                             </p:dataTable>
-                        </b:column>
-                    </b:row>
-                </b:container>
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
-                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                </p:confirmDialog>
-                <p:dialog id="dlgPrecios" header="PRECIOS POR TIPOS DE CLIENTES" widgetVar="dlgPrecios" closable="false" resizable="false" draggable="false" style="width: 450px; height: 400px">
-                    <p:dataTable value="#{articuloController.precios}" editable="true" var="precio" id="tblPrecios" style="width: 450px;">
-                        <p:column headerText="Tipo de Cliente">
-                            <h:outputText value="#{precio.ticlId.ticlDescripcion}"/>
-                        </p:column>
-                        <p:column headerText="Precio">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{precio.precio}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{precio.precio}" style="width:100%" label="Precio"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column style="width:32px">
-                            <p:rowEditor />
-                        </p:column>
-                    </p:dataTable>
-                    <b:commandButton value="Aceptar" ajax="true" look="primary" onclick="PF('dlgPrecios').hide();"/>
-                </p:dialog>
-            </h:form>
-        </b:panel>
+                        </div>
+                    </div>
+                </p:tab>
+                <p:tab title="Datos de articulo" id="tab2">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <div class="Card ShadowEffect  ">
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Nuevo articulo" icon="fa fa-plus" action="#{articuloController.vaciarTextos()}" update="pnlDatos"/>
+                                </h:panelGrid>
+                                <p:panelGrid columns="2"  layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                    <p:panelGrid columns="1" id="pnlDatos" layout="grid" style="border:0px !important; background:none; width: 75%;" styleClass="FormContent">
+
+                                        <p:inputText tabindex="1" styleClass="Wid90" placeholder="Código" value="#{articuloController.codigo}"/>
+                                        <p:inputText tabindex="2" styleClass="Wid90" placeholder="Descripción " value="#{articuloController.descripcion}"/>
+                                        <h:outputText value="Coste: "/>
+                                        <h:outputText value=""/>
+                                        <p:inputText tabindex="3" styleClass="Wid90" placeholder="Coste " value="#{articuloController.precioCompra}"/>
+                                        <h:outputText value=""/>
+                                        <h:outputText value="Precio Venta: "/>
+                                        <h:outputText value=""/>
+
+                                        <p:inputText tabindex="4" styleClass="Wid90" placeholder="Precio Venta" value="#{articuloController.precioVenta}" disabled="#{articuloController.diferenciado}"/>
+
+                                        <p:inputSwitch tabindex="7" value="#{articuloController.iva}" style="width: 60px; height: 30px;" onLabel=" Tiene Iva" offLabel="Sin Iva" />
+
+
+                                        <p:selectOneMenu tabindex="7" value="#{articuloController.umedida_id}">
+                                            <f:selectItem itemLabel="Unidad de Medida" itemValue="0"/>
+                                            <f:selectItems value="#{articuloController.unidades}" var="c" itemValue="#{c.umedId}" itemLabel="#{c.umedNombre}"/>
+                                        </p:selectOneMenu>
+
+
+                                        <p:inputText tabindex="8" placeholder="Información Adicional "  value="#{articuloController.infoAdicional}" id="txtInfoAdicional"/>
+
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none; width: 75%;" styleClass="FormContent">
+                                        <p:dataTable value="#{articuloController.precios}" editable="true" var="precio" id="tblPrecios" style="width: 300px;">
+                                            <p:column headerText="Tipo de Cliente">
+                                                <h:outputText value="#{precio.ticlId.ticlDescripcion}"/>
+                                            </p:column>
+                                            <p:column headerText="Precio">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{precio.precio}" /></f:facet>sudo apt-get install sublime-text-installer
+                                                    <f:facet name="input"><p:inputText value="#{precio.precio}" style="width:100%" label="Precio"/></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column style="width:32px">
+                                                <p:rowEditor />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panelGrid>
+                                </p:panelGrid>
+                                <p:commandButton value="Guardar" action="#{articuloController.guardar()}" update="@form:messages @form:acordion @form:acordion:tab1:tblArticulos @form:acordion:tab2:pnlDatos"/>
+                            </div>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:accordionPanel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+            <p:dialog id="dlgPrecios" header="PRECIOS POR TIPOS DE CLIENTES" widgetVar="dlgPrecios" closable="false" resizable="false" draggable="false" style="width: 450px; height: 400px">
+
+                <p:commandButton value="Aceptar" ajax="true" onclick="PF('dlgPrecios').hide();"/>
+            </p:dialog>
+        </h:form>
+
     </ui:define>
+
 </ui:composition>
 

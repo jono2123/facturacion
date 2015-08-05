@@ -103,13 +103,13 @@ public class ClienteController extends AbstractMB implements Serializable {
             }
 
         } else {
-            if(permiso.getPermModificar()){
+            if (permiso.getPermModificar()) {
                 updateCliente();
-            }else{
+            } else {
                 displayErrorMessageToUser("No tiene permiso para realizar esta acción");
                 return;
             }
-            
+
         }
         activeIndex = 0;
     }
@@ -272,6 +272,7 @@ public class ClienteController extends AbstractMB implements Serializable {
             closeDialog();
             displayInfoMessageToUser("Cliente Eliminado Correctamente");
             clientes.remove(this.cliente);
+            clientesFiltrados.remove(this.cliente);
             reiniciaCliente();
             vaciaTextos();
         } catch (Exception ex) {

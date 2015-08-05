@@ -7,6 +7,7 @@ package com.jodasoft.sistfact.gco.ctr;
 
 import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Articulo;
+import com.jodasoft.sistfact.gco.mdl.Cliente;
 import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.PrecioVenta;
 import com.jodasoft.sistfact.gco.mdl.TipoCliente;
@@ -22,7 +23,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -53,6 +56,7 @@ public class ArticuloController extends AbstractMB implements Serializable {
     private List<TipoCliente> tipos;
     private List<PrecioVenta> precios;
     private List<PrecioVenta> preciosAnteriores;
+    private int activeIndex;
 
     /////////////////////ejb del facade
     @EJB
@@ -68,6 +72,7 @@ public class ArticuloController extends AbstractMB implements Serializable {
     private com.jodasoft.sistfact.gco.dao.PrecioVentaFacade precioVentaFacade;
 
     public ArticuloController() {
+        this.activeIndex = 0;
     }
 
     //////////////////////funciones//////////////////////////////////////////////////
@@ -162,25 +167,58 @@ public class ArticuloController extends AbstractMB implements Serializable {
 
     }
 
+    public void editArticulo(Articulo articulo) {
+        activeIndex = 1;
+
+        this.articulo = articulo;
+        preciosAnteriores = null;
+        setCodigo(articulo.getArtiCodigo());
+        setDescripcion(articulo.getArtiDescripcion());
+        setPrecioCompra(articulo.getArtiPrecioCompra());
+        setPrecioVenta(articulo.getArtiPrecioVenta());
+        setUmedida_id(articulo.getUmedId().getUmedId());
+        setIva(articulo.getArtiIva());
+        setInfoAdicional(articulo.getArtiInfoAdicional());
+        //setPrecios(articulo.getPrecioVentaList());
+        if (getDiferenciado()) {
+            precios = new ArrayList<PrecioVenta>();
+            for (TipoCliente tipo : getTipos()) {
+                PrecioVenta pVenta = new PrecioVenta();
+                pVenta.setArtiId(articulo);
+                pVenta.setTiclId(tipo);
+                pVenta.setPrecio(0d);
+                for (PrecioVenta precio : getPreciosAnteriores()) {
+                    if (precio.getArtiId().equals(articulo) && precio.getTiclId().equals(tipo)) {
+                        pVenta.setPrecio(precio.getPrecio());
+                        break;
+                    }
+                }
+                precios.add(pVenta);
+            }
+        }
+    }
+
     public void updateArticulo() {
         try {
-            articulo.setArtEstado(true);
-            articulo.setArtiCodigo(codigo);
-            articulo.setArtiDescripcion(descripcion);
-            articulo.setArtiInfoAdicional(infoAdicional);
-            articulo.setArtiIva(iva);
-            articulo.setArtiPrecioCompra(precioCompra);
-            articulo.setArtiPrecioVenta(precioVenta);
+            activeIndex = 1;
+
+            this.articulo.setArtEstado(true);
+            setCodigo(articulo.getArtiCodigo());
+            this.articulo.setArtiDescripcion(descripcion);
+            this.articulo.setArtiInfoAdicional(infoAdicional);
+            this.articulo.setArtiIva(iva);
+            this.articulo.setArtiPrecioCompra(precioCompra);
+            this.articulo.setArtiPrecioVenta(precioVenta);
             UnidadDeMedida umed = new UnidadDeMedida();
             umed.setUmedId(umedida_id);
-            articulo.setUmedId(umed);
+            this.articulo.setUmedId(umed);
             if (getDiferenciado()) {
                 for (PrecioVenta precio : getPreciosAnteriores()) {
                     precioVentaFacade.deletePrecio(precio);
                 }
-                articuloFacade.update(articulo, precios);
+                articuloFacade.update(this.articulo, precios);
             } else {
-                articuloFacade.update(articulo);
+                articuloFacade.update(this.articulo);
             }
             closeDialog();
             displayInfoMessageToUser("Artículo Modificado Correctamente");
@@ -192,15 +230,27 @@ public class ArticuloController extends AbstractMB implements Serializable {
         }
     }
 
-    public void deleteArticulo() {
-        articuloFacade.delete(articulo);
-        articulos.remove(articulo);
+    public void deleteArticulo(Articulo articulo) {
+        this.articulo = articulo;
+        articuloFacade.delete(this.articulo);
+        articulos.remove(this.articulo);
+        articulosFiltrados.remove(this.articulo);
         vaciarTextos();
         closeDialog();
         displayInfoMessageToUser("Artículo Eliminado Correctamente");
+        //DataTable table = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("tblArticulos");
+        //table.reset();
+    }
+
+    public int getActiveIndex() {
+        return activeIndex;
     }
 
     ////////////////////////// Gets y Sets //////////////////////////////////////////
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
+    }
+
     public String getCodigo() {
         return codigo;
     }
@@ -355,4 +405,32 @@ public class ArticuloController extends AbstractMB implements Serializable {
         this.preciosAnteriores = preciosAnteriores;
     }
 
+    public void nuevoArticulo() {
+        activeIndex = 1;
+        vaciarTextos();
+    }
+
+    public void guardar() {
+        if (articulo == null) {
+            articulo = new Articulo();
+        }
+        if (articulo.getArtiCodigo() == null) {
+            if (permiso.getPermCrear()) {
+                saveArticulo();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        } else {
+            if (permiso.getPermModificar()) {
+                updateArticulo();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        }
+        activeIndex = 0;
+    }
 }
