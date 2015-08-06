@@ -47,9 +47,11 @@ public class UsuarioController extends AbstractMB implements Serializable {
 
     @EJB
     private com.jodasoft.sistfact.gco.dao.RolFacade rolFacade;
-    
-    
+    private int activeIndex;
+
     public UsuarioController() {
+        activeIndex = 0;
+
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -85,8 +87,11 @@ public class UsuarioController extends AbstractMB implements Serializable {
 
     }
 
-    public void updateUsuario() {
+    public void updateUsuario(Usuario usuario) {
+
         try {
+            activeIndex = 1;
+            this.usuario = usuario;
             usuario.setUsuaClave(contrasenia);
             Rol objRol = new Rol();
             objRol.setAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
@@ -108,26 +113,40 @@ public class UsuarioController extends AbstractMB implements Serializable {
         }
     }
 
-    public void deleteUsuario() {
+    public void deleteUsuario(Usuario usuario) {
+
         if (usuario.getUsuaId().equals(LoginController.getInstance().getUsuario().getUsuaId())) {
             displayErrorMessageToUser("No se puede eliminar el usuario con el que ha accedido al sistema");
-            return ;
+            return;
         }
-        usuarioFacade.delete(usuario);
+        this.usuario = usuario;
+        usuarioFacade.delete(this.usuario);
         displayInfoMessageToUser("Usuario eliminado correctamente");
-        usuarios.remove(usuario);
+        usuarios.remove(this.usuario);
         limpiaTodo();
-        
+
     }
 
     public void limpiaTodo() {
-        setContrasenia("");
+        this.usuario = new Usuario();
+       // setContrasenia("");
         setNomUsuario("");
         setRol(1);
-        usuario = new Usuario();
+        //contrasenia = "";
+        nomUsuario = "";
+        rol = 1;
+
     }
 
     ///////////////////////////////gets y sets///////////////////////////
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
+    }
+
     public String getNomUsuario() {
         return nomUsuario;
     }
@@ -172,8 +191,9 @@ public class UsuarioController extends AbstractMB implements Serializable {
     }
 
     public List<Rol> getRoles() {
-        if(roles==null)
+        if (roles == null) {
             roles = rolFacade.findByAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        }
         return roles;
     }
 
@@ -182,15 +202,54 @@ public class UsuarioController extends AbstractMB implements Serializable {
     }
 
     public Permiso getPermiso() {
-        if(permiso==null)
-            permiso=LoginController.getInstance().getPermiso("Usuarios");
+        if (permiso == null) {
+            permiso = LoginController.getInstance().getPermiso("Usuarios");
+        }
         return permiso;
     }
 
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
-    
-    
+
+    public void nuevoUsuario() {
+        activeIndex = 1;
+        limpiaTodo();
+    }
+
+    public void guardar() {
+        if (usuario == null) {
+            usuario = new Usuario();
+        }
+        if (usuario.getUsuaId() == null) {
+            if (permiso.getPermCrear()) {
+                saveUsuario();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        } else {
+            if (permiso.getPermModificar()) {
+                updateUsuario(usuario);
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        }
+        activeIndex = 0;
+    }
+
+    public void editarUsuario(Usuario usuario) {
+
+        activeIndex = 1;
+        this.usuario = usuario;
+
+        setNomUsuario(this.usuario.getUsuaNombre());
+        setRol(this.usuario.getRolId().getRolId());
+        setContrasenia(this.usuario.getUsuaClave());
+
+    }
 
 }

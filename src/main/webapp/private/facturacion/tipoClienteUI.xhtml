@@ -1,101 +1,68 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../../template/mainTemplate.xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:b="http://bootsfaces.net/ui">
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="content">
-        <b:panel look="primary" title="Mantenimiento de Tipos de Cliente" style="vertical-align: central; margin: 0px auto !important;" >
-            <h:form>
-                <p:growl id="messages" showDetail="false"/>
-                <b:container style="width: 100%;">
-                    <b:row>
-                        <b:column>
-                            <div id="contentLeft">
-                                <b:container id="pnlDatos" style="width: 100%">
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Descripción: "/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText  id="txtCodigo" value="#{tipoClienteController.descripcion}"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{tipoClienteController.permiso.permCrear}" action="#{tipoClienteController.saveTipo()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Modificar" rendered="#{tipoClienteController.permiso.permModificar}" action="#{tipoClienteController.updateTipo()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos">
-                                                <p:confirm header="Modificar Tipo de Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                            </p:commandButton> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar" rendered="#{tipoClienteController.permiso.permEliminar}" action="#{tipoClienteController.deleteTipo()}"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblTipos @form:pnlDatos">
-                                                <p:confirm header="Eliminar Tipo de Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                            </p:commandButton> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" action="#{tipoClienteController.vaciaTextos()}" value="Limpiar" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos @form:tblTipos">
-                                                <p:resetInput target="pnlDatos" />
-                                            </p:commandButton>
-                                        </b:column>
-                                    </b:row>
-                                    
-                                </b:container>
-
-                            </div>
-
-                            <div id="contentRight">
-                                <p:graphicImage value="../../resources/images/cliente.png" width="100%"/>
-                            </div>
-                        </b:column>
-                    </b:row>
-                    <b:row style="margin-top: 20px;">
-                        <b:column>
-                            <p:dataTable styleClass="" style="width: 100%" var="tipo" value="#{tipoClienteController.tipos}" id="tblTipos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{tipo.ticlId}" selection="#{tipoClienteController.tipo}" widgetVar="tablaTipos">
-                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{tipoClienteController.onRowSelect}"/>
-                                <f:facet name="header">
-                                    <h:outputText value="Listado"/>
-                                </f:facet>
+        <h:form>
+            <p:growl id="messages" showDetail="false"/>  
+            <p:accordionPanel multiple="false" id="acordion" activeIndex="#{tipoClienteController.activeIndex}">
+                <p:tab id="tab1" closable="false" title="Tipos de Clientes">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <p:dataTable editMode="cell" styleClass="" style="width: 100%" var="tipo" value="#{tipoClienteController.tipos}" id="tblTipos"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{tipo.ticlId}" selection="#{tipoClienteController.tipo}" widgetVar="tablaTipos">
+                                <p:ajax event="rowSelect"  update="@form:acordion:tab2:pnlDatos"  listener="#{tipoClienteController.onRowSelect}"/>
                                 <p:column   headerText="Descripción" priority="1" style="width: 100%">
                                     <h:outputText value="#{tipo.ticlDescripcion}"  />
                                 </p:column>
-                               
+
+                                <p:column style="width: 15%" priority="1">
+                                    <f:facet name="header">
+                                        <h:panelGrid columns="2" style="width: 100%;">
+                                            <h:outputText value="Acciones"/>
+                                            <p:commandButton icon="fa fa-plus" title="Nuevo Tipo" action="#{tipoClienteController.nuevoTipoCliente()}" styleClass="BlueTextButton RaisedButton" update="@form:acordion @form:acordion:tab2:pnlDatos" rendered="#{tipoClienteController.permiso.permCrear}"/>
+                                        </h:panelGrid>
+
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-edit" title="Editar Tipo Cliente"  action="#{tipoClienteController.editArticulo(tipo)}" update="@form:acordion @form:acordion:tab2:pnlDatos" rendered="#{tipoClienteController.permiso.permModificar}"/>
+                                    <p:commandButton icon="fa fa-remove" title="Eliminar Tipo Cliente" action="#{tipoClienteController.deleteTipo(tipo)}" update="@form:messages @form:acordion:tab1:tblTipos @form:acordion:tab2:pnlDatos"  rendered="#{tipoClienteController.permiso.permEliminar}">
+                                        <p:confirm  header="Eliminar Tipo de Cliente" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                </p:column>
                             </p:dataTable>
-                        </b:column>
-                    </b:row>
-                </b:container>
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
-                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                </p:confirmDialog>
-            </h:form>
-        </b:panel>
+                        </div>
+                    </div>
+                </p:tab>
+
+
+                <p:tab title="Tipo Cliente" id="tab2">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <div class="Card ShadowEffect  ">
+                                <h:panelGrid columns="1">
+                                    <p:commandButton icon="fa fa-plus" value="Nuevo Tipo Cliente" title="Nuevo Tipo" action="#{tipoClienteController.nuevoTipoCliente()}" update="@form:acordion @form:acordion:tab2:pnlDatos"  rendered="#{tipoClienteController.permiso.permCrear}"/>
+                                </h:panelGrid>
+                                <p:panelGrid columns="2" id="pnlDatos" layout="grid" style="border:0px !important; background:none; width: 75%;" styleClass="FormContent">
+                                    <p:inputText tabindex="1" styleClass="Wid90" placeholder="Descripción" id="txtCodigo" value="#{tipoClienteController.descripcion}"/>
+
+                                </p:panelGrid>
+                                <p:commandButton value="Guardar" action="#{tipoClienteController.guardar()}"  update="@form:messages @form:acordion @form:acordion:tab1:tblTipos @form:acordion:tab2:pnlDatos"  />
+                            </div>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:accordionPanel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+
+        </h:form>
     </ui:define>
+
 </ui:composition>
+

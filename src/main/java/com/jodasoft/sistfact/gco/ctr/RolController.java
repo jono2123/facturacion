@@ -9,6 +9,7 @@ import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Rol;
 import com.jodasoft.sistfact.gco.util.exp.RolValidadorException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +29,7 @@ import org.primefaces.event.SelectEvent;
 //@SessionScoped
 @ManagedBean(name = "rolController")
 @ViewScoped
-public class RolController extends AbstractMB implements Serializable{
+public class RolController extends AbstractMB implements Serializable {
 
     /**
      * Creates a new instance of RolController
@@ -37,26 +38,30 @@ public class RolController extends AbstractMB implements Serializable{
     private Rol rol;
     private List<Rol> roles;
     private Permiso permiso;
-    
-    
-     @EJB
+    private int activeIndex;
+
+    @EJB
     private com.jodasoft.sistfact.gco.dao.RolFacade rolFacade;
-    
+
     public RolController() {
+        activeIndex = 0;
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         setNombre(rol.getRolNombre());
     }
-    
-    public void save(){
-        rol= new Rol();
+
+    public void save() {
+        rol = new Rol();
         rol.setAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
         rol.setRolEstado(true);
         rol.setRolNombre(nombre);
         try {
             rolFacade.save(rol);
             displayInfoMessageToUser("Rol creado correctamente");
+
+            roles = rolFacade.findByAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+
             roles.add(rol);
             rol = new Rol();
             setNombre("");
@@ -64,8 +69,8 @@ public class RolController extends AbstractMB implements Serializable{
             displayErrorMessageToUser(ex.getMessage());
         }
     }
-    
-    public void updateRol(){
+
+    public void updateRol() {
         rol.setRolNombre(nombre);
         try {
             rolFacade.update(rol);
@@ -75,16 +80,24 @@ public class RolController extends AbstractMB implements Serializable{
         } catch (RolValidadorException ex) {
             displayErrorMessageToUser(ex.getMessage());
         }
-        
+
     }
-    
-    public void deleteRol(){
-        rolFacade.delete(rol);
+
+    public void deleteRol(Rol rol) {
+        this.rol = rol;
+        rolFacade.delete(this.rol);
         displayInfoMessageToUser("Rol eliminado correctamente");
-        roles.remove(rol);
+        roles.remove(this.rol);
     }
-    
+
     //////////////////////////////gets y sets//////////////////////////////
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
+    }
 
     public String getNombre() {
         return nombre;
@@ -103,8 +116,9 @@ public class RolController extends AbstractMB implements Serializable{
     }
 
     public List<Rol> getRoles() {
-        if(roles==null)
+        if (roles == null) {
             roles = rolFacade.findByAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        }
         return roles;
     }
 
@@ -113,15 +127,64 @@ public class RolController extends AbstractMB implements Serializable{
     }
 
     public Permiso getPermiso() {
-        if(permiso==null)
-            permiso=LoginController.getInstance().getPermiso("Roles");
+        if (permiso == null) {
+            permiso = LoginController.getInstance().getPermiso("Roles");
+        }
         return permiso;
     }
 
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
-    
-    
-    
+
+    public void nuevoRol() {
+        activeIndex = 1;
+        vaciar();
+    }
+
+    private void vaciar() {
+        setNombre("");
+        setPermiso(new Permiso());
+        setRol(new Rol());
+        setRoles(new ArrayList<Rol>());
+
+    }
+
+    public void guardar() {
+        permiso = LoginController.getInstance().getPermiso("Roles");
+
+        if (rol == null) {
+            rol = new Rol();
+        }
+        if (rol.getRolId() == null) {
+            if (permiso.getPermCrear() != null) {
+                if (permiso.getPermCrear()) {
+
+                    save();
+                } else {
+                    displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                    return;
+                }
+            }
+
+        } else {
+            if (permiso.getPermModificar() != null) {
+                if (permiso.getPermModificar()) {
+                    updateRol();
+                } else {
+                    displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                    return;
+                }
+            }
+
+        }
+        activeIndex = 0;
+    }
+
+    public void editRol(Rol rol) {
+        activeIndex = 1;
+        this.rol = rol;
+        setNombre(rol.getRolNombre());
+
+    }
 }

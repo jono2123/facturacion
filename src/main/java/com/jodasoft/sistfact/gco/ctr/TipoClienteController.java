@@ -28,25 +28,27 @@ public class TipoClienteController extends AbstractMB implements Serializable {
     /**
      * Creates a new instance of TipoClienteController
      */
-    private  List<TipoCliente> tipos;
+    private List<TipoCliente> tipos;
     private TipoCliente tipo;
     private String descripcion;
     private Permiso permiso;
-    
+    private int activeIndex;
+
     @EJB
     com.jodasoft.sistfact.gco.dao.TipoClienteFacade tipoClienteFacade;
-    
-    
+
     public TipoClienteController() {
+        activeIndex = 0;
     }
-    
-    public void vaciaTextos(){
-        tipo= new TipoCliente();
+
+    public void vaciaTextos() {
+        tipo = new TipoCliente();
         setDescripcion("");
-        
+        activeIndex = 1;
+
     }
-    
-    public void saveTipo(){
+
+    public void saveTipo() {
         tipo = new TipoCliente();
         tipo.setTiclDescripcion(descripcion);
         tipo.setAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
@@ -60,10 +62,10 @@ public class TipoClienteController extends AbstractMB implements Serializable {
         } catch (TipoClienteValidadorException ex) {
             keepDialogOpen();
             displayErrorMessageToUser(ex.getMessage());
-        }     
+        }
     }
-    
-    public void updateTipo(){
+
+    public void updateTipo() {
         tipo.setTiclDescripcion(descripcion);
         try {
             tipoClienteFacade.update(tipo);
@@ -73,24 +75,34 @@ public class TipoClienteController extends AbstractMB implements Serializable {
         } catch (TipoClienteValidadorException ex) {
             keepDialogOpen();
             displayErrorMessageToUser(ex.getMessage());
-        }     
-        
+        }
+
     }
-    
-    public void deleteTipo(){
+
+    public void deleteTipo(TipoCliente tipo) {
+        this.tipo = tipo;
         tipoClienteFacade.delete(tipo);
         tipos.remove(tipo);
         displayInfoMessageToUser("Tipo de cliente eliminado correctamente");
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         setDescripcion(tipo.getTiclDescripcion());
     }
 
     public List<TipoCliente> getTipos() {
-        if(tipos==null)
+        if (tipos == null) {
             tipos = tipoClienteFacade.findByAlmaIdAndEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
+        }
         return tipos;
+    }
+
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
     }
 
     public void setTipos(List<TipoCliente> tipos) {
@@ -112,16 +124,52 @@ public class TipoClienteController extends AbstractMB implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion.toUpperCase();
     }
-    
+
     public Permiso getPermiso() {
-        if(permiso==null)
-            permiso=LoginController.getInstance().getPermiso("Tipo Cliente");
+        if (permiso == null) {
+            permiso = LoginController.getInstance().getPermiso("Tipo Cliente");
+        }
         return permiso;
     }
 
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
-    
-    
+
+    public void nuevoTipoCliente() {
+        activeIndex = 1;
+        vaciaTextos();
+    }
+
+    public void editArticulo(TipoCliente tipocliente) {
+        activeIndex = 1;
+
+        this.tipo = tipocliente;
+        setDescripcion(tipo.getTiclDescripcion());
+
+    }
+
+    public void guardar() {
+        if (tipo == null) {
+            tipo = new TipoCliente();
+        }
+        if (tipo.getTiclId() == null) {
+            if (permiso.getPermCrear()) {
+                saveTipo();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        } else {
+            if (permiso.getPermModificar()) {
+                updateTipo();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        }
+        activeIndex = 0;
+    }
 }

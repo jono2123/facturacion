@@ -1,108 +1,79 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../../template/mainTemplate.xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:b="http://bootsfaces.net/ui">
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="content">
-        <b:panel look="primary" title="Administración de Usuarios" style="vertical-align: central; margin: 0px auto !important;" >
-            <h:form>
-                <p:growl id="messages" showDetail="false"/>
-                <b:container style="width: 100%;">
-                    <b:row>
-                        <b:column>
-                            <div id="contentLeft">
-                                <b:container id="pnlDatos" style="width: 100%">
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Nombre: "/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputText  id="txtNombre" value="#{usuarioController.nomUsuario}"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton  ajax="true" value="Nuevo" rendered="#{usuarioController.permiso.permCrear}" action="#{usuarioController.saveUsuario()}"   styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Contraseña"/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:inputSecret  id="txtPass" value="#{usuarioController.contrasenia}"/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" action="#{usuarioController.updateUsuario()}" rendered="#{usuarioController.permiso.permModificar}" value="Modificar" styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:messages @form:tblUsuarios @form:pnlDatos">
-                                                <p:confirm header="Modificar Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                            </p:commandButton> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value="Rol"/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <b:selectOneMenu value="#{usuarioController.rol}">
-                                                <f:selectItems value="#{usuarioController.roles}" var="rol" itemLabel="#{rol.rolNombre}" itemValue="#{rol.rolId}"/>
-                                            </b:selectOneMenu>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true" value="Eliminar"  rendered="#{usuarioController.permiso.permEliminar}" action="#{usuarioController.deleteUsuario()}"  styleClass="botonesMantenimientos btn-danger btn-lg"  update="@form:messages @form:tblUsuarios @form:pnlDatos">
-                                                <p:confirm header="Eliminar Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
-                                            </p:commandButton> 
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column col-md="2" col-xs="12">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="8" col-xs="8">
-                                            <h:outputText value=""/>
-                                        </b:column>
-                                        <b:column col-md="2" col-xs="4">
-                                            <p:commandButton ajax="true"  value="Limpiar"  styleClass="botonesMantenimientos btn-danger btn-lg" update="@form:pnlDatos">
-                                                <p:resetInput target="pnlDatos" />
-                                            </p:commandButton>
-                                        </b:column>
-                                    </b:row>
-                                    
-                                </b:container>
+        <h:form>
+            <p:growl id="messages" showDetail="false"/>  
+            <p:accordionPanel multiple="false" id="acordion" activeIndex="#{usuarioController.activeIndex}">
+                <p:tab id="tab1" closable="false" title="Usuarios">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <p:dataTable editable="true" editMode="cell" styleClass="" style="width: 100%"  var="usuario" value="#{usuarioController.usuarios}" id="tblUsuarios"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{usuario.usuaId}" selection="#{usuarioController.usuario}" widgetVar="tablaUsuarios">
+                                <p:ajax event="rowSelect"  update="@form:acordion:tab2:pnlDatos" listener="#{usuarioController.onRowSelect}"/>
 
-                            </div>
-
-                            <div id="contentRight">
-                                <p:graphicImage value="../../resources/images/user.png" width="100%"/>
-                            </div>
-                        </b:column>
-                    </b:row>
-                    <b:row style="margin-top: 20px;">
-                        <b:column>
-                            <p:dataTable styleClass="" style="width: 100%" var="usuario" value="#{usuarioController.usuarios}" id="tblUsuarios"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{usuario.usuaId}" selection="#{usuarioController.usuario}" widgetVar="tablaUsuarios">
-                                <p:ajax event="rowSelect"  update="@form:pnlDatos" listener="#{usuarioController.onRowSelect}"/>
-                                <f:facet name="header">
-                                    <h:outputText value="Listado"/>
-                                </f:facet>
-                                <p:column   headerText="Nombre de Usuario" priority="1" style="width: 100%">
+                                <p:column   headerText="Nombre de Usuario" priority="1" style="width: 33%">
                                     <h:outputText value="#{usuario.usuaNombre}"  />                                
                                 </p:column>
-                                <p:column   headerText="Rol" priority="1" style="width: 100%">
-                                    <h:outputText value="#{usuario.rolId.rolNombre}"  />
+                                <p:column   headerText="Rol" priority="1" style="width: 33%">
+                                    <h:outputText value="#{usuario.rolId.rolNombre}" id="rolNombre" />
                                 </p:column>
-                                    
-                            </p:dataTable>
-                        </b:column>
-                    </b:row>
-                </b:container>
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
-                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                </p:confirmDialog>
-            </h:form>
-        </b:panel>
-    </ui:define>
-</ui:composition>
 
+                                <p:column style="width: 10%" priority="1">
+                                    <f:facet name="header">
+                                        <h:panelGrid columns="2" style="width: 100%;">
+                                            <h:outputText value="Acciones"/>
+                                            <p:commandButton icon="fa fa-plus" title="Nuevo Usuario"  action="#{usuarioController.nuevoUsuario()}" styleClass="BlueTextButton RaisedButton" update="@form:acordion @form:acordion:tab2:pnlDatos" rendered="#{usuarioController.permiso.permCrear}"/>
+                                        </h:panelGrid>
+
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-edit" title="Editar Usuario"  action="#{usuarioController.editarUsuario(usuario)}" update="@form:acordion @form:acordion:tab2:pnlDatos" rendered="#{usuarioController.permiso.permModificar}"/>
+                                    <p:commandButton icon="fa fa-remove" title="Eliminar Usuario" action="#{usuarioController.deleteUsuario(usuario)}" update="@form:messages @form:acordion:tab1:tblUsuarios @form:acordion:tab2:pnlDatos" rendered="#{usuarioController.permiso.permEliminar}">
+                                        <p:confirm  header="Eliminar  Usuario" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </p:tab>
+
+
+                <p:tab title="Datos de Usuario" id="tab2">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <div class="Card ShadowEffect  ">
+                                <h:panelGrid columns="1">
+                                    <p:commandButton icon="fa fa-plus" title="Nuevo Usuario" action="#{usuarioController.nuevoUsuario()}" styleClass="BlueTextButton RaisedButton" update="@form:acordion @form:acordion:tab2:pnlDatos" rendered="#{usuarioController.permiso.permCrear}"/>
+                                </h:panelGrid>
+                                <p:panelGrid columns="2" id="pnlDatos" layout="grid" style="border:0px !important; background:none; width: 75%;" styleClass="FormContent">
+                                    <p:inputText placeholder="Nombre Usuario" styleClass="Wid80 TexAlCenter Fs18" value="#{usuarioController.nomUsuario}"/>
+
+
+                                    <p:inputText type="password" placeholder="Contraseña" styleClass="Wid80 TexAlCenter Fs18" value="#{usuarioController.contrasenia}"/>
+                                    <p:selectOneMenu  tabindex="9" style="width: 80%" id="rol" value="#{usuarioController.rol}">
+                                        <f:selectItems value="#{usuarioController.roles}" var="rol" itemLabel="#{rol.rolNombre}" itemValue="#{rol.rolId}"/>
+                                    </p:selectOneMenu> 
+                                </p:panelGrid>
+
+                                <p:commandButton value="Guardar" action="#{usuarioController.guardar()}" rendered="#{usuarioController.permiso.permCrear}" update="@form:acordion:tab1:tblUsuarios @form:acordion:tab2:pnlDatos @form:messages @form:acordion   @form:acordion:tab1:tblUsuarios @form:acordion:tab1:tblUsuarios:rolNombre"/>
+                            </div>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:accordionPanel>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
 
