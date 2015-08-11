@@ -36,7 +36,7 @@ public class JerarquiaController extends AbstractMB implements Serializable {
 
     public JerarquiaController() {
         nivel = 0;
-        padre=null;
+        padre = null;
     }
 
     @EJB
@@ -45,7 +45,7 @@ public class JerarquiaController extends AbstractMB implements Serializable {
     public void crearTipo() {
         TipoArticulo tipo = new TipoArticulo();
         tipo.setTiarNombre(nombreTipo);
-        if (nivel == 0 || padre==null) {
+        if (nivel == 0 || padre == null) {
             tipo.setTiarPadre(null);
         } else {
             tipo.setTiarPadre(padre.getTiarId());
@@ -55,19 +55,33 @@ public class JerarquiaController extends AbstractMB implements Serializable {
         tipo.setAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
         tipo.setTiarHoja(true);
         try {
-            tipoArticuloFacade.save(tipo,padre);
+            tipoArticuloFacade.save(tipo, padre);
             tipos.add(tipo);
             displayInfoMessageToUser("Tipo creado correctamente");
+            setNombreTipo("");
         } catch (TipoArticuloValidadorException ex) {
             displayErrorMessageToUser(ex.getMessage());
         }
     }
-    
-    public void ingresaTipo(TipoArticulo tipo)
-    {
-        padre=tipo;
+
+    public void ingresaTipo(TipoArticulo tipo) {
+        padre = tipo;
         nivel++;
-        tipos=tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+        tipos = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+    }
+
+    public void regresar() {
+        if (padre == null || padre.getTiarPadre() == null) {
+            if (nivel > 0) {
+                nivel--;
+            }
+            tipos = tipoArticuloFacade.findAlmaIdAndNivel0(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            padre=null;
+        } else {
+            padre = tipoArticuloFacade.find(padre.getTiarPadre());
+            tipos = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+            nivel--;
+        }
     }
 
     public int getNivel() {
@@ -104,11 +118,12 @@ public class JerarquiaController extends AbstractMB implements Serializable {
     public void setPadre(TipoArticulo padre) {
         this.padre = padre;
     }
-    public String getTitulo(){
-        if(nivel==0){
+
+    public String getTitulo() {
+        if (nivel == 0) {
             return "Tipos principales de Ítems";
-        }else{
-            return "Tipos de "+padre.getTiarNombre();
+        } else {
+            return "Tipos de " + padre.getTiarNombre();
         }
     }
 

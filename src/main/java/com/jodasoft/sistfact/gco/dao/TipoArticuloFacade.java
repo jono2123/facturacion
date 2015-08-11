@@ -54,6 +54,16 @@ public class TipoArticuloFacade extends AbstractFacade<TipoArticulo> {
         tipos = findAllResults("TipoArticulo.findByTiarPadre", parameters);
         return tipos;
     }
+    //TipoArticulo.findByTiarNivel
+    public List<TipoArticulo> findByTiarNivel(int nivel, Almacen almaId) {
+        List<TipoArticulo> tipos;
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("tiarNivel", nivel);
+        parameters.put("almaId", almaId);
+        parameters.put("tiarEstado", true);
+        tipos = findAllResults("TipoArticulo.findByTiarNivel", parameters);
+        return tipos;
+    }
     
     public void save(TipoArticulo tipo, TipoArticulo padre) throws TipoArticuloValidadorException {
         try {

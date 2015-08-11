@@ -10,6 +10,7 @@ import com.jodasoft.sistfact.gco.mdl.Articulo;
 import com.jodasoft.sistfact.gco.mdl.Cliente;
 import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.PrecioVenta;
+import com.jodasoft.sistfact.gco.mdl.TipoArticulo;
 import com.jodasoft.sistfact.gco.mdl.TipoCliente;
 import com.jodasoft.sistfact.gco.mdl.UnidadDeMedida;
 import com.jodasoft.sistfact.gco.util.exp.ArticuloValidadorException;
@@ -24,6 +25,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import javax.inject.Named;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.SelectEvent;
@@ -57,6 +60,12 @@ public class ArticuloController extends AbstractMB implements Serializable {
     private List<PrecioVenta> precios;
     private List<PrecioVenta> preciosAnteriores;
     private int activeIndex;
+    private int tipoArticulo;
+    private List<SelectItem> tiposArticulo;
+    private List<TipoArticulo> tiposArt;
+    private int nivel;
+    private TipoArticulo padre;
+    private String ruta;
 
     /////////////////////ejb del facade
     @EJB
@@ -70,9 +79,13 @@ public class ArticuloController extends AbstractMB implements Serializable {
 
     @EJB
     private com.jodasoft.sistfact.gco.dao.PrecioVentaFacade precioVentaFacade;
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.TipoArticuloFacade tipoArticuloFacade;
 
     public ArticuloController() {
         this.activeIndex = 0;
+        nivel = 0;
+        padre = null;
     }
 
     //////////////////////funciones//////////////////////////////////////////////////
@@ -93,6 +106,10 @@ public class ArticuloController extends AbstractMB implements Serializable {
         articulo = new Articulo();
         precios = null;
         preciosAnteriores = null;
+        tipoArticulo=0;
+        nivel=0;
+        padre=null;
+        tiposArt=null;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -105,6 +122,17 @@ public class ArticuloController extends AbstractMB implements Serializable {
         setIva(articulo.getArtiIva());
         setInfoAdicional(articulo.getArtiInfoAdicional());
         //setPrecios(articulo.getPrecioVentaList());
+        if (articulo.getTiarId() != null) {
+            tipoArticulo = articulo.getTiarId().getTiarId().intValue();
+            nivel=articulo.getTiarId().getTiarNivel();
+            if (articulo.getTiarId().getTiarPadre() != null) {
+                padre = tipoArticuloFacade.find(articulo.getTiarId().getTiarPadre());
+                tiposArt = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+                
+            } else {
+                tiposArt = tipoArticuloFacade.findAlmaIdAndNivel0(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            }
+        }
         if (getDiferenciado()) {
             precios = new ArrayList<PrecioVenta>();
             for (TipoCliente tipo : getTipos()) {
@@ -123,6 +151,40 @@ public class ArticuloController extends AbstractMB implements Serializable {
         }
     }
 
+    public void armaArbol() {
+        tiposArticulo = new ArrayList<SelectItem>();
+        List<TipoArticulo> tiposPrincipales = tipoArticuloFacade.findAlmaIdAndNivel0(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        for (TipoArticulo tipoPrincipal : tiposPrincipales) {
+            if (!tipoPrincipal.getTiarHoja()) {
+                SelectItemGroup grupo = new SelectItemGroup(tipoPrincipal.getTiarNombre());
+                grupo.setSelectItems(buscaHijos(grupo, tipoPrincipal));
+                tiposArticulo.add(grupo);
+            } else {
+                SelectItem tipo = new SelectItem(tipoPrincipal.getTiarId(), tipoPrincipal.getTiarNombre());
+                tiposArticulo.add(tipo);
+            }
+
+        }
+    }
+
+    public SelectItem[] buscaHijos(SelectItemGroup grupoPadre, TipoArticulo padre) {
+        List<TipoArticulo> listaHijos = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+        SelectItem[] vectorHijos = new SelectItem[listaHijos.size()];
+        int i = 0;
+        for (TipoArticulo tipoHijo : listaHijos) {
+            if (!tipoHijo.getTiarHoja()) {
+                SelectItemGroup grupo = new SelectItemGroup(tipoHijo.getTiarNombre());
+                grupo.setSelectItems(buscaHijos(grupo, tipoHijo));
+                vectorHijos[i] = grupo;
+            } else {
+                SelectItem tipo = new SelectItem(tipoHijo.getTiarId(), tipoHijo.getTiarNombre());
+                vectorHijos[i] = tipo;
+            }
+            i++;
+        }
+        return vectorHijos;
+    }
+
     public void saveArticulo() {
         try {
             articulo = new Articulo();
@@ -139,6 +201,12 @@ public class ArticuloController extends AbstractMB implements Serializable {
             UnidadDeMedida umed = new UnidadDeMedida();
             umed.setUmedId(umedida_id);
             articulo.setUmedId(umed);
+            if (tipoArticulo != 0) {
+                TipoArticulo tipo;
+                tipo = tipoArticuloFacade.find(tipoArticulo);
+                articulo.setTiarId(tipo);
+            }
+
             if (getDiferenciado()) {
 
                 for (PrecioVenta precio : precios) {
@@ -180,6 +248,15 @@ public class ArticuloController extends AbstractMB implements Serializable {
         setIva(articulo.getArtiIva());
         setInfoAdicional(articulo.getArtiInfoAdicional());
         //setPrecios(articulo.getPrecioVentaList());
+        if (articulo.getTiarId() != null) {
+            tipoArticulo = articulo.getTiarId().getTiarId().intValue();
+            if (articulo.getTiarId().getTiarPadre() != null) {
+                padre = tipoArticuloFacade.find(articulo.getTiarId().getTiarPadre());
+                tiposArt = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+            } else {
+                tiposArt = tipoArticuloFacade.findAlmaIdAndNivel0(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            }
+        }
         if (getDiferenciado()) {
             precios = new ArrayList<PrecioVenta>();
             for (TipoCliente tipo : getTipos()) {
@@ -209,6 +286,12 @@ public class ArticuloController extends AbstractMB implements Serializable {
             this.articulo.setArtiIva(iva);
             this.articulo.setArtiPrecioCompra(precioCompra);
             this.articulo.setArtiPrecioVenta(precioVenta);
+            if (this.tipoArticulo != 0) {
+                TipoArticulo tipo;
+                tipo = tipoArticuloFacade.find(this.tipoArticulo);
+                this.articulo.setTiarId(tipo);
+            }
+
             UnidadDeMedida umed = new UnidadDeMedida();
             umed.setUmedId(umedida_id);
             this.articulo.setUmedId(umed);
@@ -377,6 +460,25 @@ public class ArticuloController extends AbstractMB implements Serializable {
         this.tipos = tipos;
     }
 
+    public int getTipoArticulo() {
+        return tipoArticulo;
+    }
+
+    public void setTipoArticulo(int tipoArticulo) {
+        this.tipoArticulo = tipoArticulo;
+    }
+
+    public List<TipoArticulo> getTiposArt() {
+        if (tiposArt == null) {
+            tiposArt = tipoArticuloFacade.findAlmaIdAndNivel0(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        }
+        return tiposArt;
+    }
+
+    public void setTiposArt(List<TipoArticulo> tiposArt) {
+        this.tiposArt = tiposArt;
+    }
+
     public List<PrecioVenta> getPrecios() {
         if (precios == null) {
             precios = new ArrayList<PrecioVenta>();
@@ -403,6 +505,17 @@ public class ArticuloController extends AbstractMB implements Serializable {
 
     public void setPreciosAnteriores(List<PrecioVenta> preciosAnteriores) {
         this.preciosAnteriores = preciosAnteriores;
+    }
+
+    public List<SelectItem> getTiposArticulo() {
+        if (tiposArticulo == null) {
+            armaArbol();
+        }
+        return tiposArticulo;
+    }
+
+    public void setTiposArticulo(List<SelectItem> tiposArticulo) {
+        this.tiposArticulo = tiposArticulo;
     }
 
     public void nuevoArticulo() {
@@ -432,5 +545,67 @@ public class ArticuloController extends AbstractMB implements Serializable {
 
         }
         activeIndex = 0;
+    }
+
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+
+    public String getTitulo() {
+        if (nivel == 0) {
+            return "Tipos principales de Ítems";
+        } else {
+            return "Tipos de " + padre.getTiarNombre();
+        }
+    }
+
+    public void ingresaTipo(TipoArticulo tipo) {
+        if (!tipo.getTiarHoja()) {
+            padre = tipo;
+            nivel++;
+            tiposArt = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+        } else {
+            tipoArticulo = tipo.getTiarId();
+        }
+    }
+
+    public void regresar() {
+        if (padre == null || padre.getTiarPadre() == null) {
+            if (nivel > 0) {
+                nivel--;
+            }
+            tiposArt = tipoArticuloFacade.findAlmaIdAndNivel0(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            padre = null;
+        } else {
+            padre = tipoArticuloFacade.find(padre.getTiarPadre());
+            tiposArt = tipoArticuloFacade.findByTiarPadre(padre.getTiarId());
+            nivel--;
+        }
+    }
+
+    public String getRuta() {
+        String ruta = "";
+        if (tipoArticulo != 0) {
+            TipoArticulo tipoArt = tipoArticuloFacade.find(tipoArticulo);
+            if (tipoArt.getTiarPadre() != null) {
+                List<String> padres = new ArrayList<String>();
+                while (tipoArt.getTiarPadre() != null) {
+                    tipoArt = tipoArticuloFacade.find(tipoArt.getTiarPadre());
+                    padres.add(tipoArt.getTiarNombre());
+                }
+                for (int i = padres.size() - 1; i >= 0; i--) {
+                    ruta = ruta + padres.get(i) + ">>";
+                }
+
+                return ruta;
+            } else {
+                return "Tipos principales de Artículos";
+            }
+        }
+        return "";
     }
 }
