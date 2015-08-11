@@ -31,9 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TipoArticulo.findAll", query = "SELECT t FROM TipoArticulo t"),
     @NamedQuery(name = "TipoArticulo.findByTiarId", query = "SELECT t FROM TipoArticulo t WHERE t.tiarId = :tiarId"),
     @NamedQuery(name = "TipoArticulo.findByTiarHoja", query = "SELECT t FROM TipoArticulo t WHERE t.tiarHoja = :tiarHoja"),
-    @NamedQuery(name = "TipoArticulo.findByTiarNivel", query = "SELECT t FROM TipoArticulo t WHERE t.tiarNivel = :tiarNivel"),
-    @NamedQuery(name = "TipoArticulo.findByTiarPadre", query = "SELECT t FROM TipoArticulo t WHERE t.tiarPadre = :tiarPadre and t.tiarEstado = :tiarEstado"),
-    @NamedQuery(name = "TipoArticulo.findAlmaIdAndNivel0", query = "SELECT t FROM TipoArticulo t WHERE t.almaId = :almaId and t.tiarPadre is null and t.tiarEstado = :tiarEstado"),
+    @NamedQuery(name = "TipoArticulo.findByTiarNivel", query = "SELECT t FROM TipoArticulo t WHERE t.tiarNivel = :tiarNivel and t.almaId = :almaId and t.tiarEstado = :tiarEstado"),
+    @NamedQuery(name = "TipoArticulo.findByTiarPadre", query = "SELECT t FROM TipoArticulo t WHERE t.tiarPadre = :tiarPadre and t.tiarEstado = :tiarEstado order by t.tiarId"),
+    @NamedQuery(name = "TipoArticulo.findAlmaIdAndNivel0", query = "SELECT t FROM TipoArticulo t WHERE t.almaId = :almaId and t.tiarPadre is null and t.tiarEstado = :tiarEstado order by t.tiarId"),
     @NamedQuery(name = "TipoArticulo.findByTiarNombre", query = "SELECT t FROM TipoArticulo t WHERE t.tiarNombre = :tiarNombre")})
 public class TipoArticulo implements Serializable {
     private static final long serialVersionUID = 1L;

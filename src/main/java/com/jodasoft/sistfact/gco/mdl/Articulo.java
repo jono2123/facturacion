@@ -55,7 +55,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Articulo.findByArtiIva", query = "SELECT a FROM Articulo a WHERE a.artiIva = :artiIva"),
     @NamedQuery(name = "Articulo.findByArtiDescripcion", query = "SELECT a FROM Articulo a WHERE a.artiDescripcion = :artiDescripcion"),
     @NamedQuery(name = "Articulo.findByArtiInfoAdicional", query = "SELECT a FROM Articulo a WHERE a.artiInfoAdicional = :artiInfoAdicional"),
-    @NamedQuery(name = "Articulo.findByAlmaIdAndArtiEstado", query = "SELECT a FROM Articulo a WHERE a.almaId = :almaId and a.artEstado = :estado"),
+    @NamedQuery(name = "Articulo.findByAlmaIdAndArtiEstado", query = "SELECT a FROM Articulo a WHERE a.almaId = :almaId and a.artEstado = :estado order by a.artiDescripcion"),
     @NamedQuery(name = "Articulo.findByArtiCodigoAlmaIdAndArtiEstado", query = "SELECT a FROM Articulo a WHERE a.artiCodigo = :artiCodigo and a.almaId = :almaId and a.artEstado = :estado"),
     @NamedQuery(name = "Articulo.findByArtEstado", query = "SELECT a FROM Articulo a WHERE a.artEstado = :artEstado")})
 public class Articulo implements Serializable {
@@ -89,7 +89,10 @@ public class Articulo implements Serializable {
     @JoinColumn(name = "umed_id", referencedColumnName = "umed_id")
     @ManyToOne
     private UnidadDeMedida umedId;
-   
+    @JoinColumn(name = "tiar_id", referencedColumnName = "tiar_id")
+    @ManyToOne
+    private TipoArticulo tiarId;
+    
 
     public Articulo() {
     }
@@ -178,6 +181,14 @@ public class Articulo implements Serializable {
 
     public void setUmedId(UnidadDeMedida umedId) {
         this.umedId = umedId;
+    }
+
+    public TipoArticulo getTiarId() {
+        return tiarId;
+    }
+
+    public void setTiarId(TipoArticulo tiarId) {
+        this.tiarId = tiarId;
     }
 
     @Override

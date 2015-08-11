@@ -36,6 +36,7 @@
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
             <version>2.2.11</version>
+            <type>jar</type>
         </dependency>
        
         <dependency>
