@@ -12,6 +12,7 @@ import com.jodasoft.sistfact.gco.mdl.DetalleFactura;
 import com.jodasoft.sistfact.gco.mdl.Factura;
 import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.PrecioVenta;
+import com.jodasoft.sistfact.gco.mdl.TipoCliente;
 import com.jodasoft.sistfact.gco.util.XmlManager;
 import com.jodasoft.sistfact.gco.util.exp.AlmacenTransaccionValidadorException;
 import com.jodasoft.sistfact.gco.util.exp.FacturaValidadorException;
@@ -29,6 +30,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.swing.JOptionPane;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -69,6 +72,8 @@ public class FacturaController extends AbstractMB implements Serializable {
     private String direccion;
     private String telefono;
     private Permiso permiso;
+    List<Cliente> clientes;
+    List<Cliente> clientesFiltrados;
 
     //variables para el producto
     private String codigo;
@@ -100,6 +105,9 @@ public class FacturaController extends AbstractMB implements Serializable {
         modificar = false;
 
     }
+    List<Articulo> articulos;
+    List<Articulo> articulosFiltrados;
+    private TipoCliente tipo;
     /*
      public void obtenCodigo(){
      int numAlmacen= LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId();
@@ -124,6 +132,30 @@ public class FacturaController extends AbstractMB implements Serializable {
      codigoFactura = codigoFactura.toUpperCase();
      }*/
 
+    public String abreSeleccion() {
+        if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDiferenciarPrecios()) {
+            if (cliente != null) {
+                if (cliente.getTiclId() != null) {
+                    return "SeleccionArticulosUI.xhtml";
+                } else {
+                    displayErrorMessageToUser("No se ha estabecido un tipo de cliente para el cliente seleccionado");
+                    return null;
+                }
+
+            } else {
+                displayErrorMessageToUser("Primero seleccione un cliente");
+                return null;
+            }
+        } else {
+            return "SeleccionArticulosUI.xhtml";
+
+        }
+        
+    }
+    public void onCellEdit(CellEditEvent event) {
+        calcular();
+    }
+
     public void selecciona() {
         cliente = ListaClientesController.getInstance().cliente;
         setCedula(cliente.getPersCedula());
@@ -138,6 +170,14 @@ public class FacturaController extends AbstractMB implements Serializable {
         setCodigo(articulo.getArtiCodigo());
         setPrecio(articulo.getArtiPrecioVenta());
         setDescripcion(articulo.getArtiDescripcion());
+        setCantidad(1);
+    }
+
+    public void seleccionaArticulo(Articulo articulo) {
+        this.articulo = articulo;
+        setCodigo(this.articulo.getArtiCodigo());
+        setPrecio(this.articulo.getArtiPrecioVenta());
+        setDescripcion(this.articulo.getArtiDescripcion());
         setCantidad(1);
     }
 
@@ -246,9 +286,9 @@ public class FacturaController extends AbstractMB implements Serializable {
         item.setArtiId(articulo);
         item.setDefaCantidad(cantidad);
         if (item.getArtiId().getArtiIva() && LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDesglozar()) {
-            item.setDefaPrecioVenta(precio / (1d + (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaIva()) / 100));
+            item.setDefaPrecioVenta(redondear(precio / (1d + (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaIva()) / 100)));
         } else {
-            item.setDefaPrecioVenta(precio);
+            item.setDefaPrecioVenta(redondear(precio));
         }
         item.setDefaObservaciones("");
         item.setNumItem(i);
@@ -355,7 +395,6 @@ public class FacturaController extends AbstractMB implements Serializable {
         try {
             guardarFactura();
             closeDialog();
-            displayInfoMessageToUser("Factura Guardada Correctamente");
             limpiarTodo();
         } catch (FacturaValidadorException ex) {
             keepDialogOpen();
@@ -440,8 +479,11 @@ public class FacturaController extends AbstractMB implements Serializable {
             displayErrorMessageToUser("Primero seleccione un cliente");
             return;
         }
-        ListaArticulosController.getInstance().setTipo(cliente.getTiclId());
-        ListaArticulosController.getInstance().cargarArticulos();
+        if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDiferenciarPrecios()) {
+            articulos = articuloFacade.listar(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), cliente.getTiclId());
+        } else {
+            articulos = articuloFacade.listar(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
+        }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlgItems').show();");
     }
@@ -567,6 +609,15 @@ public class FacturaController extends AbstractMB implements Serializable {
         modificar = true;
     }
 
+    public void seleccionaCliente(Cliente cliente) {
+        this.cliente = cliente;
+        setCedula(cliente.getPersCedula());
+        setNombres(cliente.getPersNombres() + " " + cliente.getPersApellidos());
+        setDireccion(cliente.getPersDireccion());
+        setTelefono(cliente.getPersTelefono());
+        setFecha(new Date());
+    }
+
     public List<DetalleFactura> getDetalle() {
         if (detalle == null) {
             detalle = new ArrayList<DetalleFactura>();
@@ -677,11 +728,56 @@ public class FacturaController extends AbstractMB implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public List<Cliente> getClientes() {
+        if (clientes == null) {
+            clientes = clienteFacade.findClienteByAlmaIdAndClieEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
+        }
+        return clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
+    }
+
+    public List<Cliente> getClientesFiltrados() {
+        return clientesFiltrados;
+    }
+
+    public void setClientesFiltrados(List<Cliente> clientesFiltrados) {
+        this.clientesFiltrados = clientesFiltrados;
+    }
+
+    public void reiniciaClientes() {
+        clientes = null;
+    }
+
+    public List<Articulo> getArticulos() {
+        if (articulos == null) {
+            articulos = new ArrayList<Articulo>();
+        }
+        return articulos;
+    }
+
+    public void setArticulos(List<Articulo> articulos) {
+        this.articulos = articulos;
+    }
+
+    public List<Articulo> getArticulosFiltrados() {
+        return articulosFiltrados;
+    }
+
+    public void setArticulosFiltrados(List<Articulo> articulosFiltrados) {
+        this.articulosFiltrados = articulosFiltrados;
+    }
+
     public static FacturaController getInstance() {
         ELContext context = FacesContext.getCurrentInstance().getELContext();
         ValueExpression ex = FacesContext.getCurrentInstance().getApplication().getExpressionFactory().
                 createValueExpression(context, "#{facturaController}", FacturaController.class);
         return (FacturaController) ex.getValue(context);
+    }
+    public String getVTotal(DetalleFactura detalle){
+        return Formato(detalle.getDefaCantidad()*detalle.getDefaPrecioVenta());
     }
 
 }

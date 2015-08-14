@@ -1,17 +1,126 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../../template/mainTemplate.xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:b="http://bootsfaces.net/ui">
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="content">
-        <b:panel look="primary" title="Página Principal" style="margin: 0px auto !important;">
-            <h:form id="frmFactura">
-                <ui:include src="verFactura.xhtml"/>
-            </h:form>
-        </b:panel>
+        <h:outputScript library="js"  name="events.js"/>
+        <h:form id="frmPrincipal">
+            <div class="Container100">
+                <div class="ContainerIndent">
+                    <div class="Card ShadowEffect">
+                        <p:growl id="messages" showDetail="false"/>
+                        <p:panel header="Datos de la Factura" id="pnlDatosFact">
+                            <p:panelGrid columns="2" layout="grid"  style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="Número:"/>
+                                    <p:inputText tabindex="1" value="#{verFacturaController.factura.factNumero}" styleClass="Wid90" id="txtNumero" readonly="true"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value=""/>
+                                    <p:inputText value="#{verFacturaController.formateaFecha(verFacturaController.factura.factFecha)}" styleClass="Wid90" readonly="true"/> 
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="CI/RUC:"/>
+                                    <p:inputText styleClass="Wid90" value="#{verFacturaController.factura.clieId.persCedula}" id="txtCedula" readonly="true"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="Cliente: "/>
+                                    <p:inputText  styleClass="Wid90" value="#{verFacturaController.factura.clieId.persNombres} #{verFacturaController.factura.clieId.persApellidos}" readonly="true" id="txtCliente"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="Dirección: "/>
+                                    <p:inputText styleClass="Wid90" value="#{verFacturaController.factura.clieId.persDireccion}" readonly="true" id="txtDireccion"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="Teléfono:"/>
+                                    <p:inputText styleClass="Wid90" value="#{verFacturaController.factura.clieId.persTelefono}" readonly="true" id="txtTelefono"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="N.Guía:"/>
+                                    <p:inputText styleClass="Wid90" value="#{verFacturaController.guia}" readonly="true" id="txtGuia"/>
+                                </h:panelGrid>
+                                <h:outputText value=""/>
+
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="pnlProducto" header="Detalle de la Factura">
+                            <p:dataTable styleClass=""  style="width: 100%" var="item" value="#{verFacturaController.factura.detalleFacturaList}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" widgetVar="tablaItems">               
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle de La Factura"/>
+                                </f:facet>           
+                                <p:column headerText="COD" priority="1" style="width: 10%">
+                                    <h:outputText value="#{item.artiId.artiCodigo}"/>
+                                </p:column>
+                                <p:column headerText="CANT" priority="1" style="width: 10%">
+                                    <h:outputText value="#{item.defaCantidad}"/>
+                                </p:column>
+                                <p:column headerText="DESCRIPCION" priority="1" style="width:34%">
+                                    <h:outputText value="#{item.artiId.artiDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="P.Venta" priority="1" style="width: 10%">
+                                    <h:outputText value="#{verFacturaController.Formato(item.defaPrecioVenta)}"/>
+                                </p:column>
+                                <p:column headerText="V. Total" priority="1" style="width: 10%">
+                                    <h:outputText value="#{verFacturaController.Formato(item.defaPrecioVenta*item.defaCantidad)}"/>
+                                </p:column>
+                                
+                                <p:column headerText="Observaciones" priority="2" style="width: 30%" >
+                                    <h:outputText value="#{item.defaObservaciones}"/>
+                                </p:column>
+                            </p:dataTable> 
+                            <p:outputPanel id="pnlResultados" style="width: 100%;">
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent">
+
+                                    </div>
+                                </div>
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent TexAlRight">
+                                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
+                                            <h:outputText value="Subtotal:"/>
+                                            <p:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalConIva + verFacturaController.factura.factSubtotalSinIva)}" id="txtSubtotal" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="Subtotal Iva 0%: "/>
+                                            <p:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalSinIva)}"  id="txtSubtotalSinIva" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="Subtotal Con 12%: "/>
+                                            <p:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factSubtotalConIva)}" id="txtSubtotalConIva" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="Descuento(%): "/>
+                                            <p:inputText value="#{verFacturaController.factura.factDescuento}" id="txtDescuento" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="IVA: "/>
+                                            <p:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factIva)}" id="txtIva" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="TOTAL: "/>
+                                            <p:inputText value="#{verFacturaController.Formato(verFacturaController.factura.factTotal)}" id="txtTotal" readonly="true" styleClass="Wid90"/>
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent">
+
+                                    </div>
+                                </div>
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent TexAlRight">
+                                        <p:commandButton rendered="#{verFacturaController.puedeAnular}" action="#{verFacturaController.anular()}" update="messages pnlResultados" value="Anular Factura">
+                                            <p:confirm  header="Anular Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                        <p:commandButton value="Salir" action="#{verFacturaController.salir()}"/>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:panel>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
     </ui:define>
+
 </ui:composition>

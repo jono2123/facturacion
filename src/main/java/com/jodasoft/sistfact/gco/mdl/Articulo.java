@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
 import static javax.persistence.ParameterMode.IN;
@@ -33,15 +34,28 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author javila
  */
-@NamedStoredProcedureQuery(
-    name = "findArticuloPrecio",
-    resultClasses = Articulo.class,
-    procedureName = "articulo_precios",
-    parameters = {
-        @StoredProcedureParameter(mode=IN, name="tipo_id", type=Integer.class),
-        @StoredProcedureParameter(mode=IN, name="almaid", type=Integer.class)       
-    }
-)
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "findArticuloPrecio",
+            resultClasses = Articulo.class,
+            procedureName = "articulo_precios",
+            parameters = {
+                @StoredProcedureParameter(mode = IN, name = "tipo_id", type = Integer.class),
+                @StoredProcedureParameter(mode = IN, name = "almaid", type = Integer.class)
+            }
+    ),
+    @NamedStoredProcedureQuery(
+            name = "findArticuloPrecioTipo",
+            resultClasses = Articulo.class,
+            procedureName = "articulo_precios_tipo",
+            parameters = {
+                @StoredProcedureParameter(mode = IN, name = "tipo_id", type = Integer.class),
+                @StoredProcedureParameter(mode = IN, name = "almaid", type = Integer.class),
+                @StoredProcedureParameter(mode = IN, name = "tipoar_id", type = Integer.class)
+            }
+    )
+})
+
 @Entity
 @Table(catalog = "dbfacturacion", schema = "public", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"arti_codigo", "alma_id"})})
@@ -56,9 +70,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Articulo.findByArtiDescripcion", query = "SELECT a FROM Articulo a WHERE a.artiDescripcion = :artiDescripcion"),
     @NamedQuery(name = "Articulo.findByArtiInfoAdicional", query = "SELECT a FROM Articulo a WHERE a.artiInfoAdicional = :artiInfoAdicional"),
     @NamedQuery(name = "Articulo.findByAlmaIdAndArtiEstado", query = "SELECT a FROM Articulo a WHERE a.almaId = :almaId and a.artEstado = :estado order by a.artiDescripcion"),
+    @NamedQuery(name = "Articulo.findByTiarIdAndArtiEstado", query = "SELECT a FROM Articulo a WHERE a.tiarId = :tiarId and a.artEstado = :estado order by a.artiDescripcion"),
     @NamedQuery(name = "Articulo.findByArtiCodigoAlmaIdAndArtiEstado", query = "SELECT a FROM Articulo a WHERE a.artiCodigo = :artiCodigo and a.almaId = :almaId and a.artEstado = :estado"),
     @NamedQuery(name = "Articulo.findByArtEstado", query = "SELECT a FROM Articulo a WHERE a.artEstado = :artEstado")})
+
 public class Articulo implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,7 +109,6 @@ public class Articulo implements Serializable {
     @JoinColumn(name = "tiar_id", referencedColumnName = "tiar_id")
     @ManyToOne
     private TipoArticulo tiarId;
-    
 
     public Articulo() {
     }
@@ -165,8 +181,6 @@ public class Articulo implements Serializable {
         this.artEstado = artEstado;
     }
 
-    
-
     public Almacen getAlmaId() {
         return almaId;
     }
@@ -215,5 +229,5 @@ public class Articulo implements Serializable {
     public String toString() {
         return "com.jodasoft.sistfact.gco.mdl.Articulo[ artiId=" + artiId + " ]";
     }
-    
+
 }

@@ -8,6 +8,7 @@ package com.jodasoft.sistfact.gco.dao;
 import com.jodasoft.sistfact.gco.mdl.Almacen;
 import com.jodasoft.sistfact.gco.mdl.Articulo;
 import com.jodasoft.sistfact.gco.mdl.PrecioVenta;
+import com.jodasoft.sistfact.gco.mdl.TipoArticulo;
 import com.jodasoft.sistfact.gco.mdl.TipoCliente;
 import com.jodasoft.sistfact.gco.util.ValidarAtributoUtil;
 import com.jodasoft.sistfact.gco.util.exp.ArticuloValidadorException;
@@ -59,6 +60,15 @@ public class ArticuloFacade extends AbstractFacade<Articulo> {
         parameters.put("tipo_id", tipoId.getTiclId().intValue());
         parameters.put("almaid", almaId.getAlmaId().intValue());   
         articulos = findAllResultsFunction("findArticuloPrecio", parameters);
+        return articulos;
+    }
+    public List<Articulo> listar(Almacen almaId, TipoCliente tipoId, TipoArticulo tiarId) {
+        List<Articulo> articulos = new ArrayList<Articulo>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("tipo_id", tipoId.getTiclId().intValue());
+        parameters.put("almaid", almaId.getAlmaId().intValue());
+         parameters.put("tipoar_id", tiarId.getTiarId().intValue());
+        articulos = findAllResultsFunction("findArticuloPrecioTipo", parameters);
         return articulos;
     }
 
@@ -134,5 +144,15 @@ public class ArticuloFacade extends AbstractFacade<Articulo> {
         parameters.put("estado", true);
         articulo = super.findOneResult("Articulo.findByArtiCodigoAlmaIdAndArtiEstado", parameters);
         return articulo;
+    }
+    
+    //Articulo.findByTiarIdAndArtiEstado
+    public List<Articulo> findByTiarIdAndArtiEstado(TipoArticulo tiarId, boolean estado){
+    List<Articulo> articulos = new ArrayList<Articulo>();
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("tiarId", tiarId);
+        parameters.put("estado", estado);
+        articulos = findAllResults("Articulo.findByTiarIdAndArtiEstado", parameters);
+        return articulos;
     }
 }

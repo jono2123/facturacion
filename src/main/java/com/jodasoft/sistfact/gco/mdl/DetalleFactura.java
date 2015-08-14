@@ -84,6 +84,7 @@ public class DetalleFactura implements Serializable {
     }
 
     public Double getDefaPrecioVenta() {
+        
         return defaPrecioVenta;
     }
 

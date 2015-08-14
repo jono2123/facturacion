@@ -60,7 +60,7 @@
                                         <p:inputText tabindex="4" styleClass="Wid90" placeholder="Dirección" value="#{clienteController.direccion}"/>
                                         <p:inputText tabindex="5" styleClass="Wid90" placeholder="Telefono" value="#{clienteController.telefono}"/>
                                         <p:inputText tabindex="6" styleClass="Wid90" placeholder="E-Mail" value="#{clienteController.mail}"/>
-                                        <p:calendar  tabindex="7" styleClass="Wid90" placeholder="Fecha de Nacimiento" navigator="true" value="#{clienteController.fechaNacimiento}" yearRange="c-70:c"/>
+                                        <p:calendar  tabindex="7" styleClass="Wid90" placeholder="Fecha de Nacimiento" readonlyInput="true" navigator="true" value="#{clienteController.fechaNacimiento}" yearRange="c-70:c"/>
 
                                         <p:selectOneMenu style="width: 80%" tabindex="8" value="#{clienteController.tipo}" id="cboTipoCliente">
                                             <f:selectItems value="#{clienteController.tipos}" var="tipo" itemLabel="#{tipo.ticlDescripcion}" itemValue="#{tipo.ticlId}"/>

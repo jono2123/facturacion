@@ -36,7 +36,11 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
     private List<Factura> facturasFiltradas;
     private List<ItemVendido> items;
     private List<ItemVendido> itemsFiltrados;
+    private List<Factura> facturasCedula;
+    private List<Factura> facturasCedulaFiltradas;
     private double total = 0;
+    private double totalCedula = 0;
+    
     private Date desde;
     private Date hasta;
     private Date desdeItem;
@@ -60,6 +64,24 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
     private com.jodasoft.sistfact.gco.dao.AmacenTransaccionFacade transaccionFacade;
 
     public ReporteVentasController() {
+    }
+
+    public List<Factura> getFacturasCedula() {
+        if(facturasCedula==null)
+            facturasCedula= new ArrayList<Factura>();
+        return facturasCedula;
+    }
+
+    public void setFacturasCedula(List<Factura> facturasCedula) {
+        this.facturasCedula = facturasCedula;
+    }
+
+    public List<Factura> getFacturasCedulaFiltradas() {
+        return facturasCedulaFiltradas;
+    }
+
+    public void setFacturasCedulaFiltradas(List<Factura> facturasCedulaFiltradas) {
+        this.facturasCedulaFiltradas = facturasCedulaFiltradas;
     }
 
     public List<Factura> getFacturas() {
@@ -152,11 +174,19 @@ public class ReporteVentasController extends AbstractMB implements Serializable 
     }
 
     public void buscarPorCedula() {
-        facturas = facturaFacade.findByPersCedulaAndAlmaIdandFactEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), estadoFacturaCliente, cedula);
-        total = 0;
-        for (Factura factura : getFacturas()) {
-            total = total + factura.getFactTotal();
+        facturasCedula = facturaFacade.findByPersCedulaAndAlmaIdandFactEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), estadoFacturaCliente, cedula);
+        totalCedula = 0;
+        for (Factura factura : getFacturasCedula()) {
+            totalCedula = totalCedula + factura.getFactTotal();
         }
+    }
+
+    public double getTotalCedula() {
+        return totalCedula;
+    }
+
+    public void setTotalCedula(double totalCedula) {
+        this.totalCedula = totalCedula;
     }
 
     public void buscarItemsPorFecha() {

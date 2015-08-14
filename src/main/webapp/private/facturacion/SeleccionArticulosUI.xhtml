@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="frmTipos">
+            <p:growl id="messages"/>
+            <div class="Container100">
+                <div class="ContainerIndent">
+                    <div class="Card ShadowEffect">
+                        <p:panelGrid columns="1" layout="grid" id="pnlPrincipal">
+                            <p:dataGrid rendered="#{!seleccionProductosController.hoja}" id="dtgTipos" layout="grid" var="tipo" value="#{seleccionProductosController.tipos}" columns="5">
+                                <f:facet name="header">
+                                    <p:commandButton icon="fa fa-arrow-left" styleClass="BlueTextButton RaisedButton" rendered="#{seleccionProductosController.nivel!=0}" action="#{seleccionProductosController.regresar()}" update="dtgTipos @form:pnlPrincipal"/>
+                                    <h:outputText value="#{seleccionProductosController.titulo}"/>
+
+                                </f:facet>
+
+
+                                <h:panelGrid columns="2">
+                                    <p:commandButton style="width: 100%;" styleClass="BlueTextButton RaisedButton" value="#{tipo.tiarNombre}" action="#{seleccionProductosController.ingresaTipo(tipo)}" update="dtgTipos @form:pnlPrincipal"/>
+                                </h:panelGrid>
+
+                            </p:dataGrid>
+                            <p:dataGrid rendered="#{seleccionProductosController.hoja}" id="dtgArticulos" layout="grid" var="articulo" value="#{seleccionProductosController.detalles}" columns="5">
+                                <f:facet name="header">
+                                    <p:commandButton icon="fa fa-arrow-left" styleClass="BlueTextButton RaisedButton" action="#{seleccionProductosController.regresar()}" update="@form:pnlPrincipal"/>
+                                    <h:outputText value="Selección de Artículos"/>
+                                </f:facet>
+                                <p:panel header="#{articulo.artiId.artiCodigo}" id="pnlArticulo">
+                                    <h:panelGrid columns="1">
+                                        <h:outputText value="#{articulo.artiId.artiDescripcion}"/>
+                                        <h:panelGrid columns="2">
+                                            <h:outputText value="P.Venta:" style="font-weight: bolder"/>
+                                            <h:panelGrid columns="3" styleClass="TexAlRight">
+                                                <h:outputText value="#{seleccionProductosController.Formato(articulo.defaPrecioVenta)}" id="lblPrecioVenta"/> 
+                                                <p:commandButton icon="fa fa-plus" styleClass="BlueTextButton RaisedButton" action="#{seleccionProductosController.addPrecioVenta(articulo)}" update="lblPrecioVenta"/>
+                                                <p:commandButton icon="fa fa-minus" styleClass="BlueTextButton RaisedButton" action="#{seleccionProductosController.minPrecioVenta(articulo)}" update="lblPrecioVenta"/>
+                                            </h:panelGrid>  
+                                            
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputText value="Cantidad:" style="font-weight: bolder"/>
+                                            <h:panelGrid columns="3" styleClass="TexAlRight">
+                                                <h:outputText value="#{articulo.defaCantidad}" id="lblCantidad"/>
+                                                <p:commandButton icon="fa fa-plus" styleClass="BlueTextButton RaisedButton" action="#{seleccionProductosController.addCantidad(articulo)}" update="lblCantidad"/>
+                                                <p:commandButton icon="fa fa-minus" styleClass="BlueTextButton RaisedButton" action="#{seleccionProductosController.minCantidad(articulo)}" update="lblCantidad"/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                        <p:commandButton icon="fa fa-shopping-cart" update="@form:messages @form:pnlAgregados pnlArticulo" action="#{seleccionProductosController.agregar(articulo)}"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </p:dataGrid>
+
+
+                        </p:panelGrid>
+                        <div class="Container50 Responsive100">
+                            <div class="ContainerIndent">
+                                <h:panelGrid columns="3" id="pnlAgregados" style="width: 100%">
+                                    <h:outputText value="Agregados:"/>
+                                    <p:inputText style="width: 40px;" readonly="true" value="#{seleccionProductosController.agregados}"/>
+                                    <p:commandButton value="Volver a la Factura" action="FacturaUI?faces-redirect=true"/>                               
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

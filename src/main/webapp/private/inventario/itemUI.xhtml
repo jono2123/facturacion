@@ -114,7 +114,7 @@
                                                         <h:outputText value="#{articuloController.titulo}"/>
                                                     </f:facet>
                                                    
-                                                    <p:commandButton  styleClass="#{articuloController.tipoArticulo!=tipo.tiarId.intValue()?'BlueTextButton':'GreenButton RaisedButton'}" value="#{tipo.tiarNombre}" action="#{articuloController.ingresaTipo(tipo)}" update="dtgTipos @form:acordion:tab2:pnlPrecioYTipo"/>
+                                                    <p:commandButton  styleClass="#{articuloController.tipoArticulo!=tipo.tiarId.intValue()?'BlueTextButton':'GreenButton RaisedButton'}" style="width: 100%;" value="#{tipo.tiarNombre}" action="#{articuloController.ingresaTipo(tipo)}" update="dtgTipos @form:acordion:tab2:pnlPrecioYTipo"/>
 
                                                     <f:selectItem itemLabel="#{tipo.tiarNombre}" itemValue="#{tipo.tiarId}"/> 
                                                 </p:dataGrid>
