@@ -6,6 +6,7 @@
 package com.jodasoft.sistfact.gco.ctr;
 
 import com.jodasoft.sistfact.gco.mdl.AlmacenModulo;
+import com.jodasoft.sistfact.gco.mdl.Cliente;
 import com.jodasoft.sistfact.gco.mdl.Modulo;
 import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Rol;
@@ -18,16 +19,17 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ValueChangeEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author johnny
  */
-//@Named(value = "permisosController")
+@Named(value = "permisosController")
 //@SessionScoped
-@ManagedBean(name = "permisosController")
-@ViewScoped
+//@ManagedBean(name = "permisosController")
+@SessionScoped
 public class PermisosController extends AbstractMB implements Serializable {
 
     /**
@@ -43,7 +45,7 @@ public class PermisosController extends AbstractMB implements Serializable {
     private com.jodasoft.sistfact.gco.dao.VentanaFacade ventanaFacade;
     @EJB
     private com.jodasoft.sistfact.gco.dao.PermisoFacade permisoFacade;
-    
+
     private Rol rol;
     private List<Rol> roles;
     private List<AlmacenModulo> modulos;
@@ -53,35 +55,33 @@ public class PermisosController extends AbstractMB implements Serializable {
     private Modulo modulo;
     private Ventana ventana;
     private int idMod;
+    private int idRol;
     private int idVent;
     private boolean crear;
     private boolean modificar;
     private boolean eliminar;
     private boolean consultar;
-    
-    
-    
-    
+    private int activeIndex;
+
     public PermisosController() {
+        this.activeIndex = 0;
+
     }
 ///////////////////////////////agregar permiso////////////////////////////////
-    
-    public void agregar(){
+
+    public void agregar() {
         ventana = ventanaFacade.find(idVent);
-        if(rol==null || rol.getRolId()==null )
-        {
+        if (this.rol == null || this.rol.getRolId() == null) {
             displayErrorMessageToUser("Por favor seleccione un rol");
-                return;
+            return;
         }
-        if(ventana==null)
-        {
+        if (ventana == null) {
             displayErrorMessageToUser("Por favor seleccione un proceso");
-                return;
+            return;
         }
         permiso = new Permiso();
-        for(Permiso permi: permisos){
-            if(permi.getVentId().getVentId().intValue()==ventana.getVentId().intValue())
-            {
+        for (Permiso permi : permisos) {
+            if (permi.getVentId().getVentId().intValue() == ventana.getVentId().intValue()) {
                 displayErrorMessageToUser("Ya se han agregado permisos sobre esta ventana");
                 return;
             }
@@ -96,62 +96,97 @@ public class PermisosController extends AbstractMB implements Serializable {
         permisos.add(permiso);
         limpiarTodo();
     }
-    
-    public void limpiarTodo(){
-        idMod=0;
-        modulo=new Modulo();
-        idVent=0;
-        ventanas= new ArrayList<Ventana>();
-        crear=false;
-        consultar=false;
-        eliminar=false;
-        modificar=false;
+
+   
+     public void agregar2() {
+        ventana = ventanaFacade.find(idVent);
+        if (this.rol == null || this.rol.getRolId() == null) {
+            displayErrorMessageToUser("Por favor seleccione un rol");
+            return;
+        }
+        if (ventana == null) {
+            displayErrorMessageToUser("Por favor seleccione un proceso");
+            return;
+        }
+        permiso = new Permiso();
+        for (Permiso permi : permisos) {
+            if (permi.getVentId().getVentId().intValue() == ventana.getVentId().intValue()) {
+                displayErrorMessageToUser("Ya se han agregado permisos sobre esta ventana");
+                return;
+            }
+        }
+        permiso.setPermConsultar(consultar);
+        permiso.setPermCrear(crear);
+        permiso.setPermEliminar(eliminar);
+        permiso.setPermModificar(modificar);
+        permiso.setRolId(rol);
+        permiso.setVentId(ventana);
+        permisoFacade.create(permiso);
+        permisos.add(permiso);
+        limpiarTodo();
     }
-    
-    public void borrarPermiso(Permiso perm){
-        permiso=perm;
+public void limpiarTodo() {
+        idMod = 0;
+        modulo = new Modulo();
+        idVent = 0;
+        ventanas = new ArrayList<Ventana>();
+        crear = false;
+        consultar = false;
+        eliminar = false;
+        modificar = false;
+        activeIndex=1;
+        idRol=0;
+    }
+
+    public void borrarPermiso(Permiso perm) {
+        permiso = perm;
         permisos.remove(permiso);
         permisoFacade.remove(permiso);
-        
+
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         permisos = permisoFacade.findByRol(rol);
-        
+
     }
-    
+
     public Rol getRol() {
-        if(rol==null)
+        if (rol == null) {
             rol = new Rol();
+        }
         return rol;
     }
-    
-    public void cambiaPermiso(Permiso perm, int numPerm){
-        permiso=perm;
-        switch(numPerm){
-            case 1: 
-                if(permiso.getPermCrear())
+
+    public void cambiaPermiso(Permiso perm, int numPerm) {
+        permiso = perm;
+        switch (numPerm) {
+            case 1:
+                if (permiso.getPermCrear()) {
                     permiso.setPermCrear(false);
-                else
+                } else {
                     permiso.setPermCrear(true);
+                }
                 break;
             case 2:
-                if(permiso.getPermModificar())
+                if (permiso.getPermModificar()) {
                     permiso.setPermModificar(false);
-                else
+                } else {
                     permiso.setPermModificar(true);
+                }
                 break;
             case 3:
-                if(permiso.getPermEliminar())
+                if (permiso.getPermEliminar()) {
                     permiso.setPermEliminar(false);
-                else
+                } else {
                     permiso.setPermEliminar(true);
+                }
                 break;
             case 4:
-                if(permiso.getPermConsultar())
+                if (permiso.getPermConsultar()) {
                     permiso.setPermConsultar(false);
-                else
+                } else {
                     permiso.setPermConsultar(true);
+                }
                 break;
         }
         permisoFacade.edit(permiso);
@@ -162,8 +197,9 @@ public class PermisosController extends AbstractMB implements Serializable {
     }
 
     public List<Rol> getRoles() {
-        if(roles==null)
+        if (roles == null) {
             roles = rolFacade.findByAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        }
         return roles;
     }
 
@@ -172,8 +208,9 @@ public class PermisosController extends AbstractMB implements Serializable {
     }
 
     public List<AlmacenModulo> getModulos() {
-        if(modulos==null)
-            modulos=almoFacade.findByAlmaID(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        if (modulos == null) {
+            modulos = almoFacade.findByAlmaID(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        }
         return modulos;
     }
 
@@ -214,27 +251,68 @@ public class PermisosController extends AbstractMB implements Serializable {
     }
 
     public List<Ventana> getVentanas() {
-        if(ventanas==null)
+        if (ventanas == null) {
             ventanas = new ArrayList<Ventana>();
+        }
         return ventanas;
+    }
+
+    public int getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(int idRol) {
+        this.idRol = idRol;
+    }
+
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
     }
 
     public void setVentanas(List<Ventana> ventanas) {
         this.ventanas = ventanas;
     }
-    
-    
-    public void onModuloChange(){
-        if(idMod!=0)
-        {
-            modulo=moduloFacade.find(idMod);
-            if(modulo!=null)
-            {
-                ventanas=ventanaFacade.findByModuId(modulo);
+
+    public void PresetGroupChangeEvent(ValueChangeEvent event) {
+        if (event.getNewValue() != null) {
+            int aux = (int) event.getNewValue();
+            for (Rol rolAux : roles) {
+                if (rolAux.getRolId() == aux) {
+                    this.rol = rolAux;
+                    break;
+                }
             }
-        }else{
+
+            permisos = permisoFacade.findByRol(rol);
+
+        }
+
+    }
+
+    public void onModuloChange() {
+        if (idMod != 0) {
+            modulo = moduloFacade.find(idMod);
+            if (modulo != null) {
+                ventanas = ventanaFacade.findByModuId(modulo);
+            }
+        } else {
             ventanas = new ArrayList<Ventana>();
         }
+    }
+
+    public void onRolChange() {
+        for (Rol Aux : roles) {
+            if (Aux.getRolId() == idRol) {
+                this.rol = Aux;
+                break;
+            }
+        }
+        permisos = permisoFacade.findByRol(rol);
+
     }
 
     public boolean getCrear() {
@@ -270,16 +348,25 @@ public class PermisosController extends AbstractMB implements Serializable {
     }
 
     public List<Permiso> getPermisos() {
-        if(permisos==null)
+        if (permisos == null) {
             permisos = new ArrayList<Permiso>();
+        }
         return permisos;
     }
 
     public void setPermisos(List<Permiso> permisos) {
         this.permisos = permisos;
     }
-    
-    
-    
-    
+
+    public void nuevoPersmiso() {
+        activeIndex = 1;
+        limpiarTodo();
+    }
+
+    public void editPermiso(Permiso permiso) {
+        this.permiso = permiso;
+        permisos = permisoFacade.findByRol(rol);
+
+    }
+
 }

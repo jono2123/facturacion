@@ -25,7 +25,7 @@ import org.primefaces.event.SelectEvent;
 //@SessionScoped
 @ManagedBean(name = "unidadDeMedidaController")
 @ViewScoped
-public class UnidadDeMedidaController extends AbstractMB implements Serializable{
+public class UnidadDeMedidaController extends AbstractMB implements Serializable {
 
     /**
      * Creates a new instance of UnidadDeMedidaController
@@ -36,12 +36,13 @@ public class UnidadDeMedidaController extends AbstractMB implements Serializable
     private List<UnidadDeMedida> unidades;
     private UnidadDeMedida unidad;
     private Permiso permiso;
+    private int activeIndex;
 
     public UnidadDeMedidaController() {
+        activeIndex = 0;
     }
 
     //////////////////////////funciones//////////////////////////
-
     public void reiniciaUmed() {
         unidad = new UnidadDeMedida();
     }
@@ -88,7 +89,8 @@ public class UnidadDeMedidaController extends AbstractMB implements Serializable
         }
     }
 
-    public void deleteUmed() {
+    public void deleteUmed(UnidadDeMedida unidadMedida) {
+        this.unidad = unidadMedida;
         umedFacade.delete(unidad);
         unidades.remove(unidad);
         closeDialog();
@@ -125,14 +127,62 @@ public class UnidadDeMedidaController extends AbstractMB implements Serializable
         this.unidad = unidad;
     }
 
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
+    }
+
     public Permiso getPermiso() {
-        if(permiso==null)
-            permiso=LoginController.getInstance().getPermiso("Unidades de Medida");
+        if (permiso == null) {
+            permiso = LoginController.getInstance().getPermiso("Unidades de Medida");
+        }
         return permiso;
     }
 
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
+    }
+
+    public void nuevoUnidadMedida() {
+        activeIndex = 1;
+        vaciaTextos();
+    }
+
+    public void editarUnidad(UnidadDeMedida unidadMedida) {
+        this.unidad = unidadMedida;
+        setNombre(unidad.getUmedNombre());
+        activeIndex = 1;
+
+    }
+
+    public void guardar() {
+        permiso = LoginController.getInstance().getPermiso("Unidades de Medida");
+
+        if (unidad == null) {
+            unidad = new UnidadDeMedida();
+        }
+        if (unidad.getUmedId() == null) {
+
+            if (permiso.getPermCrear()) {
+                saveUmed();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        } else {
+            if (permiso.getPermModificar()) {
+                updateUmed();
+            } else {
+                displayErrorMessageToUser("No tiene permiso para realizar esta acción");
+                return;
+            }
+
+        }
+        activeIndex = 0;
     }
 
 }

@@ -57,12 +57,10 @@ public class RolController extends AbstractMB implements Serializable {
         rol.setRolEstado(true);
         rol.setRolNombre(nombre);
         try {
+
             rolFacade.save(rol);
             displayInfoMessageToUser("Rol creado correctamente");
-
             roles = rolFacade.findByAlmaId(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
-
-            roles.add(rol);
             rol = new Rol();
             setNombre("");
         } catch (RolValidadorException ex) {

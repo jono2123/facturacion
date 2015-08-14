@@ -1,84 +1,39 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../../template/mainTemplate.xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:b="http://bootsfaces.net/ui">
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="content">
-        <b:panel look="primary" title="Administración de Permisos" style="vertical-align: central; margin: 0px auto !important;" >
-            <h:form id="pnlDatos">
-                <p:growl id="messages"/>
-                <b:container id="pnlDatos" style="width: 60%; margin: 0px auto;">
-                    <b:row>
-                        <b:column col-md="1" col-sm="1" col-xs="12">
-                            <h:outputText value="Rol: "/>
-                        </b:column>
-                        <b:column col-md="9" col-sm="9" col-xs="8">
-                            <b:inputText value="#{permisosController.rol.rolNombre}" id="Rol"/>
-                        </b:column> 
-                        <b:column col-md="2" col-sm="2" col-xs="4">
-                            <p:commandButton value="Seleccionar" onclick="PF('dlgRoles').show();" id="cmdSeleccionar" styleClass="botonesMantenimientos btn-danger btn-lg"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column col-md="1" col-sm="1" col-xs="12">
-                            <h:outputText value="Módulo: "/>
-                        </b:column>
-                        <b:column col-md="5" col-sm="5" col-xs="12">
-                            <p:selectOneMenu styleClass="form-control" style="width: 100%;" value="#{permisosController.idMod}" id="cboModulo">
-                                <p:ajax listener="#{permisosController.onModuloChange()}" update="cboProceso"/>
-                                <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
-                                <f:selectItems  var="modulo" value="#{permisosController.modulos}" itemLabel="#{modulo.moduId.moduNombre}" itemValue="#{modulo.moduId.moduId}"/>
+        <h:form>
+            <p:growl id="messages" showDetail="false"/>  
+            <p:accordionPanel multiple="false" id="acordion" activeIndex="#{permisosController.activeIndex}">
+                <p:tab id="tab1" closable="false" title="Permisos">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <p:panelGrid  columns="3" layout="grid" style="border:0px !important; background:none; width: 100%;vertical-align: middle !important" styleClass="FormContent">
+                                <p:outputLabel value="Seleccione un Rol: " />
 
-                            </p:selectOneMenu>
-                        </b:column>
-                        <b:column col-md="1" col-sm="1" col-xs="12">
-                            <h:outputText value="Proceso: "/>
-                        </b:column>
-                        <b:column col-md="5" col-sm="5" col-xs="12">
-                            <b:selectOneMenu value="#{permisosController.idVent}" id="cboProceso">
-                                <f:selectItems value="#{permisosController.ventanas}" var="ventana" itemValue="#{ventana.ventId}" itemLabel="#{ventana.ventNombre}"/>
-                            </b:selectOneMenu>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column col-md="1" col-sm="1" col-xs="12">
-                            <h:outputText value="Permisos: "/>
-                        </b:column>
-                        <b:column col-md="2" col-sm="2" col-xs="8">
-                            <b:selectBooleanCheckbox value="#{permisosController.crear}" caption="Crear"/>
-                        </b:column>
-                        <b:column col-md="2" col-sm="2" col-xs="8">
-                            <b:selectBooleanCheckbox value="#{permisosController.modificar}" caption="Modificar"/>
-                        </b:column>
-                        <b:column col-md="2" col-sm="2" col-xs="8">
-                            <b:selectBooleanCheckbox value="#{permisosController.eliminar}" caption="Eliminar"/>
-                        </b:column>
-                        <b:column col-md="2" col-sm="2" col-xs="8">
-                            <b:selectBooleanCheckbox value="#{permisosController.consultar}" caption="Consultar"/>
-                        </b:column>
-                        <b:column col-md="1" col-sm="1" col-xs="12">
-                            <h:outputText value=""/>
-                        </b:column>
-                        <b:column col-md="1" col-sm="1" col-xs="4">
-                            <p:commandButton value="Agregar" id="cmdAgregar" action="#{permisosController.agregar()}" update="pnlDatos tblPermisos messages" styleClass="botonesMantenimientos btn-danger btn-lg"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column col-md="12" col-sm="12" col-xs="12">
+                                <p:selectOneMenu  value="#{permisosController.idRol}" style="right: 50%;bottom:  20%" >
 
-                            <p:dataTable  id="tblPermisos" value="#{permisosController.permisos}" var="permiso">
-                                <f:facet name="header">
-                                    <h:outputText value="Permisos"/>
-                                </f:facet>
+                                    <p:ajax listener="#{permisosController.onRolChange()}" update="@form:acordion:tab1:tblPermisos"/>
+                                    <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+                                    <f:selectItems  var="role" value="#{permisosController.roles}" itemLabel="#{role.rolNombre}" itemValue="#{role.rolId}"/>
+
+
+                                </p:selectOneMenu>
+                                <p:commandButton icon="fa fa-plus" title="Nuevo Permiso"  value="Nuevo Permiso" action="#{permisosController.nuevoPersmiso()}"  update="@form:acordion @form:acordion:tab1:tblPermisos" style="left: 60%"/>
+                            </p:panelGrid>
+
+                            <p:dataTable  styleClass="" style="width: 100%" id="tblPermisos" value="#{permisosController.permisos}" var="permiso">
+                                <p:ajax event="rowSelect"  update="@form:acordion:tab2:pnlDatos" listener="#{permisosController.onRowSelect}"/>
 
                                 <p:column headerText="Ventana">
                                     <h:outputText value="#{permiso.ventId.ventNombre}"/>
                                 </p:column>
                                 <p:column headerText="Crear">
-                                    <p:commandLink action="#{permisosController.cambiaPermiso(permiso, 1)}" update="tblPermisos">
+                                    <p:commandLink action="#{permisosController.cambiaPermiso(permiso, 1)}" update="tblPermisos @this">
                                         <p:graphicImage value="#{permiso.permCrear?'../../resources/images/check.png':'../../resources/images/uncheck.png'}" width="32px" />
                                     </p:commandLink>
                                 </p:column>
@@ -102,26 +57,76 @@
                                         <p:graphicImage value="../../resources/images/bin.png"/>
                                     </p:commandLink>
                                 </p:column>
+                              
                             </p:dataTable>
-                        </b:column>
-                    </b:row>
-                </b:container>
-                <p:dialog id="dlgRoles" width="300px" widgetVar="dlgRoles" header="Seleccione un Rol" closable="false" resizable="false">
-                    <p:dataTable styleClass="" style="width: 100%" var="rol" value="#{permisosController.roles}" id="tblRoles"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{rol.rolId}" selection="#{permisosController.rol}" widgetVar="tablaRoles">
-                        <p:ajax event="rowSelect"  update="pnlDatos" listener="#{permisosController.onRowSelect}"/>
-                        <f:facet name="header">
-                            <h:outputText value="Listado"/>
-                        </f:facet>
-                        <p:column   headerText="Nombre de Rol" priority="1" style="width: 100%">
-                            <h:outputText value="#{rol.rolNombre}"  />                                
-                        </p:column>
+
+                        </div>
+                    </div>
+                </p:tab>
 
 
-                    </p:dataTable>
-                    <p:commandButton styleClass="botonesMantenimientos" value="Aceptar" update="pnlDatos" onsuccess="PF('dlgRoles').hide();"/>
-                </p:dialog>
-            </h:form>
-        </b:panel>
+
+                <p:tab title="Informacón de Permisos" id="tab2">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <div class="Card ShadowEffect  ">
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Nuevo Permiso" icon="fa fa-plus" action="#{permisosController.nuevoPersmiso()}" update="pnlDatos"/>
+                                </h:panelGrid>
+                                <p:panelGrid  id="pnlDatos" columns="2" layout="grid" style="border:0px !important; background:none; width: 75%;" styleClass="FormContent" >
+
+                                    <p:outputLabel value="Rol: " id="Rol"/>
+
+                                    <p:selectOneMenu  value="#{permisosController.idRol}" id="roles" >
+
+                                        <p:ajax listener="#{permisosController.onRolChange()}" update="@form:acordion:tab1:tblPermisos"/>
+                                        <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+                                        <f:selectItems  var="role" value="#{permisosController.roles}" itemLabel="#{role.rolNombre}" itemValue="#{role.rolId}"/>
+
+
+                                    </p:selectOneMenu>
+                                    <h:outputText value="Módulo: "/>
+                                    <p:selectOneMenu  value="#{permisosController.idMod}" id="cboModulo">
+                                        <p:ajax listener="#{permisosController.onModuloChange()}" update="cboProceso"/>
+                                        <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+                                        <f:selectItems  var="modulo" value="#{permisosController.modulos}" itemLabel="#{modulo.moduId.moduNombre}" itemValue="#{modulo.moduId.moduId}"/>
+
+                                    </p:selectOneMenu>
+                                    <h:outputText value="Proceso: "/>
+                                    <p:selectOneMenu value="#{permisosController.idVent}" id="cboProceso">
+                                        <f:selectItem itemLabel="Seleccione uno..." itemValue="0"/>
+
+                                        <f:selectItems value="#{permisosController.ventanas}" var="ventana" itemValue="#{ventana.ventId}" itemLabel="#{ventana.ventNombre}"/>
+                                    </p:selectOneMenu>
+
+
+                                    <h:outputText value="Permisos: "/>
+                                    <h:outputText value=" "/>
+                                    <p:selectBooleanCheckbox value="#{permisosController.crear}" label="Crear" itemLabel="Crear" />
+                                    <p:selectBooleanCheckbox value="#{permisosController.modificar}" label="Modificar" itemLabel="Modificar"/>
+                                    <p:selectBooleanCheckbox value="#{permisosController.eliminar}" label="Eliminar" itemLabel="Eliminar"/>
+                                    <p:selectBooleanCheckbox value="#{permisosController.consultar}" label="Consultar" itemLabel="Consultar"/>
+
+
+
+
+
+                                </p:panelGrid>
+                                <p:commandButton value="Agregar" id="cmdAgregar" action="#{permisosController.agregar()}" update="@form:acordion @form:acordion:tab1:tblPermisos @form:messages" style="width: 13%" />
+
+
+                            </div>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:accordionPanel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
     </ui:define>
+
 </ui:composition>
 
