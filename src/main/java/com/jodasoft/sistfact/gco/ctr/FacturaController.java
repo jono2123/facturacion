@@ -28,6 +28,7 @@ import javax.el.ValueExpression;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.swing.JOptionPane;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
@@ -103,6 +104,7 @@ public class FacturaController extends AbstractMB implements Serializable {
     public FacturaController() {
         cliente = new Cliente();
         modificar = false;
+        articulo = new Articulo();
 
     }
     List<Articulo> articulos;
@@ -150,8 +152,9 @@ public class FacturaController extends AbstractMB implements Serializable {
             return "SeleccionArticulosUI.xhtml";
 
         }
-        
+
     }
+
     public void onCellEdit(CellEditEvent event) {
         calcular();
     }
@@ -242,6 +245,9 @@ public class FacturaController extends AbstractMB implements Serializable {
             displayErrorMessageToUser("Primero Seleccione un cliente");
             return;
         }
+        if (articulo != null) {
+            this.codigo = articulo.getArtiCodigo();
+        }
         articulo = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), codigo);
 
         if (articulo == null) {
@@ -271,8 +277,16 @@ public class FacturaController extends AbstractMB implements Serializable {
     ////////////////////////////agregar articulos a la factura////////////////////////////////////////////
     public void agregarItem() {
         if (articulo == null) {
-            displayErrorMessageToUser("No se ha seleccionado ningún producto para agregar");
-            return;
+            if (codigo == null) {
+                displayErrorMessageToUser("No se ha seleccionado ningún producto para agregar");
+                return;
+            } else {
+                articulo = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), codigo);
+                if (articulo == null) {
+                    displayErrorMessageToUser("No se ha seleccionado ningún producto para agregar");
+                    return;
+                }
+            }
         }
         if (cantidad <= 0) {
             displayErrorMessageToUser("Ingrese una cantidad");
@@ -305,6 +319,11 @@ public class FacturaController extends AbstractMB implements Serializable {
         setCantidad(0);
         setPrecio(0);
         setDescripcion("");
+        RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlDatosProducto:panelArticle");
+        RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlDatosProducto:articleDescripcion");
+        RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:tblItems");
+        RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlResultados");
+
     }
 
     public void calcular() {
@@ -776,8 +795,82 @@ public class FacturaController extends AbstractMB implements Serializable {
                 createValueExpression(context, "#{facturaController}", FacturaController.class);
         return (FacturaController) ex.getValue(context);
     }
-    public String getVTotal(DetalleFactura detalle){
-        return Formato(detalle.getDefaCantidad()*detalle.getDefaPrecioVenta());
+
+    public String getVTotal(DetalleFactura detalle) {
+        return Formato(detalle.getDefaCantidad() * detalle.getDefaPrecioVenta());
+    }
+
+    /**
+     * Method to add products to invoice barcode
+     *
+     * @author Freddy Sumba
+     */
+    public void agregarPorCodigoBarras() {
+        if (articulo != null) {
+            try {
+                //articulo = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), articulo.);
+            } catch (Exception w) {
+            }
+            if (articulo != null) {
+                this.codigo = articulo.getArtiCodigo();
+                buscaArticuloPorCodigo();
+                agregarItem();
+
+            }
+        }
+    }
+
+    /**
+     * Method that asign an article or returns a list of articles according to the entry in the field of the invoice item
+     *
+     * @author Freddy Sumba
+     */
+    public List<Articulo> completeArticle(String query) {
+
+        List<Articulo> filteredArticles = new ArrayList<Articulo>();
+        Articulo aux = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), query);
+        if (aux == null) {
+            List<Articulo> allArticles = articuloFacade.findAll();
+
+            for (int i = 0; i < allArticles.size(); i++) {
+                Articulo skin = allArticles.get(i);
+                if (skin.getArtiDescripcion().toLowerCase().contains(query)) {
+                    filteredArticles.add(skin);
+                }
+            }
+            codigo = query;
+        } else {
+            this.codigo = aux.getArtiCodigo();
+            this.articulo = aux;
+            setArticulo(aux);
+            //agregarPorCodigoBarras();
+            this.codigo = articulo.getArtiCodigo();
+            buscaArticuloPorCodigo();
+            RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:articleDescripcion");
+            RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:txtCantidad");
+            RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:txtPrecio");
+            RequestContext.getCurrentInstance().update("frmPrincipal:messages");
+
+        }
+        return filteredArticles;
+    }
+
+    
+    /**
+     * Method assign an article to articulo of a list, after selection in autocomplete input 
+     *
+     * @author Freddy Sumba
+     */
+    public void onItemSelect(SelectEvent event) {
+        if (event != null) {
+            Articulo aux = (Articulo) event.getObject();
+            if (aux != null) {
+                codigo = aux.getArtiCodigo();
+                articulo = aux;
+                buscaArticuloPorCodigo();
+
+            }
+        }
     }
 
 }

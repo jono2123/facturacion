@@ -71,22 +71,30 @@
                                 </p:dataTable>
                             </p:dialog>
                         </h:form>
-                        <h:form id="frmDetalle">
-                            <p:panel id="pnlProducto" header="Detalle de la Factura">
+                        <h:form id="frmDetalle" >
+                            <p:defaultCommand target="buyButton"/>
+                            <p:panel  header="Detalle de la Factura">
                                 <p:panelGrid layout="grid" columns="2" id="pnlDatosProducto" style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
-                                    <h:panelGrid columns="1" styleClass="Wid90">
-                                        <h:outputText value="Codigo:"/>
+                                    <h:panelGrid columns="1" styleClass="Wid90" id="panelProducto">
+                                        <h:outputText value="Item:"/>
                                         <h:panelGrid columns="4" style="width: 100%;" columnClasses="Wid60,Wid10,Wid10,Wid10">
-                                            <p:inputText style="width: 90%;" value="#{facturaController.codigo}" id="txtCodigo"/>
+                                            <p:autoComplete  id="completeArticle" value="#{facturaController.articulo}" completeMethod="#{facturaController.completeArticle}"
+                                                             var="article" itemLabel="#{article.artiDescripcion}" itemValue="#{article}" converter="articleConverter"  >
+
+                                                <p:ajax event="itemSelect" listener="#{facturaController.onItemSelect}" update="pnlDatosProducto" />
+                                                
+
+
+                                            </p:autoComplete>
                                             <p:commandButton icon="fa fa-search" process=":frmPrincipal:frmDetalle" action="#{facturaController.buscaArticuloPorCodigo()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:pnlDatosProducto"/>
                                             <p:commandButton icon="fa fa-indent" process=":frmPrincipal:frmDetalle" action="#{facturaController.cargarArticulos()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:mdlItems"/>
                                             <p:commandButton icon="fa fa-th" process=":frmPrincipal:frmDetalle" action="#{facturaController.abreSeleccion()}" update=":frmPrincipal:messages"/>
                                         </h:panelGrid>
                                     </h:panelGrid>
-                                    <h:panelGrid columns="3" style="width: 100%;" columnClasses="Wid33,Wid33,Wid33">
+                                    <h:panelGrid  id="panelArticle" columns="3" style="width: 100%;" columnClasses="Wid33,Wid33,Wid33">
                                         <h:panelGrid columns="1" styleClass="Wid100">
                                             <h:outputText value="Cantidad:" />
-                                            <p:spinner size="8" value="#{facturaController.cantidad}" min="0" id="txtCantidad" stepFactor="0.5"/>
+                                            <p:spinner size="8" value="#{facturaController.cantidad}" min="0" id="txtCantidad" stepFactor="0.5"  />
                                         </h:panelGrid>
                                         <h:panelGrid columns="1" styleClass="Wid100">
                                             <h:outputText value="Precio:"/>
@@ -94,13 +102,13 @@
                                         </h:panelGrid>
                                         <h:panelGrid columns="1" styleClass="Wid100">
                                             <h:outputText value=""/>
-                                            <p:commandButton icon="fa fa-cart-plus" process=":frmPrincipal:frmDetalle" action="#{facturaController.agregarItem()}" update="tblItems pnlDatosProducto :frmPrincipal:messages :frmPrincipal:frmDetalle:pnlResultados" onsuccess="document.getElementById('frmPrincipal:frmDetalle:txtCodigo').focus();"/>
+                                            <p:commandButton id="buyButton" icon="fa fa-cart-plus" process=":frmPrincipal:frmDetalle" action="#{facturaController.agregarItem()}" update="tblItems pnlDatosProducto :frmPrincipal:messages :frmPrincipal:frmDetalle:pnlResultados" onsuccess="document.getElementById('frmPrincipal:frmDetalle:completeArticle').focus();"/>
                                         </h:panelGrid>
                                     </h:panelGrid>
-                                    <h:outputText value="Descripción: #{facturaController.descripcion}"/>
+                                    <h:outputText value="Descripción: #{facturaController.descripcion}" id="articleDescripcion"/>
                                     <h:outputText value=""/>
                                 </p:panelGrid>
-                                <p:dataTable styleClass="" editable="true" editMode="cell" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" widgetVar="tablaItems">               
+                                <p:dataTable editable="true" editMode="cell" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" widgetVar="tablaItems">               
                                     <f:facet name="header">
                                         <h:outputText value="Detalle de La Factura"/>
                                     </f:facet> 
@@ -121,9 +129,9 @@
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="V. Total" priority="1"  style="width: 15%">
-                                        <p:cellEditor>
-                                            <f:facet name="output"><h:outputText id="colVtotal" value="#{facturaController.getVTotal(item)}"/></f:facet>
-                                        </p:cellEditor>
+
+                                        <h:outputText id="colVtotal" value="#{facturaController.getVTotal(item)}"/>
+
                                     </p:column>
                                     <p:column headerText="Observaciones" priority="2" style="width: 20%" >
                                         <p:cellEditor>
@@ -131,15 +139,11 @@
                                             <f:facet name="input"><p:inputText value="#{item.defaObservaciones}" style="width:100%" label="Observaciones"/></f:facet>
                                         </p:cellEditor>
                                     </p:column>
-
-                                    <p:column style="width:32px" priority="2">
-                                        <p:rowEditor />
-                                    </p:column>
                                     <p:column style="width: 36px;" priority="1">
                                         <p:commandButton icon="fa fa-close" action="#{facturaController.quitar(item)}" title="Quitar" update="tblItems :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle"/>
 
                                     </p:column>
-                                </p:dataTable> 
+                                </p:dataTable>
                                 <p:outputPanel id="pnlResultados" style="width: 100%;">
                                     <div class="Container50 Responsive50">
                                         <div class="ContainerIndent">
