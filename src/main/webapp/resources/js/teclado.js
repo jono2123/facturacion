@@ -21,15 +21,5 @@ $(document).on('keypress', 'form input', function (event)
         }
     }
 });
-function submitOnEnter(inputElement, event) {
-    if (event.keyCode == 13) { // No need to do browser specific checks. It is always 13.
-        inputElement.form.submit();
-    }
-}
-function someFunction(element) {
-    var $element = $(element);
-        document.getElementById("txtCantidad").focus();
 
-    // ...
-}
 

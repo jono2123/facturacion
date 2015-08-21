@@ -7,12 +7,12 @@
 
     <ui:define name="content">
         <h:outputScript library="js"  name="events.js"/>
-        <h:form id="frmPrincipal">
+        <h:form id="frmPrincipal" prependId="true">
             <div class="Container100">
                 <div class="ContainerIndent">
                     <div class="Card ShadowEffect">
                         <p:growl id="messages" showDetail="false"/>
-                        <h:form id="frmEncabezado">
+                        <h:form id="frmEncabezado" prependId="true" >
                             <p:panel header="Datos de la Factura" id="pnlDatosFact">
 
                                 <p:panelGrid columns="2" layout="grid"  style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
@@ -71,23 +71,22 @@
                                 </p:dataTable>
                             </p:dialog>
                         </h:form>
-                        <h:form id="frmDetalle" >
-                            <p:defaultCommand target="buyButton"/>
-                            <p:panel  header="Detalle de la Factura">
+
+                        <p:panel  header="Detalle de la Factura">
+                            <h:form id="frmDetalle">
+                                <p:defaultCommand target="buyButton"/>
                                 <p:panelGrid layout="grid" columns="2" id="pnlDatosProducto" style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
                                     <h:panelGrid columns="1" styleClass="Wid90" id="panelProducto">
                                         <h:outputText value="Item:"/>
-                                        <h:panelGrid columns="4" style="width: 100%;" columnClasses="Wid60,Wid10,Wid10,Wid10">
+                                        <h:panelGrid columns="2" style="width: 100%;" columnClasses="Wid80,10">
                                             <p:autoComplete  id="completeArticle" value="#{facturaController.articulo}" completeMethod="#{facturaController.completeArticle}"
                                                              var="article" itemLabel="#{article.artiDescripcion}" itemValue="#{article}" converter="articleConverter"  >
 
                                                 <p:ajax event="itemSelect" listener="#{facturaController.onItemSelect}" update="pnlDatosProducto" />
-                                                
+
 
 
                                             </p:autoComplete>
-                                            <p:commandButton icon="fa fa-search" process=":frmPrincipal:frmDetalle" action="#{facturaController.buscaArticuloPorCodigo()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:pnlDatosProducto"/>
-                                            <p:commandButton icon="fa fa-indent" process=":frmPrincipal:frmDetalle" action="#{facturaController.cargarArticulos()}" update=":frmPrincipal:messages :frmPrincipal:frmDetalle:mdlItems"/>
                                             <p:commandButton icon="fa fa-th" process=":frmPrincipal:frmDetalle" action="#{facturaController.abreSeleccion()}" update=":frmPrincipal:messages"/>
                                         </h:panelGrid>
                                     </h:panelGrid>
@@ -102,17 +101,20 @@
                                         </h:panelGrid>
                                         <h:panelGrid columns="1" styleClass="Wid100">
                                             <h:outputText value=""/>
-                                            <p:commandButton id="buyButton" icon="fa fa-cart-plus" process=":frmPrincipal:frmDetalle" action="#{facturaController.agregarItem()}" update="tblItems pnlDatosProducto :frmPrincipal:messages :frmPrincipal:frmDetalle:pnlResultados" onsuccess="document.getElementById('frmPrincipal:frmDetalle:completeArticle').focus();"/>
+                                            <p:commandButton id="buyButton" icon="fa fa-cart-plus" process=":frmPrincipal:frmDetalle" action="#{facturaController.agregarItem()}" update=":frmPrincipal:frmTablaItems:tblItems pnlDatosProducto :frmPrincipal:messages :frmPrincipal:frmTablaItems:pnlResultados" onsuccess="document.getElementById('frmPrincipal:frmDetalle:completeArticle').focus();"/>
                                         </h:panelGrid>
                                     </h:panelGrid>
                                     <h:outputText value="Descripción: #{facturaController.descripcion}" id="articleDescripcion"/>
                                     <h:outputText value=""/>
                                 </p:panelGrid>
-                                <p:dataTable editable="true" editMode="cell" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" widgetVar="tablaItems">               
+                            </h:form>
+                            <h:form id="frmTablaItems">
+                                <p:remoteCommand name="rc" process="@this" update="tblItems"/>
+                                <p:dataTable   editable="true" editMode="cell" style="width: 100%" var="item" value="#{facturaController.detalle}" id="tblItems"  paginator="true" rows="15" paginatorPosition="bottom" widgetVar="tablaItems">               
                                     <f:facet name="header">
                                         <h:outputText value="Detalle de La Factura"/>
                                     </f:facet> 
-                                    <p:ajax event="cellEdit" listener="#{facturaController.onCellEdit}" update=":frmPrincipal:frmDetalle:pnlResultados colVtotal" />
+                                    <p:ajax event="cellEdit" listener="#{facturaController.onCellEdit}" update=":frmPrincipal:frmTablaItems:pnlResultados colVtotal" />
                                     <p:column headerText="COD" priority="1" style="width: 10%">
                                         <h:outputText value="#{item.artiId.artiCodigo}"/>
                                     </p:column>
@@ -125,7 +127,7 @@
                                     <p:column headerText="P.Venta" priority="3" style="width: 15%">
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{facturaController.Formato(item.defaPrecioVenta)}"/></f:facet>
-                                            <f:facet name="input"><p:spinner min="0" size="10" stepFactor="0.01" value="#{item.defaPrecioVenta}"/></f:facet>
+                                            <f:facet name="input"><p:spinner id="txtPrecioTabla"  min="0" size="10" stepFactor="0.01" value="#{item.defaPrecioVenta}"/></f:facet>
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="V. Total" priority="1"  style="width: 15%">
@@ -140,7 +142,7 @@
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column style="width: 36px;" priority="1">
-                                        <p:commandButton icon="fa fa-close" action="#{facturaController.quitar(item)}" title="Quitar" update="tblItems :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle"/>
+                                        <p:commandButton icon="fa fa-close" action="#{facturaController.quitar(item)}" title="Quitar" update="tblItems :frmPrincipal:frmTablaItems:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle"/>
 
                                     </p:column>
                                 </p:dataTable>
@@ -179,10 +181,10 @@
                                     <div class="Container50 Responsive50">
                                         <div class="ContainerIndent TexAlRight">
                                             <p:outputPanel rendered="#{!facturaController.modificar}">
-                                                <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar" action="#{facturaController.soloGuardar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmDetalle:tblItems :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                                <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar" action="#{facturaController.soloGuardar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmTablaItems:tblItems :frmPrincipal:frmTablaItems:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmTablaItems">
                                                     <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                                 </p:commandButton>
-                                                <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar e Imprimir" action="#{facturaController.guardarEImprimir()}"   update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmDetalle:tblItems :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                                <p:commandButton rendered="#{facturaController.permiso.permCrear}" value="Guardar e Imprimir" action="#{facturaController.guardarEImprimir()}"   update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmTablaItems:tblItems :frmPrincipal:frmTablaItems:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmTablaItems">
                                                     <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                                 </p:commandButton>
                                                 <p:commandButton value="Nueva" action="#{facturaController.limpiarTodo()}" ajax="false" process=":frmPrincipal:frmDetalle">
@@ -190,42 +192,43 @@
                                                 </p:commandButton>
                                             </p:outputPanel>
                                             <p:outputPanel rendered="#{facturaController.modificar}">
-                                                <p:commandButton rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios" action="#{facturaController.guardarCambios()}" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 120px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:tblItems :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                                <p:commandButton rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios" action="#{facturaController.guardarCambios()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmTablaItems:tblItems :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmTablaItems:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmTablaItems">
                                                     <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                                 </p:commandButton>
-                                                <p:commandButton  rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios e imprimir" action="#{facturaController.guardarCambiosEImprimir()}" styleClass="botonesMantenimientos btn-danger btn-lg" style="width: 180px; " update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:tblItems :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                                <p:commandButton  rendered="#{facturaController.permiso.permModificar}" value="Guardar Cambios e imprimir" action="#{facturaController.guardarCambiosEImprimir()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmTablaItems:tblItems :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmTablaItems:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmTablaItems">
                                                     <p:confirm header="Guardar Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
                                                 </p:commandButton>
-                                                <p:commandButton value="Cancelar" styleClass="botonesMantenimientos btn-danger btn-lg" action="#{facturaController.cancelar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmDetalle:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmDetalle">
+                                                <p:commandButton value="Cancelar" action="#{facturaController.cancelar()}" update=":frmPrincipal:frmEncabezado:pnlDatosFact :frmPrincipal:frmDetalle:pnlDatosProducto :frmPrincipal:frmTablaItems:pnlResultados :frmPrincipal:messages" process=":frmPrincipal:frmTablaItems">
                                                     <p:confirm header="Cancelar" message="¿Está Seguro?" icon="ui-icon-alert" />
                                                 </p:commandButton>
                                             </p:outputPanel>
                                         </div>
                                     </div>
                                 </p:outputPanel>
-                            </p:panel>
-                            <p:dialog resizable="false" draggable="false" header="Listado de Ítems" id="mdlItems"  widgetVar="dlgItems">
-                                <p:dataTable styleClass="" var="articulo" value="#{facturaController.articulos}" id="tblArticulos"  paginator="true" rows="4" paginatorPosition="bottom" widgetVar="tablaArticulos" filteredValue="#{facturaController.articulosFiltrados}">               
+                            </h:form>
 
-                                    <p:column  filterBy="#{articulo.artiCodigo}" filterMatchMode="contains" headerText="Código" priority="1" sortBy="#{articulo.artiCodigo}">
-                                        <h:outputText value="#{articulo.artiCodigo}"  />
-                                    </p:column>
-                                    <p:column headerText="Descripción" filterBy="#{articulo.artiDescripcion}" filterMatchMode="contains" priority="1" sortBy="#{articulo.artiDescripcion}">
-                                        <h:outputText value="#{articulo.artiDescripcion}"/>
-                                    </p:column>     
-                                    <p:column headerText="P.Venta" priority="2">
-                                        <h:outputText value="#{articulo.artiPrecioVenta}"/>
-                                    </p:column>
-                                    <p:column  priority="1" style="width: 36px">
-                                        <p:commandButton icon="fa fa-hand-o-left" process="@form" action="#{facturaController.seleccionaArticulo(articulo)}" update=":frmPrincipal:frmDetalle:pnlDatosProducto" oncomplete="PF('dlgItems').hide();" />
-                                    </p:column>
-                                </p:dataTable>    
-                            </p:dialog>
-                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
-                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                            </p:confirmDialog>
-                        </h:form>
+                        </p:panel>
+                        <p:dialog resizable="false" draggable="false" header="Listado de Ítems" id="mdlItems"  widgetVar="dlgItems">
+                            <p:dataTable styleClass="" var="articulo" value="#{facturaController.articulos}" id="tblArticulos"  paginator="true" rows="4" paginatorPosition="bottom" widgetVar="tablaArticulos" filteredValue="#{facturaController.articulosFiltrados}">               
+
+                                <p:column  filterBy="#{articulo.artiCodigo}" filterMatchMode="contains" headerText="Código" priority="1" sortBy="#{articulo.artiCodigo}">
+                                    <h:outputText value="#{articulo.artiCodigo}"  />
+                                </p:column>
+                                <p:column headerText="Descripción" filterBy="#{articulo.artiDescripcion}" filterMatchMode="contains" priority="1" sortBy="#{articulo.artiDescripcion}">
+                                    <h:outputText value="#{articulo.artiDescripcion}"/>
+                                </p:column>     
+                                <p:column headerText="P.Venta" priority="2">
+                                    <h:outputText value="#{articulo.artiPrecioVenta}"/>
+                                </p:column>
+                                <p:column  priority="1" style="width: 36px">
+                                    <p:commandButton icon="fa fa-hand-o-left" process="@form" action="#{facturaController.seleccionaArticulo(articulo)}" update=":frmPrincipal:frmDetalle:pnlDatosProducto" oncomplete="PF('dlgItems').hide();" />
+                                </p:column>
+                            </p:dataTable>    
+                        </p:dialog>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
                     </div>
                 </div>
             </div>

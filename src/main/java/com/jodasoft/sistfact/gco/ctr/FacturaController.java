@@ -157,6 +157,7 @@ public class FacturaController extends AbstractMB implements Serializable {
 
     public void onCellEdit(CellEditEvent event) {
         calcular();
+        RequestContext.getCurrentInstance().execute("rc()");
     }
 
     public void selecciona() {
@@ -243,6 +244,7 @@ public class FacturaController extends AbstractMB implements Serializable {
     public void buscaArticuloPorCodigo() {
         if (cliente == null || cliente.getTiclId() == null) {
             displayErrorMessageToUser("Primero Seleccione un cliente");
+            RequestContext.getCurrentInstance().update("frmPrincipal:messages");
             return;
         }
         if (articulo != null) {
@@ -253,6 +255,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         if (articulo == null) {
             articulo = new Articulo();
             displayErrorMessageToUser("No se encontró ningún artículo con ese código");
+            RequestContext.getCurrentInstance().update("frmPrincipal:messages");
             setPrecio(0);
         } else {
             if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDiferenciarPrecios()) {
@@ -263,6 +266,7 @@ public class FacturaController extends AbstractMB implements Serializable {
                 } else {
                     articulo = null;
                     displayErrorMessageToUser("No se ha asignado un precio de venta para este artículo y este tipo de cliente");
+                    RequestContext.getCurrentInstance().update("frmPrincipal:messages");
                     setPrecio(0);
                     return;
                 }
@@ -321,8 +325,8 @@ public class FacturaController extends AbstractMB implements Serializable {
         setDescripcion("");
         RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlDatosProducto:panelArticle");
         RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlDatosProducto:articleDescripcion");
-        RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:tblItems");
-        RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlResultados");
+        RequestContext.getCurrentInstance().update("frmPrincipal:frmTablaItems:tblItems");
+        RequestContext.getCurrentInstance().update("frmPrincipal:frmTablaItems:pnlResultados");
 
     }
 
@@ -828,13 +832,13 @@ public class FacturaController extends AbstractMB implements Serializable {
     public List<Articulo> completeArticle(String query) {
 
         List<Articulo> filteredArticles = new ArrayList<Articulo>();
-        Articulo aux = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), query);
+        Articulo aux = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), query.toUpperCase());
         if (aux == null) {
             List<Articulo> allArticles = articuloFacade.findAll();
 
             for (int i = 0; i < allArticles.size(); i++) {
                 Articulo skin = allArticles.get(i);
-                if (skin.getArtiDescripcion().toLowerCase().contains(query)) {
+                if (skin.getArtiDescripcion().toLowerCase().contains(query.toLowerCase())) {
                     filteredArticles.add(skin);
                 }
             }

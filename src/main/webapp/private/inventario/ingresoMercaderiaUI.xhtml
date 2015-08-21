@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="frmPrincipal">
+
+            <div class="Container100">
+                <div class="ContainerIndent">
+                    <div class="Card ShadowEffect">
+                        <p:growl id="messages" showDetail="false"/>
+                        <p:panel header="Datos del Ingreso" id="datosIngreso">
+                            <p:panelGrid id="pnlDatosIngreso" columns="2" layout="grid"  style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="Fecha:" />
+                                    <p:inputText readonly="true" id="txtFecha" value="#{ingresoMercaderiaController.formateaFecha(ingresoMercaderiaController.fechaIngreso)}" styleClass="Wid90"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" styleClass="Wid90" >
+                                    <h:outputText value="Concepto:"/>
+                                    <p:selectOneMenu id="cboConcepto" value="#{ingresoMercaderiaController.concepto}" style="width: 90%;">
+                                        <f:selectItem itemLabel="ADQUISICIÓN/COMPRA" itemValue="ADQUISICIÓN/COMPRA"/>
+                                        <f:selectItem itemLabel="PRODUCCIÓN" itemValue="PRODUCCIÓN"/>
+                                        <f:selectItem itemLabel="OTRO" itemValue="OTRO"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </p:panelGrid>                               
+                        </p:panel>
+                        <p:panel header="Detalle del Ingreso" id="detalleIngreso">
+                            <p:panelGrid layout="grid" columns="2" id="pnlDatosProducto" style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
+                                <h:panelGrid columns="1" styleClass="Wid90">
+                                    <h:outputText value="Codigo:"/>
+                                    <h:panelGrid columns="4" style="width: 100%;" columnClasses="Wid60,Wid10,Wid10,Wid10">
+                                        <p:inputText style="width: 90%;" id="txtCodigo" value="#{ingresoMercaderiaController.codigo}"/>
+                                        <p:commandButton action="#{ingresoMercaderiaController.buscaArticuloPorCodigo()}" icon="fa fa-search" update="pnlDatosProducto messages"/>
+                                        <p:commandButton icon="fa fa-indent" update=":frmPrincipal:messages"/>
+                                        <p:commandButton icon="fa fa-th" update=":frmPrincipal:messages"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid columns="3" style="width: 100%;" columnClasses="Wid33,Wid33,Wid33">
+                                    <h:panelGrid columns="1" styleClass="Wid100">
+                                        <h:outputText value="Cantidad:" />
+                                        <p:spinner size="8" min="0" value="#{ingresoMercaderiaController.cantidad}" id="txtCantidad" stepFactor="0.5"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" styleClass="Wid100">
+                                        <h:outputText value="Costo:" />
+                                        <p:inputText styleClass="Wid70" value="#{ingresoMercaderiaController.costo}" id="txtCosto"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" styleClass="Wid100" columnClasses="Wid50, Wid50">
+                                        <p:commandButton icon="fa fa-cart-plus" action="#{ingresoMercaderiaController.agregarItem()}" update="messages tblItems pnlDatosProducto pnlResultados"/>
+                                        <p:commandButton icon="fa fa-rotate-left" action="#{ingresoMercaderiaController.calcular()}" id="cmdActualizar" update="tblItems pnlResultados" style="visibility: hidden;"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:outputText value="Descripción: #{ingresoMercaderiaController.descripcion}" />
+                                <h:outputText value=""/>
+                            </p:panelGrid>
+                            <p:dataTable id="tblItems" value="#{ingresoMercaderiaController.detalle}" var="item" editable="true" editMode="cell" style="width: 100%" paginator="true" rows="15" paginatorPosition="bottom" widgetVar="tablaItems">
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle de Ítems"/>
+
+                                </f:facet>
+                                <p:ajax event="cellEdit" listener="#{ingresoMercaderiaController.onCellEdit}"  />
+                                <p:column headerText="COD" priority="1" style="width: 10%;">
+                                    <h:outputText value="#{item.artiId.artiCodigo}"/>
+                                </p:column>
+                                <p:column headerText="CANT" priority="1" style="width: 10%">
+                                    <h:outputText value="#{item.imdeCantidad}"/>
+                                </p:column>
+                                <p:column headerText="DESCRIPCIÓN" priority="2" style="width: 30%;">
+                                    <h:outputText value="#{item.artiId.artiDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="COSTO" priority="2" style="width: 15%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{ingresoMercaderiaController.Formato(item.imdeCostoUnitario)}"/></f:facet>
+                                        <f:facet name="input"><p:spinner value="#{item.imdeCostoUnitario}" stepFactor="0.01" size="8" min="0"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="C.TOTAL" priority="1" style="width: 15%">
+                                    <h:outputText value="#{ingresoMercaderiaController.redondear(item.imdeCantidad*item.imdeCostoUnitario)}"/>
+                                </p:column>
+                                <p:column headerText="LOTE" priority="2" style="width: 20%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{item.loteCodigo}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{item.loteCodigo}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column style="width: 36px;" priority="1">
+                                    <p:commandButton icon="fa fa-close" action="#{ingresoMercaderiaController.quitar(item)}" title="Quitar" update="tblItems :frmPrincipal:pnlResultados"/>
+                                </p:column>
+                            </p:dataTable>
+                            <p:outputPanel id="pnlResultados" style="width: 100%;">
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent">
+
+                                    </div>
+                                </div>
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent TexAlRight">
+                                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none; width: 100%;" styleClass="FormContent">
+                                            <h:outputText value="Subtotal:"/>
+                                            <p:inputText value="#{ingresoMercaderiaController.Formato(ingresoMercaderiaController.subtTotal)}" id="txtSubtotal" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="Subtotal Iva 0%: "/>
+                                            <p:inputText value="#{ingresoMercaderiaController.Formato(ingresoMercaderiaController.subTotalSinIva)}" id="txtSubtotalSinIva" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="Subtotal Con 12%: "/>
+                                            <p:inputText value="#{ingresoMercaderiaController.Formato(ingresoMercaderiaController.subTotalConIva)}" id="txtSubtotalConIva" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="IVA: "/>
+                                            <p:inputText value="#{ingresoMercaderiaController.Formato(ingresoMercaderiaController.iva)}" id="txtIva" readonly="true" styleClass="Wid90"/>
+                                            <h:outputText value="TOTAL: "/>
+                                            <p:inputText value="#{ingresoMercaderiaController.Formato(ingresoMercaderiaController.total)}" id="txtTotal" readonly="true" styleClass="Wid90"/>
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent">
+
+                                    </div>
+                                </div>
+                                <div class="Container50 Responsive50">
+                                    <div class="ContainerIndent TexAlRight">
+                                        <p:outputPanel>
+                                            <p:commandButton value="Guardar" action="#{ingresoMercaderiaController.guardarIngreso()}" update=":frmPrincipal:pnlDatosIngreso :frmPrincipal:messages :frmPrincipal:tblItems :frmPrincipal:pnlResultados :frmPrincipal:pnlDatosProducto">
+                                                <p:confirm header="Guardar Ingreso" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                            <p:commandButton value="Nuevo">
+                                                <p:confirm header="Nueva Factura" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                        </p:outputPanel>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:panel>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
