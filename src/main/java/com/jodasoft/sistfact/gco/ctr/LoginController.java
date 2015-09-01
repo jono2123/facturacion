@@ -5,6 +5,7 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.mdl.CajaSesion;
 import com.jodasoft.sistfact.gco.mdl.Permiso;
 import com.jodasoft.sistfact.gco.mdl.Usuario;
 import javax.inject.Named;
@@ -31,6 +32,8 @@ public class LoginController extends AbstractMB implements Serializable {
     private com.jodasoft.sistfact.gco.dao.UsuarioFacade usuarioFacade;
     @EJB
     private com.jodasoft.sistfact.gco.dao.PermisoFacade permisoFacade;
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.CajaSesionFacade cajaSesionFacade;
 
     public LoginController() {
     }
@@ -46,12 +49,14 @@ public class LoginController extends AbstractMB implements Serializable {
     private String pass;
     private Usuario usuario;
     private List<Permiso> permisos;
+    private CajaSesion cajaSesion;
 
     public String login() {
         usuario = null;
         usuario = usuarioFacade.findByUserAndPass(nomUsuario, pass);
         if (usuario != null) {
             if (usuario.getRolId().getAlmaId().getAlmaEstado() == 0) {
+                cajaSesion=getCajaSesion();
                 return "/private/principal.xhtml?faces-redirect=true";
             } else if (usuario.getRolId().getAlmaId().getAlmaEstado() == 1) {
                 displayErrorMessageToUser("El Usuario ingresado tiene restringido el ingreso\nComuníquese con el administrador para más información");
@@ -112,5 +117,17 @@ public class LoginController extends AbstractMB implements Serializable {
         }
         return null;
     }
+
+    public CajaSesion getCajaSesion() {
+        
+        this.cajaSesion= cajaSesionFacade.findByUser(usuario);
+        return cajaSesion;
+    }
+    
+
+    public void setCajaSesion(CajaSesion cajaSesion) {
+        this.cajaSesion = cajaSesion;
+    }
+    
 
 }

@@ -8,9 +8,14 @@ package com.jodasoft.sistfact.gco.mdl;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -25,6 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author johnny
  */
 @Entity
+@Cacheable(false)
 @Table(catalog = "dbfacturacion", schema = "public")
 @XmlRootElement
 @NamedQueries({
@@ -33,12 +39,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caja.findByCajaNumCaja", query = "SELECT c FROM Caja c WHERE c.cajaNumCaja = :cajaNumCaja"),
     @NamedQuery(name = "Caja.findByCajaIpImpresion", query = "SELECT c FROM Caja c WHERE c.cajaIpImpresion = :cajaIpImpresion"),
     @NamedQuery(name = "Caja.findByCajaNumFactura", query = "SELECT c FROM Caja c WHERE c.cajaNumFactura = :cajaNumFactura"),
-    @NamedQuery(name = "Caja.findByCajaIdAlma", query = "SELECT c FROM Caja c WHERE c.cajaIdAlma = :cajaIdAlma")})
+    @NamedQuery(name = "Caja.findByCajaAlmacen", query = "SELECT c FROM Caja c WHERE c.almaId = :almaId")})
 public class Caja implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "caja_id", nullable = false)
     private Integer cajaId;
     @Column(name = "caja_num_caja")
@@ -48,8 +55,9 @@ public class Caja implements Serializable {
     private String cajaIpImpresion;
     @Column(name = "caja_num_factura")
     private Integer cajaNumFactura;
-    @Column(name = "caja_id_alma")
-    private Integer cajaIdAlma;
+    @JoinColumn(name = "alma_id", referencedColumnName = "alma_id")
+    @ManyToOne
+    private Almacen almaId;
     @OneToMany(mappedBy = "catrNumCaja")
     private List<CajaTransaccion> cajaTransaccionList;
     @OneToMany(mappedBy = "caseNumCaja")
@@ -94,12 +102,12 @@ public class Caja implements Serializable {
         this.cajaNumFactura = cajaNumFactura;
     }
 
-    public Integer getCajaIdAlma() {
-        return cajaIdAlma;
+    public Almacen getAlmaId() {
+        return almaId;
     }
 
-    public void setCajaIdAlma(Integer cajaIdAlma) {
-        this.cajaIdAlma = cajaIdAlma;
+    public void setAlmaId(Almacen almaId) {
+        this.almaId = almaId;
     }
 
     @XmlTransient
@@ -142,7 +150,7 @@ public class Caja implements Serializable {
 
     @Override
     public String toString() {
-        return "com.jodasoft.sistfact.gco.mdl.Caja[ cajaId=" + cajaId + " ]";
+        return cajaId + "";
     }
-    
+
 }

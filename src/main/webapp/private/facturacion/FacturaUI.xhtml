@@ -6,6 +6,8 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <f:event listener="#{facturaController.renderFacturaUI}" type="preRenderView" />
+
         <h:outputScript library="js"  name="events.js"/>
         <h:form id="frmPrincipal" prependId="true">
             <div class="Container100">
@@ -48,7 +50,11 @@
                                         <h:outputText value="N.Guía:"/>
                                         <p:inputText styleClass="Wid90" value="#{facturaController.guia}" readonly="false" id="txtGuia"/>
                                     </h:panelGrid>
-                                    <h:outputText value=""/>
+                                    <h:panelGrid columns="1" styleClass="Wid90">
+                                        <h:outputText value="Caja:"/>
+                                        <p:inputText styleClass="Wid90" value="#{facturaController.caja eq null?'':facturaController.caja.cajaNumCaja}" readonly="false" id="txtNumFactura"/>
+                                    </h:panelGrid>
+                                    
 
                                 </p:panelGrid>
 

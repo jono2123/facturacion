@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="private/administracion/rolUI.xhtml" x="400" y="750" zoom="true"/>
+        <Node id="public/login.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="private/facturacion/reporteVentas.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="private/administracion/administracionAlmacen.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="private/empty-page.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="private/facturacion/mantenimientoCiudades.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="private/facturacion/FacturaUI.xhtml" x="1300" y="159" zoom="false"/>
+        <Node id="private/facturacion/mantenimientoZonas.xhtml" x="400" y="900" zoom="true"/>
+        <Node id="template/mainTemplate.xhtml" x="1423" y="345" zoom="true"/>
+        <Node id="public/pruebaCaragaFacturas.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="private/principal.xhtml" x="1150" y="450" zoom="true"/>
+        <Node id="private/ventanas.xhtml" x="1396" y="262" zoom="true"/>
+        <Node id="private/administracion/cajasUI.xhtml" x="6" y="433" zoom="false"/>
+        <Node id="private/inventario/itemUI.xhtml" x="900" y="300" zoom="true"/>
+        <Node id="private/facturacion/mantenimientoProvincias.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="public/access-denied.xhtml" x="150" y="600" zoom="true"/>
+        <Node id="private/inventario/unidadDeMedidaUI.xhtml" x="1400" y="450" zoom="true"/>
+        <Node id="private/facturacion/tipoClienteUI.xhtml" x="650" y="600" zoom="true"/>
+        <Node id="private/facturacion/mantenimietoPaises.xhtml" x="42" y="208" zoom="false"/>
+        <Node id="private/manager/crearNegocioUI.xhtml" x="1650" y="300" zoom="true"/>
+        <Node id="private/caja/abrirCaja.xhtml" x="900" y="600" zoom="true"/>
+        <Node id="private/facturacion/VerFacturaUI.xhtml" x="900" y="450" zoom="true"/>
+        <Node id="private/facturacion/SeleccionArticulosUI.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="private/caja/cerrarCaja.xhtml" x="1650" y="150" zoom="true"/>
+        <Node id="private/administracion/usuariosUI.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="private/facturacion/clienteUI.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="private/inventario/ingresoMercaderiaUI.xhtml" x="1900" y="150" zoom="true"/>
+        <Node id="public/caja-abierta.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="private/facturacion/listaClientes.xhtml" x="150" y="900" zoom="true"/>
+        <Node id="private/inventario/jerarquiaUI.xhtml" x="150" y="750" zoom="true"/>
+        <Node id="private/facturacion/listaArticulos.xhtml" x="1137" y="102" zoom="true"/>
+        <Node id="private/administracion/permisosUI.xhtml" x="650" y="750" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

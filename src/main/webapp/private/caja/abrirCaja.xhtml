@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="formPrincipal">
+            <div class="Container100">
+                <div class="ContainerIndent">
+                    <div class="Card ShadowEffect">
+                        <p:growl id="messages" showDetail="false"/>
+                        <h:form id="formSegundario">
+                            <p:panel header="Apertura de Caja" id="pnlDatosFact">
+
+                                <p:panelGrid columns="2" layout="grid"  style="border:0px !important; background:none;" styleClass="Wid30">
+                                    <p:outputLabel value="Caja: "/>
+                                    <p:selectOneMenu value="#{cajaController.caja}" converter="cajaConverter" styleClass="Wid80">
+                                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                                        <f:selectItems value="#{cajaController.cajas}" var="box" itemLabel="Caja: #{box.cajaNumCaja}" itemValue="#{box} "/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Valor inicial: "/>
+                                    <p:inputText tabindex="1" styleClass="Wid80" placeholder="Ingrese el valor inicial de caja" value="#{cajaController.valorInicial}" />
+                                    <p:commandButton  title="Abrir caja" value="Abrir caja" action="#{cajaController.abrirCaja()}" update="formPrincipal:messages" />
+                                    <p:outputLabel value=""/>
+
+                                </p:panelGrid>
+
+                            </p:panel>
+
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -5,8 +5,13 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.dao.CajaSesionFacade;
+import com.jodasoft.sistfact.gco.mdl.AlmacenModulo;
 import com.jodasoft.sistfact.gco.mdl.AlmacenTransaccion;
 import com.jodasoft.sistfact.gco.mdl.Articulo;
+import com.jodasoft.sistfact.gco.mdl.Caja;
+import com.jodasoft.sistfact.gco.mdl.CajaSesion;
+import com.jodasoft.sistfact.gco.mdl.CajaTransaccion;
 import com.jodasoft.sistfact.gco.mdl.Cliente;
 import com.jodasoft.sistfact.gco.mdl.DetalleFactura;
 import com.jodasoft.sistfact.gco.mdl.Factura;
@@ -16,19 +21,24 @@ import com.jodasoft.sistfact.gco.mdl.TipoCliente;
 import com.jodasoft.sistfact.gco.util.XmlManager;
 import com.jodasoft.sistfact.gco.util.exp.AlmacenTransaccionValidadorException;
 import com.jodasoft.sistfact.gco.util.exp.FacturaValidadorException;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.swing.JOptionPane;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
@@ -48,22 +58,26 @@ public class FacturaController extends AbstractMB implements Serializable {
     //encabezado de la factura
     @EJB
     private com.jodasoft.sistfact.gco.dao.ClienteFacade clienteFacade;
-
+    
     @EJB
     private com.jodasoft.sistfact.gco.dao.ArticuloFacade articuloFacade;
-
+    
     @EJB
     private com.jodasoft.sistfact.gco.dao.FacturaFacade facturaFacade;
-
+    
     @EJB
     private com.jodasoft.sistfact.gco.dao.AlmacenFacade almacenFacade;
-
+    
     @EJB
     private com.jodasoft.sistfact.gco.dao.PrecioVentaFacade precioVentaFacade;
-
+    
     @EJB
     private com.jodasoft.sistfact.gco.dao.AmacenTransaccionFacade transaccionFacade;
-
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.AlmacenModuloFacade almacenModuloFacade;
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.CajaTransaccionFacade cajaTransaccionFacade;
+    
     private int numero;
     private Cliente cliente;
     private Date fecha = new Date();
@@ -98,14 +112,31 @@ public class FacturaController extends AbstractMB implements Serializable {
     private double tota;
     private String codigoFactura;
     private double valorDescuento;
-
+    @EJB
+    CajaSesionFacade cajaSesionFacade;
+    private CajaSesion cajaSesion;
+    
     private boolean modificar;
-
+    private Caja caja;
+    
     public FacturaController() {
         cliente = new Cliente();
         modificar = false;
         articulo = new Articulo();
+        
+    }
 
+    /**
+     * @Author Freddy Sumba
+     * @see This method Load cash for invoicing
+     */
+    @PostConstruct
+    public void loadingBox() {
+        CajaSesion aux = LoginController.getInstance().getCajaSesion();
+        if (aux != null) {
+            this.caja = aux.getCaseNumCaja();
+        }
+        
     }
     List<Articulo> articulos;
     List<Articulo> articulosFiltrados;
@@ -133,7 +164,7 @@ public class FacturaController extends AbstractMB implements Serializable {
      codigoFactura = hexNumAlmacen+hexNumUsuario+hexAnio+hexMont+hexDia+hexHora+hexMinuto+hexSegundo;
      codigoFactura = codigoFactura.toUpperCase();
      }*/
-
+    
     public String abreSeleccion() {
         if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDiferenciarPrecios()) {
             if (cliente != null) {
@@ -143,23 +174,23 @@ public class FacturaController extends AbstractMB implements Serializable {
                     displayErrorMessageToUser("No se ha estabecido un tipo de cliente para el cliente seleccionado");
                     return null;
                 }
-
+                
             } else {
                 displayErrorMessageToUser("Primero seleccione un cliente");
                 return null;
             }
         } else {
             return "SeleccionArticulosUI.xhtml";
-
+            
         }
-
+        
     }
-
+    
     public void onCellEdit(CellEditEvent event) {
         calcular();
         RequestContext.getCurrentInstance().execute("rc()");
     }
-
+    
     public void selecciona() {
         cliente = ListaClientesController.getInstance().cliente;
         setCedula(cliente.getPersCedula());
@@ -168,7 +199,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         setTelefono(cliente.getPersTelefono());
         setFecha(new Date());
     }
-
+    
     public void seleccionaArticulo() {
         articulo = ListaArticulosController.getInstance().getArticulo();
         setCodigo(articulo.getArtiCodigo());
@@ -176,7 +207,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         setDescripcion(articulo.getArtiDescripcion());
         setCantidad(1);
     }
-
+    
     public void seleccionaArticulo(Articulo articulo) {
         this.articulo = articulo;
         setCodigo(this.articulo.getArtiCodigo());
@@ -184,12 +215,12 @@ public class FacturaController extends AbstractMB implements Serializable {
         setDescripcion(this.articulo.getArtiDescripcion());
         setCantidad(1);
     }
-
+    
     public void quitar(DetalleFactura item) {
         detalle.remove(item);
         calcular();
     }
-
+    
     public void limpiarTodo() {
         cliente = new Cliente();
         setCedula("");
@@ -218,7 +249,7 @@ public class FacturaController extends AbstractMB implements Serializable {
          numero = LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaNumFactura();
          }*/
     }
-
+    
     public void guardaTransaccion(Factura factura) throws AlmacenTransaccionValidadorException {
         AlmacenTransaccion transaccion = new AlmacenTransaccion();
         transaccion.setTransConcepto("FACTURA");
@@ -227,7 +258,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         transaccion.setUsuaId(factura.getUsuaId());
         transaccionFacade.save(transaccion);
     }
-
+    
     public void buscarPorCedula() {
         cliente = clienteFacade.findClienteByCedula(cedula, LoginController.getInstance().getUsuario().getRolId().getAlmaId());
         if (cliente == null) {
@@ -240,7 +271,7 @@ public class FacturaController extends AbstractMB implements Serializable {
             setFecha(new Date());
         }
     }
-
+    
     public void buscaArticuloPorCodigo() {
         if (cliente == null || cliente.getTiclId() == null) {
             displayErrorMessageToUser("Primero Seleccione un cliente");
@@ -251,7 +282,7 @@ public class FacturaController extends AbstractMB implements Serializable {
             this.codigo = articulo.getArtiCodigo();
         }
         articulo = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), codigo);
-
+        
         if (articulo == null) {
             articulo = new Articulo();
             displayErrorMessageToUser("No se encontró ningún artículo con ese código");
@@ -327,14 +358,14 @@ public class FacturaController extends AbstractMB implements Serializable {
         RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:pnlDatosProducto:articleDescripcion");
         RequestContext.getCurrentInstance().update("frmPrincipal:frmTablaItems:tblItems");
         RequestContext.getCurrentInstance().update("frmPrincipal:frmTablaItems:pnlResultados");
-
+        
     }
-
+    
     public void calcular() {
         subtTotal = 0;
         subTotalConIva = 0;
         subTotalSinIva = 0;
-
+        
         iva = 0;
         tota = 0;
         for (DetalleFactura deta : detalle) {
@@ -344,16 +375,16 @@ public class FacturaController extends AbstractMB implements Serializable {
             } else {
                 subTotalSinIva = subTotalSinIva + deta.getDefaCantidad() * deta.getDefaPrecioVenta();
             }
-
+            
         }
         valorDescuento = (subTotalConIva + subTotalSinIva) * (descuento / 100);
         double descSubTotalConIva = subTotalConIva * (descuento / 100);
-
+        
         iva = (subTotalConIva - descSubTotalConIva) * LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaIva() / 100d;
-
+        
         tota = subTotalConIva + subTotalSinIva + iva - valorDescuento;
     }
-
+    
     private int existe(DetalleFactura item) {
         for (int i = 0; i < detalle.size(); i++) {
             if (item.getArtiId().getArtiId().equals(detalle.get(i).getArtiId().getArtiId()) && item.getDefaPrecioVenta().equals(detalle.get(i).getDefaPrecioVenta()) && item.getDefaObservaciones().equals(detalle.get(i).getDefaObservaciones())) {
@@ -362,7 +393,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         }
         return -1;
     }
-
+    
     public void guardarFactura() throws FacturaValidadorException {
 
         //factura.setFactNumero(numero);
@@ -379,13 +410,36 @@ public class FacturaController extends AbstractMB implements Serializable {
             deta.setFactId(factura);
         }
         factura.setDetalleFacturaList(detalle);
-
+        
         facturaFacade.save(factura);
-
+        if (caja != null) {
+            saveBoxTransaction();
+        }
+        
         displayInfoMessageToUser("Factura guardada correctamente");
-
+        
     }
 
+    /**
+     * @Author Freddy Sumba
+     * @see Save a transaction if the business have the module cash
+     */
+    public void saveBoxTransaction() {
+        
+        CajaTransaccion cajTransaction = new CajaTransaccion();
+        cajTransaction.setUsuaId(LoginController.getInstance().getUsuario());
+        cajTransaction.setCatrDocumento(String.valueOf(factura.getFactId()));
+        cajTransaction.setCatrNumCaja(caja);
+        Calendar calendar = Calendar.getInstance();
+        cajTransaction.setCatrTimestamp(calendar.getTime());
+        cajTransaction.setCatrTipoDocumento("FACTURA");
+        cajTransaction.setCatrTipoTransaccion("FACTURA");
+        cajTransaction.setCatrValorTransaccion(factura.getFactTotal());
+        cajTransaction.setCatrConcepto("Venta de producto/servicio a: " + factura.getClieId().getPersApellidos()
+                + " " + factura.getClieId().getPersNombres() + " con factura N°" + factura.getFactNumero());
+        cajaTransaccionFacade.create(cajTransaction);
+    }
+    
     public String guardarCambiosEImprimir() {
         factura.setFactEstado(1);
         factura.setFactDescuento(descuento);
@@ -411,7 +465,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         limpiarTodo();
         return "reporteVentas.xhtml?faces-redirect=true";
     }
-
+    
     public void soloGuardar() {
         factura = new Factura();
         factura.setFactEstado(0);
@@ -423,9 +477,9 @@ public class FacturaController extends AbstractMB implements Serializable {
             keepDialogOpen();
             displayErrorMessageToUser(ex.getMessage());
         }
-
+        
     }
-
+    
     public void guardarEImprimir() {
         //RequestContext requestContext = RequestContext.getCurrentInstance();
 
@@ -454,9 +508,9 @@ public class FacturaController extends AbstractMB implements Serializable {
             keepDialogOpen();
             displayErrorMessageToUser(ex.getMessage());
         }
-
+        
     }
-
+    
     public String guardarCambios() {
         factura.setFactDescuento(descuento);
         factura.setFactIva(iva);
@@ -471,32 +525,32 @@ public class FacturaController extends AbstractMB implements Serializable {
         limpiarTodo();
         return "reporteVentas.xhtml?faces-redirect=true";
     }
-
+    
     public String cancelar() {
         limpiarTodo();
         return "reporteVentas.xhtml?faces-redirect=true";
     }
-
+    
     public int getNumero() {
         return numero;
     }
-
+    
     public void conectarWs() {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         String functionCrear = "creaWebSocket('" + LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaDireccionServidor() + "')";
         requestContext.execute(functionCrear);
     }
-
+    
     public void print(String xml) {
         RequestContext requestContext = RequestContext.getCurrentInstance();
-
+        
         String mensaje = xml.substring(xml.indexOf("<f"), xml.lastIndexOf(">") + 1);
-
+        
         String funcion = "enviaMensaje('" + mensaje + "')";
-
+        
         requestContext.execute(funcion);
     }
-
+    
     public void cargarArticulos() {
         if (cliente == null || cliente.getTiclId() == null) {
             displayErrorMessageToUser("Primero seleccione un cliente");
@@ -510,63 +564,63 @@ public class FacturaController extends AbstractMB implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlgItems').show();");
     }
-
+    
     public void setNumero(int numero) {
         this.numero = numero;
     }
-
+    
     public Cliente getCliente() {
         return cliente;
     }
-
+    
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-
+    
     public Date getFecha() {
         return fecha;
     }
-
+    
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
+    
     public String getGuia() {
         return guia;
     }
-
+    
     public void setGuia(String guia) {
         this.guia = guia;
     }
-
+    
     public String getCedula() {
         return cedula;
     }
-
+    
     public void setCedula(String cedula) {
         this.cedula = cedula;
     }
-
+    
     public String getNombres() {
         return nombres;
     }
-
+    
     public void setNombres(String nombres) {
         this.nombres = nombres;
     }
-
+    
     public String getDireccion() {
         return direccion;
     }
-
+    
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-
+    
     public String getTelefono() {
         return telefono;
     }
-
+    
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
@@ -575,39 +629,39 @@ public class FacturaController extends AbstractMB implements Serializable {
     public String getCodigo() {
         return codigo;
     }
-
+    
     public void setCodigo(String codigo) {
         this.codigo = codigo.toUpperCase();
     }
-
+    
     public double getCantidad() {
         return cantidad;
     }
-
+    
     public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
-
+    
     public double getPrecio() {
         return precio;
     }
-
+    
     public void setPrecio(double precio) {
         this.precio = precio;
     }
-
+    
     public Articulo getArticulo() {
         return articulo;
     }
-
+    
     public void setArticulo(Articulo articulo) {
         this.articulo = articulo;
     }
-
+    
     public Factura getFactura() {
         return factura;
     }
-
+    
     public void setFactura(Factura factura) {
         this.factura = factura;
         detalle = new ArrayList<DetalleFactura>();
@@ -631,7 +685,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         calcular();
         modificar = true;
     }
-
+    
     public void seleccionaCliente(Cliente cliente) {
         this.cliente = cliente;
         setCedula(cliente.getPersCedula());
@@ -640,22 +694,22 @@ public class FacturaController extends AbstractMB implements Serializable {
         setTelefono(cliente.getPersTelefono());
         setFecha(new Date());
     }
-
+    
     public List<DetalleFactura> getDetalle() {
         if (detalle == null) {
             detalle = new ArrayList<DetalleFactura>();
         }
         return detalle;
     }
-
+    
     public void setDetalle(List<DetalleFactura> detalle) {
         this.detalle = detalle;
     }
-
+    
     public DetalleFactura getDetalleSelected() {
         return detalleSelected;
     }
-
+    
     public void setDetalleSelected(DetalleFactura detalleSelected) {
         this.detalleSelected = detalleSelected;
     }
@@ -664,93 +718,93 @@ public class FacturaController extends AbstractMB implements Serializable {
     public double getSubtTotal() {
         return subtTotal;
     }
-
+    
     public void setSubtTotal(double subtTotal) {
         this.subtTotal = subtTotal;
     }
-
+    
     public double getSubTotalSinIva() {
         return subTotalSinIva;
     }
-
+    
     public void setSubTotalSinIva(double subTotalSinIva) {
         this.subTotalSinIva = subTotalSinIva;
     }
-
+    
     public double getSubTotalConIva() {
         return subTotalConIva;
     }
-
+    
     public void setSubTotalConIva(double subTotalConIva) {
         this.subTotalConIva = subTotalConIva;
     }
-
+    
     public double getIva() {
         return iva;
     }
-
+    
     public void setIva(double iva) {
         this.iva = iva;
     }
-
+    
     public double getDescuento() {
         return descuento;
     }
-
+    
     public void setDescuento(double descuento) {
         this.descuento = descuento;
     }
-
+    
     public double getTota() {
         return tota;
     }
-
+    
     public void setTota(double tota) {
         this.tota = tota;
     }
-
+    
     public Permiso getPermiso() {
         permiso = LoginController.getInstance().getPermiso("Facturar");
         return permiso;
     }
-
+    
     public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
-
+    
     public String getCodigoFactura() {
         //obtenCodigo();
         return codigoFactura;
     }
-
+    
     public void setCodigoFactura(String codigoFactura) {
         this.codigoFactura = codigoFactura;
     }
-
+    
     public boolean getModificar() {
         return modificar;
     }
-
+    
     public void setModificar(boolean modificar) {
         this.modificar = modificar;
     }
-
+    
     public double getValorDescuento() {
         return valorDescuento;
     }
-
+    
     public void setValorDescuento(double valorDescuento) {
         this.valorDescuento = valorDescuento;
     }
-
+    
     public String getDescripcion() {
         return descripcion;
     }
-
+    
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
+    
     public List<Cliente> getClientes() {
         if (clientes == null) {
             clientes = clienteFacade.findClienteByAlmaIdAndClieEstado(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), true);
@@ -758,48 +812,57 @@ public class FacturaController extends AbstractMB implements Serializable {
         return clientes;
     }
 
+    public Caja getCaja() {
+        return caja;
+    }
+
+    public void setCaja(Caja caja) {
+        this.caja = caja;
+    }
+    
+    
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-
+    
     public List<Cliente> getClientesFiltrados() {
         return clientesFiltrados;
     }
-
+    
     public void setClientesFiltrados(List<Cliente> clientesFiltrados) {
         this.clientesFiltrados = clientesFiltrados;
     }
-
+    
     public void reiniciaClientes() {
         clientes = null;
     }
-
+    
     public List<Articulo> getArticulos() {
         if (articulos == null) {
             articulos = new ArrayList<Articulo>();
         }
         return articulos;
     }
-
+    
     public void setArticulos(List<Articulo> articulos) {
         this.articulos = articulos;
     }
-
+    
     public List<Articulo> getArticulosFiltrados() {
         return articulosFiltrados;
     }
-
+    
     public void setArticulosFiltrados(List<Articulo> articulosFiltrados) {
         this.articulosFiltrados = articulosFiltrados;
     }
-
+    
     public static FacturaController getInstance() {
         ELContext context = FacesContext.getCurrentInstance().getELContext();
         ValueExpression ex = FacesContext.getCurrentInstance().getApplication().getExpressionFactory().
                 createValueExpression(context, "#{facturaController}", FacturaController.class);
         return (FacturaController) ex.getValue(context);
     }
-
+    
     public String getVTotal(DetalleFactura detalle) {
         return Formato(detalle.getDefaCantidad() * detalle.getDefaPrecioVenta());
     }
@@ -819,23 +882,24 @@ public class FacturaController extends AbstractMB implements Serializable {
                 this.codigo = articulo.getArtiCodigo();
                 buscaArticuloPorCodigo();
                 agregarItem();
-
+                
             }
         }
     }
 
     /**
-     * Method that asign an article or returns a list of articles according to the entry in the field of the invoice item
+     * Method that asign an article or returns a list of articles according to
+     * the entry in the field of the invoice item
      *
      * @author Freddy Sumba
      */
     public List<Articulo> completeArticle(String query) {
-
+        
         List<Articulo> filteredArticles = new ArrayList<Articulo>();
         Articulo aux = articuloFacade.findByCodigoAndAlmacen(LoginController.getInstance().getUsuario().getRolId().getAlmaId(), query.toUpperCase());
         if (aux == null) {
             List<Articulo> allArticles = articuloFacade.findAll();
-
+            
             for (int i = 0; i < allArticles.size(); i++) {
                 Articulo skin = allArticles.get(i);
                 if (skin.getArtiDescripcion().toLowerCase().contains(query.toLowerCase())) {
@@ -854,14 +918,14 @@ public class FacturaController extends AbstractMB implements Serializable {
             RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:txtCantidad");
             RequestContext.getCurrentInstance().update("frmPrincipal:frmDetalle:txtPrecio");
             RequestContext.getCurrentInstance().update("frmPrincipal:messages");
-
+            
         }
         return filteredArticles;
     }
 
-    
     /**
-     * Method assign an article to articulo of a list, after selection in autocomplete input 
+     * Method assign an article to articulo of a list, after selection in
+     * autocomplete input
      *
      * @author Freddy Sumba
      */
@@ -872,9 +936,34 @@ public class FacturaController extends AbstractMB implements Serializable {
                 codigo = aux.getArtiCodigo();
                 articulo = aux;
                 buscaArticuloPorCodigo();
-
+                
             }
         }
     }
-
+    
+    public void renderFacturaUI(ComponentSystemEvent event) {
+        
+        FacesContext fc = FacesContext.getCurrentInstance();
+        List<AlmacenModulo> modulos = almacenModuloFacade.findByAlmaID(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+        boolean cajas = false;
+        for (AlmacenModulo am : modulos) {
+            if (am.getModuId().getModuId() == 5) {
+                cajas = true;
+                
+            }
+        }
+        if (cajas && LoginController.getInstance().getCajaSesion() == null) {
+            ConfigurableNavigationHandler nav
+                    = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
+            
+            nav.performNavigation("/public/caja-abierta.xhtml");
+            
+        }
+        CajaSesion aux = LoginController.getInstance().getCajaSesion();
+        if (aux != null) {
+            this.caja = aux.getCaseNumCaja();
+        }
+        
+    }
+    
 }

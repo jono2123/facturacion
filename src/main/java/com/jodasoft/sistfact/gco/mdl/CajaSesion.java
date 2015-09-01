@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,12 +37,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CajaSesion.findByCaseTimeApertura", query = "SELECT c FROM CajaSesion c WHERE c.caseTimeApertura = :caseTimeApertura"),
     @NamedQuery(name = "CajaSesion.findByCaseTimeCierre", query = "SELECT c FROM CajaSesion c WHERE c.caseTimeCierre = :caseTimeCierre"),
     @NamedQuery(name = "CajaSesion.findByCaseEstado", query = "SELECT c FROM CajaSesion c WHERE c.caseEstado = :caseEstado"),
-    @NamedQuery(name = "CajaSesion.findByCaseIdUsuario", query = "SELECT c FROM CajaSesion c WHERE c.caseIdUsuario = :caseIdUsuario")})
+    @NamedQuery(name = "CajaSesion.findByCaseIdUsuario", query = "SELECT c FROM CajaSesion c WHERE c.usuaId = :usuaId"),
+    @NamedQuery(name = "Caja.findByCajaIdAndEstado", query = "SELECT c FROM CajaSesion c WHERE c.caseNumCaja = :caseNumCaja and c.caseEstado = :caseEstado"),
+    @NamedQuery(name = "Caja.findByCajaUsuarioAndEstado", query = "SELECT c FROM CajaSesion c WHERE c.usuaId = :usuaId and c.caseEstado = :caseEstado")
+})
+
 public class CajaSesion implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "case_id", nullable = false)
     private Integer caseId;
     @Column(name = "case_time_apertura")
@@ -52,11 +59,17 @@ public class CajaSesion implements Serializable {
     @Size(max = 20)
     @Column(name = "case_estado", length = 20)
     private String caseEstado;
-    @Column(name = "case_id_usuario")
-    private Integer caseIdUsuario;
+    @JoinColumn(name = "usua_id", referencedColumnName = "usua_id")
+    @ManyToOne
+    private Usuario usuaId;
+
     @JoinColumn(name = "case_num_caja", referencedColumnName = "caja_id")
     @ManyToOne
     private Caja caseNumCaja;
+    @Column(name = "case_monto_apertura", nullable = false)
+    private Double caseMontoApertura;
+    @Column(name = "case_monto_cierre", nullable = false)
+    private Double caseMontoCierre;
 
     public CajaSesion() {
     }
@@ -97,12 +110,12 @@ public class CajaSesion implements Serializable {
         this.caseEstado = caseEstado;
     }
 
-    public Integer getCaseIdUsuario() {
-        return caseIdUsuario;
+    public Usuario getCaseIdUsuario() {
+        return usuaId;
     }
 
-    public void setCaseIdUsuario(Integer caseIdUsuario) {
-        this.caseIdUsuario = caseIdUsuario;
+    public void setCaseIdUsuario(Usuario caseIdUsuario) {
+        this.usuaId = caseIdUsuario;
     }
 
     public Caja getCaseNumCaja() {
@@ -137,5 +150,21 @@ public class CajaSesion implements Serializable {
     public String toString() {
         return "com.jodasoft.sistfact.gco.mdl.CajaSesion[ caseId=" + caseId + " ]";
     }
-    
+
+    public Double getCaseMontoApertura() {
+        return caseMontoApertura;
+    }
+
+    public void setCaseMontoApertura(Double caseMontoApertura) {
+        this.caseMontoApertura = caseMontoApertura;
+    }
+
+    public Double getCaseMontoCierre() {
+        return caseMontoCierre;
+    }
+
+    public void setCaseMontoCierre(Double caseMontoCierre) {
+        this.caseMontoCierre = caseMontoCierre;
+    }
+
 }

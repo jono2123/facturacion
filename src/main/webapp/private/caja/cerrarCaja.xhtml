@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="formPrincipal">
+            <p:growl id="messages"/>
+            <div class="Container100">
+                <div class="ContainerIndent">
+                    <div class="Card ShadowEffect">
+                        <p:panel header="Cierre de Caja" id="pnlDatosFact">
+
+                            <p:panelGrid columns="2" layout="grid"  style="border:0px !important; background:none;" styleClass="Wid30">
+                                <p:outputLabel value="Caja: "/>
+                                <p:selectOneMenu value="#{cajaController.caja}" converter="cajaConverter" styleClass="Wid80">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="0" />
+
+                                    <f:selectItems value="#{cajaController.cajas}" var="box" itemLabel="#{box.cajaNumCaja}" itemValue="#{box} "/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Valor Final "/>
+                                <p:inputText tabindex="1"  styleClass="Wid80" placeholder="Ingrese el valor final de caja" value="#{cajaController.valorFinal}" />
+                                <p:commandButton  title="Cerrar caja" value="cerrar caja" action="#{cajaController.cerrarCaja()}" update="formPrincipal:messages"/>
+                                <p:outputLabel value=""/>
+
+                            </p:panelGrid>
+
+                        </p:panel>                    
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

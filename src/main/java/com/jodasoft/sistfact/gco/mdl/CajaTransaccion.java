@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,12 +40,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CajaTransaccion.findByCatrValorTransaccion", query = "SELECT c FROM CajaTransaccion c WHERE c.catrValorTransaccion = :catrValorTransaccion"),
     @NamedQuery(name = "CajaTransaccion.findByCatrConcepto", query = "SELECT c FROM CajaTransaccion c WHERE c.catrConcepto = :catrConcepto"),
     @NamedQuery(name = "CajaTransaccion.findByCatrTipoTransaccion", query = "SELECT c FROM CajaTransaccion c WHERE c.catrTipoTransaccion = :catrTipoTransaccion"),
-    @NamedQuery(name = "CajaTransaccion.findByCatrIdUsuario", query = "SELECT c FROM CajaTransaccion c WHERE c.catrIdUsuario = :catrIdUsuario")})
+    @NamedQuery(name = "CajaTransaccion.findByCatrIdUsuario", query = "SELECT c FROM CajaTransaccion c WHERE c.usuaId = :usuaId")})
 public class CajaTransaccion implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "catr_id", nullable = false)
     private Integer catrId;
     @Size(max = 100)
@@ -64,8 +67,11 @@ public class CajaTransaccion implements Serializable {
     @Size(max = 50)
     @Column(name = "catr_tipo_transaccion", length = 50)
     private String catrTipoTransaccion;
-    @Column(name = "catr_id_usuario")
-    private Integer catrIdUsuario;
+
+    @JoinColumn(name = "usua_id", referencedColumnName = "usua_id")
+    @ManyToOne
+    private Usuario usuaId;
+
     @JoinColumn(name = "catr_num_caja", referencedColumnName = "caja_id")
     @ManyToOne
     private Caja catrNumCaja;
@@ -133,12 +139,12 @@ public class CajaTransaccion implements Serializable {
         this.catrTipoTransaccion = catrTipoTransaccion;
     }
 
-    public Integer getCatrIdUsuario() {
-        return catrIdUsuario;
+    public Usuario getUsuaId() {
+        return usuaId;
     }
 
-    public void setCatrIdUsuario(Integer catrIdUsuario) {
-        this.catrIdUsuario = catrIdUsuario;
+    public void setUsuaId(Usuario usuaId) {
+        this.usuaId = usuaId;
     }
 
     public Caja getCatrNumCaja() {
@@ -173,5 +179,5 @@ public class CajaTransaccion implements Serializable {
     public String toString() {
         return "com.jodasoft.sistfact.gco.mdl.CajaTransaccion[ catrId=" + catrId + " ]";
     }
-    
+
 }

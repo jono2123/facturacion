@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="messages" showDetail="false"/>  
+            <p:accordionPanel multiple="false" id="acordion" activeIndex="#{cajaController.activeIndex}">
+                <p:tab id="tab1" closable="false" title="Cajas">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <p:dataTable editMode="cell" styleClass="" style="width: 100%" var="caja" value="#{cajaController.cajas}" id="tblCajas"  paginator="true" rows="10" paginatorPosition="bottom" tableStyleClass="ui-table-columntoggle" selectionMode="single" rowKey="´#{caja.cajaId}" selection="#{cajaController.caja}" widgetVar="tablaCajas">
+                                <p:ajax event="rowSelect"  update="@form:acordion:tab1:pnlDatos" listener="#{cajaController.onRowSelect}"/>
+
+                                <p:column   headerText="Núm. Caja" priority="1" style="width: 20%" sortBy="#{caja.cajaNumCaja}">
+                                    <h:outputText value="#{caja.cajaNumCaja}"  />                                
+                                </p:column>
+                                <p:column   headerText="IP Impresión" priority="1" style="width: 20%">
+                                    <h:outputText value="#{caja.cajaIpImpresion}"  />                                
+                                </p:column>
+                                <p:column   headerText="Núm Factura" priority="1" style="width: 20%">
+                                    <h:outputText value="#{caja.cajaNumFactura}"  />                                
+                                </p:column>
+                                <p:column   headerText="Estado" priority="1" style="width: 25%">
+                                    <h:outputText value="#{cajaController.estadoCaja(caja)}"  />     
+
+                                </p:column>
+
+                                <p:column style="width: 15%" priority="1">
+                                    <f:facet name="header">
+                                        <h:panelGrid columns="2" style="width: 100%;">
+                                            <h:outputText value="Acciones"/>
+                                            <p:commandButton icon="fa fa-plus" title="Nueva Caja" action="#{cajaController.nuevoCaja()}" styleClass="BlueTextButton RaisedButton" update="@form:acordion @form:acordion:tab1:pnlDatos" />
+                                        </h:panelGrid>
+
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-edit" title="Editar Caja"  action="#{cajaController.editCaja(caja)}" update="@form:acordion @form:acordion:tab2:pnlDatos" rendered="#{cajaController.permiso.permModificar}"/>
+                                    <p:commandButton icon="fa fa-remove" title="Eliminar Caja" action="#{cajaController.deleteCaja(caja)}" update="@form:messages @form:acordion:tab1:tblCajas @form:acordion:tab2:pnlDatos"  rendered="#{cajaController.permiso.permEliminar}">
+                                        <p:confirm  header="Eliminar Caja" message="¿Está Seguro?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </p:tab>
+
+
+                <p:tab title="Datos Caja" id="tab2">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+                            <div class="Card ShadowEffect  ">
+                                <h:panelGrid columns="1">
+                                    <p:commandButton icon="fa fa-plus" value="Nueva Caja" title="Nueva Caja" action="#{cajaController.nuevoCaja()}" update="pnlDatos" />
+                                </h:panelGrid>
+                                <p:panelGrid columns="1" id="pnlDatos" layout="grid" style="border:0px !important; background:none; width: 36%;" styleClass="FormContent">
+
+
+                                    <p:inputText id="numCaja" placeholder="Número de caja" styleClass="Wid80 TexAlCenter Fs18" value="#{cajaController.caja.cajaNumCaja}"/>
+                                    <p:inputText id="ipimpresion" placeholder="IP servidor de impresión" styleClass="Wid80 TexAlCenter Fs18" value="#{cajaController.caja.cajaIpImpresion}"/>
+                                    <p:inputText id="numfactura" placeholder="Número de factura" styleClass="Wid80 TexAlCenter Fs18" value="#{cajaController.caja.cajaNumFactura}"/>
+
+
+                                </p:panelGrid>
+                                <p:commandButton value="Guardar" action="#{cajaController.guardar()}"  update="@form:messages @form:acordion @form:acordion:tab1:tblCajas @form:acordion:tab2:pnlDatos"/>
+                            </div>
+                        </div>
+                    </div>
+                </p:tab>
+            </p:accordionPanel>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode" style="width: 300px;">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
