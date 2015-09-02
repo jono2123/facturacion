@@ -123,21 +123,22 @@ public class CajaSesionFacade extends AbstractFacade<CajaSesion> {
         if (lista.size() == 1) {
             return lista.get(0);
         } else {
-
-            Cookie c = getCookie("sesion_jodasoft_" + usuario.getUsuaNombre());
-            if (c != null) {
-                if (Integer.parseInt(c.getValue()) != 0) {
-                    for (CajaSesion sesion : lista) {
-                        if (sesion.getCaseId() == Integer.parseInt(c.getValue())) {
-                            return sesion;
+            if (usuario != null) {
+                Cookie c = getCookie("sesion_jodasoft_" + usuario.getUsuaNombre());
+                if (c != null) {
+                    if (Integer.parseInt(c.getValue()) != 0) {
+                        for (CajaSesion sesion : lista) {
+                            if (sesion.getCaseId() == Integer.parseInt(c.getValue())) {
+                                return sesion;
+                            }
                         }
-                    }
-                    for (CajaSesion sesion : lista) {
-                        sesion.setCaseEstado("Cerrada por Sistema");
-                        sesion.setCaseMontoCierre(0.0);
-                        Calendar calendar = Calendar.getInstance();
-                        sesion.setCaseTimeCierre(calendar.getTime());
-                        edit(sesion);
+                        for (CajaSesion sesion : lista) {
+                            sesion.setCaseEstado("Cerrada por Sistema");
+                            sesion.setCaseMontoCierre(0.0);
+                            Calendar calendar = Calendar.getInstance();
+                            sesion.setCaseTimeCierre(calendar.getTime());
+                            edit(sesion);
+                        }
                     }
                 }
             }

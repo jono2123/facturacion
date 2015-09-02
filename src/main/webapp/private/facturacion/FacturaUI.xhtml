@@ -49,12 +49,12 @@
                                     <h:panelGrid columns="1" styleClass="Wid90">
                                         <h:outputText value="N.Guía:"/>
                                         <p:inputText styleClass="Wid90" value="#{facturaController.guia}" readonly="false" id="txtGuia"/>
-                                    </h:panelGrid>
-                                    <h:panelGrid columns="1" styleClass="Wid90">
+                                    </h:panelGrid>                     
+                                    <h:panelGrid columns="1" styleClass="Wid90" rendered="#{facturaController.caja ne null}" >
                                         <h:outputText value="Caja:"/>
-                                        <p:inputText styleClass="Wid90" value="#{facturaController.caja eq null?'':facturaController.caja.cajaNumCaja}" readonly="false" id="txtNumFactura"/>
+                                        <p:inputText styleClass="Wid90" value="#{facturaController.caja.cajaNumCaja}" readonly="true" id="txtNumFactura"/>
                                     </h:panelGrid>
-                                    
+                                    <h:outputText value="" rendered="#{facturaController.caja eq null}"/>
 
                                 </p:panelGrid>
 

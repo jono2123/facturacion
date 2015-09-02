@@ -5,6 +5,7 @@
  */
 package com.jodasoft.sistfact.gco.ctr;
 
+import com.jodasoft.sistfact.gco.dao.CajaFacade;
 import com.jodasoft.sistfact.gco.dao.CajaSesionFacade;
 import com.jodasoft.sistfact.gco.mdl.AlmacenModulo;
 import com.jodasoft.sistfact.gco.mdl.AlmacenTransaccion;
@@ -77,6 +78,8 @@ public class FacturaController extends AbstractMB implements Serializable {
     private com.jodasoft.sistfact.gco.dao.AlmacenModuloFacade almacenModuloFacade;
     @EJB
     private com.jodasoft.sistfact.gco.dao.CajaTransaccionFacade cajaTransaccionFacade;
+    @EJB
+    private com.jodasoft.sistfact.gco.dao.CajaFacade cajaFacade;
     
     private int numero;
     private Cliente cliente;
@@ -433,7 +436,7 @@ public class FacturaController extends AbstractMB implements Serializable {
         Calendar calendar = Calendar.getInstance();
         cajTransaction.setCatrTimestamp(calendar.getTime());
         cajTransaction.setCatrTipoDocumento("FACTURA");
-        cajTransaction.setCatrTipoTransaccion("FACTURA");
+        cajTransaction.setCatrTipoTransaccion("FACTURACION");
         cajTransaction.setCatrValorTransaccion(factura.getFactTotal());
         cajTransaction.setCatrConcepto("Venta de producto/servicio a: " + factura.getClieId().getPersApellidos()
                 + " " + factura.getClieId().getPersNombres() + " con factura N°" + factura.getFactNumero());
@@ -450,10 +453,20 @@ public class FacturaController extends AbstractMB implements Serializable {
         factura.setUsuaId(LoginController.getInstance().getUsuario());
         factura.setFactFecha(fecha);
         if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaFacturaAutonumerada()) {
-            numero = almacenFacade.find(LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId()).getAlmaNumFactura().intValue();
-            factura.setFactNumero(numero);
-            LoginController.getInstance().getUsuario().getRolId().getAlmaId().setAlmaNumFactura(numero + 1);
-            almacenFacade.edit(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            if (caja != null) {
+                numero = caja.getCajaNumFactura();
+                String aux = "0";
+                aux = caja.getCajaNumCaja() + "" + numero;
+                caja.setCajaNumFactura(numero + 1);
+                factura.setFactNumero(Integer.parseInt(aux));
+                cajaFacade.edit(caja);
+            } else {
+                numero = almacenFacade.find(LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId()).getAlmaNumFactura().intValue();
+                
+                factura.setFactNumero(numero);
+                LoginController.getInstance().getUsuario().getRolId().getAlmaId().setAlmaNumFactura(numero + 1);
+                almacenFacade.edit(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            }
         }
         facturaFacade.update(factura, detalle);
         closeDialog();
@@ -486,10 +499,23 @@ public class FacturaController extends AbstractMB implements Serializable {
         factura = new Factura();
         factura.setFactEstado(1);
         if (LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaFacturaAutonumerada()) {
-            numero = almacenFacade.find(LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId()).getAlmaNumFactura().intValue();
+            if (caja != null) {
+                numero = caja.getCajaNumFactura();
+                String aux = "0";
+                aux = caja.getCajaNumCaja() + "" + numero;
+                caja.setCajaNumFactura(numero + 1);
+                factura.setFactNumero(Integer.parseInt(aux));
+                cajaFacade.edit(caja);
+            } else {
+                numero = almacenFacade.find(LoginController.getInstance().getUsuario().getRolId().getAlmaId().getAlmaId()).getAlmaNumFactura().intValue();
+                factura.setFactNumero(numero);
+                LoginController.getInstance().getUsuario().getRolId().getAlmaId().setAlmaNumFactura(numero + 1);
+                almacenFacade.edit(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            }
+            
+        } else {
             factura.setFactNumero(numero);
-            LoginController.getInstance().getUsuario().getRolId().getAlmaId().setAlmaNumFactura(numero + 1);
-            almacenFacade.edit(LoginController.getInstance().getUsuario().getRolId().getAlmaId());
+            
         }
         try {
             guardarFactura();
@@ -811,15 +837,14 @@ public class FacturaController extends AbstractMB implements Serializable {
         }
         return clientes;
     }
-
+    
     public Caja getCaja() {
         return caja;
     }
-
+    
     public void setCaja(Caja caja) {
         this.caja = caja;
     }
-    
     
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
